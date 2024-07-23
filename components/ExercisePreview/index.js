@@ -1,10 +1,15 @@
+import Link from "next/link";
 import styled from "styled-components";
 export default function ExercisePreview({ exercise }) {
   return (
-    <ExerciseCard $image={exercise.imageUrl}>
-      <ExerciseCardName>{exercise.name}</ExerciseCardName>
-      <ExerciseCardMuscle>{exercise.muscleGroups.join(" ")}</ExerciseCardMuscle>
-    </ExerciseCard>
+    <StyledLink href={`/exercises/${exercise.id}`}>
+      <ExerciseCard $image={exercise.imageUrl}>
+        <ExerciseCardName>{exercise.name}</ExerciseCardName>
+        <ExerciseCardMuscle>
+          {exercise.muscleGroups.join(" ")}
+        </ExerciseCardMuscle>
+      </ExerciseCard>
+    </StyledLink>
   );
 }
 
@@ -44,4 +49,11 @@ const ExerciseCardMuscle = styled.p`
   background-color: rgba(255, 255, 255, 0.8);
   padding: 0.5rem;
   border-radius: 25px;
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
