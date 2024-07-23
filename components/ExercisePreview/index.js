@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export default function ExercisePreview({ exercise }) {
   return (
-    <ExerciseCard image={exercise.imageUrl}>
+    <ExerciseCard $image={exercise.imageUrl}>
       <ExerciseCardName>{exercise.name}</ExerciseCardName>
       <ExerciseCardMuscle>{exercise.muscleGroups.join(" ")}</ExerciseCardMuscle>
     </ExerciseCard>
@@ -17,7 +17,7 @@ const ExerciseCard = styled.li`
   list-style: none;
   border-radius: 1rem;
   overflow: hidden;
-  background: url(${(props) => props.image}) no-repeat center center;
+  background: url(${(props) => props.$image}) no-repeat center center;
   background-size: cover;
 `;
 
