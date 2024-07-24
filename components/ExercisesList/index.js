@@ -3,13 +3,11 @@ import styled from "styled-components";
 
 export default function ExercisesList({ exercises }) {
   return (
-    <>
-      <List>
-        {exercises.map((exercise) => (
-          <ExercisePreview key={exercise.id} exercise={exercise} />
-        ))}
-      </List>
-    </>
+    <List>
+      {exercises.map((exercise) => (
+        <ExercisePreview key={exercise.id} exercise={exercise} />
+      ))}
+    </List>
   );
 }
 
