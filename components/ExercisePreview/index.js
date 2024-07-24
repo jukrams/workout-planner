@@ -1,10 +1,16 @@
+import Link from "next/link";
 import styled from "styled-components";
 export default function ExercisePreview({ exercise }) {
   return (
-    <ExerciseCard $image={exercise.imageUrl}>
-      <ExerciseCardName>{exercise.name}</ExerciseCardName>
-      <ExerciseCardMuscle>{exercise.muscleGroups.join(" ")}</ExerciseCardMuscle>
-    </ExerciseCard>
+    <StyledLink href={`/exercises/${exercise.id}`}>
+      <ExerciseCard>
+        <ExerciseImage src={exercise.imageUrl} />
+        <ExerciseCardName>{exercise.name}</ExerciseCardName>
+        <ExerciseCardMuscle>
+          {exercise.muscleGroups.join(" ")}
+        </ExerciseCardMuscle>
+      </ExerciseCard>
+    </StyledLink>
   );
 }
 
@@ -12,15 +18,8 @@ const ExerciseCard = styled.li`
   margin: 2rem;
   list-style: none;
   position: relative;
-  width: 75vw;
-  height: 25vh;
   list-style: none;
-  border-radius: 1rem;
-  overflow: hidden;
-  background: url(${(props) => props.$image}) no-repeat center center;
-  background-size: cover;
 `;
-
 const ExerciseCardName = styled.p`
   font-family: Verdana;
   font-size: medium;
@@ -33,7 +32,6 @@ const ExerciseCardName = styled.p`
   padding: 0.5rem;
   border-radius: 25px;
 `;
-
 const ExerciseCardMuscle = styled.p`
   font-family: Verdana;
   font-size: medium;
@@ -44,4 +42,16 @@ const ExerciseCardMuscle = styled.p`
   background-color: rgba(255, 255, 255, 0.8);
   padding: 0.5rem;
   border-radius: 25px;
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const ExerciseImage = styled.img`
+  width: 75vw;
+  height: auto;
+  border-radius: 1rem;
 `;
