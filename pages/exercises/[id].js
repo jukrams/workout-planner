@@ -7,7 +7,7 @@ export default function DetailsPage({ exercises }) {
   const router = useRouter();
   const { id } = router.query;
   if (!id) { return <p>Loading...</p>; }
-  let exercise = exercises.find((exercise) => exercise.id === id);
+  const exercise = exercises.find((exercise) => exercise.id === id);
   return (
     <>
       <ExerciseDetailsHeading>
@@ -33,6 +33,6 @@ const ExerciseDetailsContainer = styled.section`
 const ExerciseDetailsHeading = styled.section`
   display: flex;
   justify-content: space-between;
-  margin-left: 4.5rem;
-  margin-right: 4.5rem;
+  margin: 0 4.5rem;
+  
 `;

@@ -10,8 +10,8 @@ export default function ExerciseDetails({ exercise }) {
         </ExerciseDetailsMuscle>
       </figure>
       <ExerciseDetailsInstruction>
-        {exercise.instructions.map((inst, index) => (
-          <li key={index}>{inst}</li>
+        {exercise.instructions.map((instruction, index) => (
+          <li key={index}>{instruction}</li>
         ))}
       </ExerciseDetailsInstruction>
     </>
@@ -33,11 +33,8 @@ const ExerciseDetailsInstruction = styled.ol`
   font-size: 1rem;
   line-height: 1.5rem;
   width: 75vw;
-  padding-left: 4rem;
-  padding-right: 2rem;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  margin-top:2rem;
+  padding: 1.5rem 2rem 1.5rem 4rem;
+  margin-top: 2rem;
   background-color: #fdfd96;
   border-radius: 1.5rem;
 `;
