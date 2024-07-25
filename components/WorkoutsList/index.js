@@ -21,6 +21,9 @@ export default function WorkoutsList({ workouts, exercises }) {
 const WorkoutCard = styled.ul`
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const WorkoutItem = styled.li`
@@ -28,6 +31,8 @@ const WorkoutItem = styled.li`
   border: 3px solid black;
   border-radius: 1.5rem;
   padding: 1rem 2rem;
+  max-width: 1000px;
+  width: 80vw;
 
   &:last-of-type {
     margin-bottom: 5.5rem;
