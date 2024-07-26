@@ -98,7 +98,7 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
             required={addedExercises.length === 0 ? true : false}
           />
           <AddButton
-            aria-label="Add new ecerxise to list"
+            aria-label="Add new exercise to list"
             type="button"
             onClick={handleAddExercise}
           >
