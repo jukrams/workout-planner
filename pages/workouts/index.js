@@ -8,9 +8,9 @@ export default function WorkoutsPage({ workouts }) {
     defaultValue: workouts,
   });
   function handleAddWorkout(newWorkout) {
-    setWorkoutsList([{ id: uid(), ...newWorkout }, ...workouts]);
+    setWorkoutsList([{ id: uid(), ...newWorkout }, ...workoutsList]);
   }
-  console.log(workoutsList);
+
   return (
     <>
       <h1>Workouts</h1>

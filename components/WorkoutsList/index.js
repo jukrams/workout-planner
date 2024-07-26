@@ -5,8 +5,8 @@ import styled from "styled-components";
 export default function WorkoutsList({ onAddWorkout, workouts, exercises }) {
   return (
     <>
-      <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
       <WorkoutCard>
+        <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.map((workout) => (
           <WorkoutItem key={workout.id}>
             <WorkoutPreview
