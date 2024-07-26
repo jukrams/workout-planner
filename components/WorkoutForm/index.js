@@ -13,11 +13,32 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
       reps.value = "";
     }
   }
-  function handleSubmit() {}
+  function handleSubmit(event) {
+    event.preventDefault();
+    handleAddExercise();
+    const newWorkout = {
+      name: event.target.name.value,
+      exercises: [
+        addedExercises.map((addedExercise) => {
+          const selectedExercise = exercises.find(
+            (exercise) => exercise.name === addedExercise.exercise
+          );
+          return {
+            exerciseId: selectedExercise.id,
+            sets: addedExercise.sets,
+            reps: addedExercise.reps,
+          };
+        }),
+      ],
+    };
+    console.log(newWorkout);
+    onAddWorkout(newWorkout);
+  }
+
   return (
     <section>
       <h2>Create a new Workout</h2>
-      <form onSubmit={onAddWorkout}>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="name">Workout name:</label>
         <input
           name="name"
