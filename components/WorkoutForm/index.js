@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 export default function WorkoutForm({ onAddWorkout, exercises }) {
   const [addedExercises, setAddedExercises] = useState([]);
+
   function handleAddExercise() {
     if (exerciseName.value !== "" && sets.value !== "" && reps.value !== "") {
       setAddedExercises([
@@ -104,7 +105,11 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
             Add new exercise to list
           </AddButton>
         </StyledSection>
-        <SubmitButton aria-label="Create new workout" type="submit">
+        <SubmitButton
+          aria-label="Create new workout"
+          type="submit"
+          disabled={addedExercises.length === 0 ? true : false}
+        >
           Create Workout
         </SubmitButton>
       </StyledForm>
