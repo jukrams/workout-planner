@@ -5,7 +5,15 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
   const [addedExercises, setAddedExercises] = useState([]);
 
   function handleAddExercise() {
-    if (exerciseName.value !== "" && sets.value !== "" && reps.value !== "") {
+    if (
+      exerciseName.value !== "" &&
+      sets.value !== "" &&
+      reps.value !== "" &&
+      sets.value >= 1 &&
+      sets.value <= 150 &&
+      reps.value >= 1 &&
+      reps.value <= 20
+    ) {
       setAddedExercises([
         ...addedExercises,
         { exercise: exerciseName.value, sets: sets.value, reps: reps.value },
@@ -13,6 +21,8 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
       exerciseName.value = "";
       sets.value = "";
       reps.value = "";
+    } else {
+      alert("Please enter valid values for sets and reps.");
     }
   }
 
@@ -86,15 +96,17 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
             type="number"
             min="1"
             max="150"
+            placeholder="1-150"
             required={addedExercises.length === 0 ? true : false}
           />
           <label htmlFor="reps">Reps:</label>
           <StyledInput
-            name="reps"
-            id="reps"
             type="number"
+            id="reps"
+            name="reps"
             min="1"
             max="20"
+            placeholder="1-20"
             required={addedExercises.length === 0 ? true : false}
           />
           <AddButton
