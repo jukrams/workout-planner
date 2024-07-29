@@ -1,20 +1,24 @@
+import WorkoutForm from "../WorkoutForm";
 import WorkoutPreview from "../WorkoutPreview";
 import styled from "styled-components";
 
-export default function WorkoutsList({ workouts, exercises }) {
+export default function WorkoutsList({ onAddWorkout, workouts, exercises }) {
   return (
-    <WorkoutCard>
-      {workouts.map((workout) => (
-        <WorkoutItem key={workout.id}>
-          <WorkoutPreview
-            name={workout.name}
-            workoutExercises={workout.exercises}
-            exercises={exercises}
-            workouts={workouts}
-          />
-        </WorkoutItem>
-      ))}
-    </WorkoutCard>
+    <>
+      <WorkoutCard>
+        <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
+        {workouts.map((workout) => (
+          <WorkoutItem key={workout.id}>
+            <WorkoutPreview
+              name={workout.name}
+              workoutExercises={workout.exercises}
+              exercises={exercises}
+              workouts={workouts}
+            />
+          </WorkoutItem>
+        ))}
+      </WorkoutCard>
+    </>
   );
 }
 
