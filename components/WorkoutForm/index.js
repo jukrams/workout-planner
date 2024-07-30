@@ -1,8 +1,21 @@
+import Link from "next/link";
 import { useState } from "react";
 import styled from "styled-components";
+import { uid } from "uid";
+import { useRouter } from "next/router";
 
-export default function WorkoutForm({ onAddWorkout, exercises }) {
-  const [addedExercises, setAddedExercises] = useState([]);
+export default function WorkoutForm({
+  onAddWorkout,
+  exercises,
+  isEditMode,
+  defaultData,
+  onEditWorkout,
+}) {
+  const router = useRouter();
+
+  const [addedExercises, setAddedExercises] = useState(
+    defaultData ? defaultData.exercises : []
+  );
 
   function handleAddExercise() {
     if (
@@ -16,7 +29,12 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
     ) {
       setAddedExercises([
         ...addedExercises,
-        { exercise: exerciseName.value, sets: sets.value, reps: reps.value },
+        {
+          exercise: exerciseName.value,
+          sets: sets.value,
+          reps: reps.value,
+          id: uid(),
+        },
       ]);
       exerciseName.value = "";
       sets.value = "";
@@ -26,30 +44,56 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
     }
   }
 
+  function handleDeleteExercise(id) {
+    setAddedExercises(
+      addedExercises.filter((addedExercise) => addedExercise.id !== id)
+    );
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
-    const newWorkout = {
-      name: event.target.name.value,
-      exercises: addedExercises.map((addedExercise) => {
-        const selectedExercise = exercises.find(
-          (exercise) => exercise.name === addedExercise.exercise
-        );
-        return {
-          exerciseId: selectedExercise.id,
-          sets: addedExercise.sets,
-          reps: addedExercise.reps,
-        };
-      }),
-    };
-    onAddWorkout(newWorkout);
+    if (!isEditMode) {
+      const newWorkout = {
+        name: event.target.name.value,
+        exercises: addedExercises.map((addedExercise) => {
+          const selectedExercise = exercises.find(
+            (exercise) => exercise.name === addedExercise.exercise
+          );
+          return {
+            exerciseId: selectedExercise.id,
+            sets: addedExercise.sets,
+            reps: addedExercise.reps,
+          };
+        }),
+      };
+      onAddWorkout(newWorkout);
+    } else {
+      const editedWorkout = {
+        id: defaultData.id,
+        name: event.target.name.value,
+        exercises: addedExercises.map((addedExercise) => {
+          const selectedExercise = exercises.find(
+            (exercise) => exercise.name === addedExercise.exercise
+          );
+          return {
+            exerciseId: selectedExercise.id,
+            sets: addedExercise.sets,
+            reps: addedExercise.reps,
+          };
+        }),
+      };
+      onEditWorkout(editedWorkout);
+      router.push("/workouts");
+    }
+
     event.target.reset();
     setAddedExercises([]);
   }
 
   return (
     <FormSection>
-      <h2>Create a new Workout</h2>
+      {!isEditMode ? <h2>Create a new Workout</h2> : null}
       <StyledForm onSubmit={handleSubmit}>
         <StyledSection>
           <label htmlFor="name">Workout name:</label>
@@ -57,8 +101,9 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
             name="name"
             id="name"
             type="text"
-            maxLength="20"
+            maxLength="30"
             placeholder="Insert name here"
+            defaultValue={defaultData?.name}
             required
           />
         </StyledSection>
@@ -66,10 +111,16 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
         <StyledSection>
           <h4>Added exercises:</h4>
           <ExercisesList>
-            {addedExercises.map((addedExercise, index) => (
-              <li key={index}>
+            {addedExercises.map((addedExercise) => (
+              <li key={addedExercise.id}>
                 {addedExercise.exercise} sets: {addedExercise.sets} reps:{" "}
                 {addedExercise.reps}
+                <DeleteButton
+                  type="button"
+                  onClick={() => handleDeleteExercise(addedExercise.id)}
+                >
+                  X
+                </DeleteButton>
               </li>
             ))}
           </ExercisesList>
@@ -109,21 +160,35 @@ export default function WorkoutForm({ onAddWorkout, exercises }) {
             placeholder="1-20"
             required={addedExercises.length === 0 ? true : false}
           />
-          <AddButton
+          <Button
             aria-label="Add new exercise to list"
             type="button"
             onClick={handleAddExercise}
           >
             Add new exercise to list
-          </AddButton>
+          </Button>
         </StyledSection>
-        <SubmitButton
-          aria-label="Create new workout"
-          type="submit"
-          disabled={addedExercises.length === 0 ? true : false}
-        >
-          Create Workout
-        </SubmitButton>
+        {isEditMode ? (
+          <ButtonSection>
+            <Link href="/workouts">
+              <Button type="button">Cancel</Button>
+            </Link>
+            <Button
+              type="submit"
+              disabled={addedExercises.length === 0 ? true : false}
+            >
+              Save
+            </Button>
+          </ButtonSection>
+        ) : (
+          <SubmitButton
+            aria-label="Create new workout"
+            type="submit"
+            disabled={addedExercises.length === 0 ? true : false}
+          >
+            Create Workout
+          </SubmitButton>
+        )}
       </StyledForm>
     </FormSection>
   );
@@ -155,7 +220,7 @@ const ExercisesList = styled.ol`
   margin: 0 0 1.5rem 0;
 `;
 
-const AddButton = styled.button`
+const Button = styled.button`
   width: fit-content;
   padding: 0.5rem;
   background-color: orange;
@@ -186,4 +251,18 @@ const StyledInput = styled.input`
 const StyledDropdown = styled.select`
   width: 70%;
   margin: 0.5rem 0 0.75rem 0;
+`;
+
+const ButtonSection = styled.section`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+`;
+
+const DeleteButton = styled.button`
+  border: none;
+  background: none;
+  font-weight: bold;
+  color: orange;
+  margin-left: 0.5rem;
 `;
