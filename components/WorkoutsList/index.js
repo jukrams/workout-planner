@@ -1,3 +1,4 @@
+import Link from "next/link";
 import WorkoutForm from "../WorkoutForm";
 import WorkoutPreview from "../WorkoutPreview";
 import styled from "styled-components";
@@ -9,6 +10,7 @@ export default function WorkoutsList({ onAddWorkout, workouts, exercises }) {
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.map((workout) => (
           <WorkoutItem key={workout.id}>
+            <EditLink href={`workouts/${workout.id}/edit`}>Edit 🖊</EditLink>
             <WorkoutPreview
               name={workout.name}
               workoutExercises={workout.exercises}
@@ -37,8 +39,18 @@ const WorkoutItem = styled.li`
   padding: 1rem 2rem;
   max-width: 1000px;
   width: 80vw;
+  display: flex;
+  flex-direction: column;
 
   &:last-of-type {
     margin-bottom: 5.5rem;
   }
+`;
+
+const EditLink = styled(Link)`
+  text-decoration: none;
+  color: orange;
+  font-weight: bold;
+  font-size: large;
+  align-self: flex-end;
 `;
