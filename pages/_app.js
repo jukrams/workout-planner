@@ -23,6 +23,12 @@ export default function App({ Component, pageProps }) {
       )
     );
   }
+  
+  function handleDeleteWorkout(id){
+    setWorkoutsList(
+      workoutsList.filter((workout)=>workout.id!==id)
+    )
+  }
 
   return (
     <>
@@ -34,6 +40,7 @@ export default function App({ Component, pageProps }) {
           workouts={workoutsList}
           onAddWorkout={handleAddWorkout}
           onEditWorkout={handleEditWorkout}
+          onDeleteWorkout={handleDeleteWorkout}
         />
       </Layout>
     </>

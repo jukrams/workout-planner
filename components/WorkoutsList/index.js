@@ -5,21 +5,29 @@ import styled from "styled-components";
 import ModalDelete from "../ModalDelete";
 import { useState } from "react";
 
-export default function WorkoutsList({ onAddWorkout, workouts, exercises }) {
-
+export default function WorkoutsList({
+  onAddWorkout,
+  onDeleteWorkout,
+  workouts,
+  exercises,
+}) {
   const [modalDelete, setModalDelete] = useState(false);
+  const [deleteWorkoutId, setDeleteWorkoutId] = useState(0);
 
-  function handleDelete() {
-    setModalDelete(true);
-  }
   function handleDeleteCancel() {
     setModalDelete(false);
   }
 
+  const handleDelete = (event) => {
+    const id = event.target.dataset.workoutid
+    setDeleteWorkoutId(id)
+    setModalDelete(true);
+  }
+
   function handleDeleteConfirm() {
-    // onDeleteProject(id);
+    onDeleteWorkout(deleteWorkoutId);
     setModalDelete(false);
-    // router.push("/");
+    
   }
   return (
     <>
@@ -27,7 +35,8 @@ export default function WorkoutsList({ onAddWorkout, workouts, exercises }) {
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.map((workout) => (
           <WorkoutItem key={workout.id}>
-            <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
+            <DeleteButton data-workoutid={workout.id} onClick={handleDelete}>Delete</DeleteButton>
+            
             <EditLink href={`workouts/${workout.id}/edit`}>Edit ✎</EditLink>
             <WorkoutPreview
               name={workout.name}
@@ -78,13 +87,15 @@ const EditLink = styled(Link)`
   font-size: large;
   align-self: flex-end;
 `;
-const DeleteButton=styled.button`
-color: orange;
-font-weight:bold;
-font-size:large;
-width: 60px;
-border:none;
-align-self: flex-end;
-background-color: white;
-display:inline;
+const DeleteButton = styled.button`
+  color: orange;
+  font-weight: bold;
+  font-size: large;
+  width: 60px;
+  border: none;
+  align-self: flex-end;
+  background-color: white;
+  display: inline;
+  pointer: cursor;
+  type: button;
 `;
