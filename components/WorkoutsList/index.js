@@ -16,10 +16,10 @@ export default function WorkoutsList({
   const [isWorkoutDeleted, setIsWorkoutDeleted] = useState(false);
 
   const handleDelete = (event) => {
-    const id = event.target.dataset.workoutid // data-workoutid auslesen
-    setWorkoutIdToDelete(id) // id speichern
+    const id = event.target.dataset.workoutid; // data-workoutid auslesen
+    setWorkoutIdToDelete(id); // id speichern
     setModalDelete(true);
-  }
+  };
 
   function handleDeleteCancel() {
     setModalDelete(false);
@@ -34,22 +34,24 @@ export default function WorkoutsList({
   return (
     <>
       {workouts.length != 0 && isWorkoutDeleted && (
-        <p>Workout deleted successfully!</p>
-      )}        
+        <SuccessMessage>Workout deleted successfully!</SuccessMessage>
+      )}
 
       {workouts.length == 0 && (
-        <>
-          <p>Oops! No Workouts yet.</p>
-          <p>Create a new Workout to start your journey!</p>
-        </>
+        <SuccessMessage>
+          Oops! No Workouts yet.<br></br>
+          Create a new Workout to start your journey!
+        </SuccessMessage>
       )}
-      
+
       <WorkoutCard>
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.map((workout) => (
           <WorkoutItem key={workout.id}>
-            <DeleteButton data-workoutid={workout.id} onClick={handleDelete}>Delete</DeleteButton>
-            
+            <DeleteButton data-workoutid={workout.id} onClick={handleDelete}>
+              Delete
+            </DeleteButton>
+
             <EditLink href={`workouts/${workout.id}/edit`}>Edit ✎</EditLink>
             <WorkoutPreview
               name={workout.name}
@@ -111,4 +113,14 @@ const DeleteButton = styled.button`
   display: inline;
   pointer: cursor;
   type: button;
+`;
+const SuccessMessage = styled.p`
+  border-radius: 15px;
+  padding: 15px;
+  margin: auto;
+  background-color: #bebebe;
+  text-align: center;
+  line-height: 2rem;
+   max-width: 1000px;
+  width: 80vw;
 `;
