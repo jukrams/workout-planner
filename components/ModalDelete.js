@@ -3,12 +3,12 @@ import styled from "styled-components";
 export default function ModalDelete({ onConfirm, onCancel }) {
   return (
     <StyledModalMessage>
-      <p>Are you sure you want to delete this workout?</p>
-      <StyledButton type="button" onClick={onConfirm}>
-        Yes
-      </StyledButton>
+      <p>Do you want to delete this workout?</p>
       <StyledButton type="button" onClick={onCancel}>
-        No
+        Cancel
+      </StyledButton>
+      <StyledButton type="button" onClick={onConfirm}>
+        Confirm
       </StyledButton>
     </StyledModalMessage>
   );
@@ -29,28 +29,9 @@ export const StyledButton = styled.button`
   border: none;
   padding: 8px;
   margin: 5px;
+ font-weight: bold;
+ font-size: 0.8rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-`;
-
-
- export const StyledCancelButton = styled.button`
- position: absolute;
- top: 20px;
- right: 20px;
- cursor: pointer;
- border: none;
- background-color: transparent;
-`;
-
-
-const StyledPageBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
 `;
 
 const StyledModalContainer = styled.div`
@@ -61,8 +42,18 @@ const StyledModalContainer = styled.div`
   right: calc(5%);
   bottom: calc(5%);
   left: calc(5%);
-  background-color: orange;
+  background-color: #ee9a00;
   border-radius: 20px;
-  padding: 10px 20px 30px 20px;
-
+  padding: 30px;
 `;
+
+const StyledPageBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #b1b1b1;
+  opacity:0.9;
+`;
+
