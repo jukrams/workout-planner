@@ -25,6 +25,7 @@ export default function App({ Component, pageProps }) {
   }
   
   function handleDeleteWorkout(id){
+    // löschen des workout mit der id
     setWorkoutsList(
       workoutsList.filter((workout)=>workout.id!==id)
     )

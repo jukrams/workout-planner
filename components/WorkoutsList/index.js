@@ -12,25 +12,31 @@ export default function WorkoutsList({
   exercises,
 }) {
   const [modalDelete, setModalDelete] = useState(false);
-  const [deleteWorkoutId, setDeleteWorkoutId] = useState(0);
+  const [workoutIdToDelete, setWorkoutIdToDelete] = useState(0);
+  const [isWorkoutDeleted, setIsWorkoutDeleted] = useState(false);
+
+  const handleDelete = (event) => {
+    const id = event.target.dataset.workoutid // data-workoutid auslesen
+    setWorkoutIdToDelete(id) // id speichern
+    setModalDelete(true);
+  }
 
   function handleDeleteCancel() {
     setModalDelete(false);
   }
 
-  const handleDelete = (event) => {
-    const id = event.target.dataset.workoutid
-    setDeleteWorkoutId(id)
-    setModalDelete(true);
+  function handleDeleteConfirm() {
+    onDeleteWorkout(workoutIdToDelete);
+    setModalDelete(false);
+    setIsWorkoutDeleted(true);
   }
 
-  function handleDeleteConfirm() {
-    onDeleteWorkout(deleteWorkoutId);
-    setModalDelete(false);
-    
-  }
   return (
     <>
+      {isWorkoutDeleted && (
+        <p>Workout deleted successfully!</p>
+      )}        
+      
       <WorkoutCard>
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.map((workout) => (
