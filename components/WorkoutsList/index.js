@@ -33,9 +33,16 @@ export default function WorkoutsList({
 
   return (
     <>
-      {isWorkoutDeleted && (
+      {workouts.length != 0 && isWorkoutDeleted && (
         <p>Workout deleted successfully!</p>
       )}        
+
+      {workouts.length == 0 && (
+        <>
+          <p>Oops! No Workouts yet.</p>
+          <p>Create a new Workout to start your journey!</p>
+        </>
+      )}
       
       <WorkoutCard>
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
