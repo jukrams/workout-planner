@@ -48,11 +48,15 @@ export default function WorkoutsList({
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.map((workout) => (
           <WorkoutItem key={workout.id}>
-            <DeleteButton data-workoutid={workout.id} onClick={handleDelete}>
-              Delete
-            </DeleteButton>
+            <Actions>
+              <DeleteButton data-workoutid={workout.id} onClick={handleDelete}>
+                ✘ Delete 
+              </DeleteButton>
+              <EditLink href={`workouts/${workout.id}/edit`}>
+                ✎ Edit 
+              </EditLink>
+            </Actions>
 
-            <EditLink href={`workouts/${workout.id}/edit`}>Edit ✎</EditLink>
             <WorkoutPreview
               name={workout.name}
               workoutExercises={workout.exercises}
@@ -95,25 +99,31 @@ const WorkoutItem = styled.li`
   }
 `;
 
+const Actions = styled.section`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+`;
+
+const DeleteButton = styled.button`
+  color: orange;
+  font-weight: bold;
+  font-size: large;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  type: button;
+  margin-right: 20px;
+`;
+
 const EditLink = styled(Link)`
   text-decoration: none;
   color: orange;
   font-weight: bold;
   font-size: large;
-  align-self: flex-end;
 `;
-const DeleteButton = styled.button`
-  color: orange;
-  font-weight: bold;
-  font-size: large;
-  width: 60px;
-  border: none;
-  align-self: flex-end;
-  background-color: white;
-  display: inline;
-  pointer: cursor;
-  type: button;
-`;
+
 const SuccessMessage = styled.p`
   border-radius: 15px;
   padding: 15px;
