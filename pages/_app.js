@@ -38,7 +38,6 @@ export default function App({ Component, pageProps }) {
           workouts={workoutsList}
           onAddWorkout={handleAddWorkout}
           onEditWorkout={handleEditWorkout}
-          muscleGroups={muscleGroups}
           onDeleteWorkout={handleDeleteWorkout}
         />
       </Layout>
