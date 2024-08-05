@@ -4,9 +4,13 @@ import styled from "styled-components";
 export default function ExercisesList({ exercises }) {
   return (
     <List>
-      {exercises.map((exercise) => (
-        <ExercisePreview key={exercise.id} exercise={exercise} />
-      ))}
+      {exercises.length !== 0 ? (
+        exercises.map((exercise) => (
+          <ExercisePreview key={exercise.id} exercise={exercise} />
+        ))
+      ) : (
+        <p>No exercises found!</p>
+      )}
     </List>
   );
 }
@@ -16,4 +20,5 @@ const List = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 4rem;
 `;

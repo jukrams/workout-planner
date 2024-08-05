@@ -15,7 +15,7 @@ export default function ExercisePreview({ exercise }) {
 }
 
 const ExerciseCard = styled.li`
-  margin: 2rem;
+  margin: 0 2rem 2rem 2rem;
   list-style: none;
   position: relative;
   list-style: none;
