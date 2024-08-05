@@ -87,4 +87,5 @@ const FilterButton = styled.button`
   padding: 0.25rem;
   align-self: flex-end;
   margin-right: 3.5rem;
+  cursor: pointer;
 `;

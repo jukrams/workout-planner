@@ -62,6 +62,7 @@ const ClearButton = styled.button`
   border-radius: 0.5rem;
   padding: 0.25rem;
   margin: 0.25rem;
+  cursor: pointer;
 `;
 
 const SelectedMuscleList = styled.ul`
@@ -79,4 +80,5 @@ const SelectedMuscleTags = styled.li`
   border-radius: 0.5rem;
   padding: 0.25rem;
   margin: 0.25rem;
+  cursor: pointer;
 `;
