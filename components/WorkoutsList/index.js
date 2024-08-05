@@ -4,6 +4,8 @@ import WorkoutPreview from "../WorkoutPreview";
 import styled from "styled-components";
 import ModalDelete from "../ModalDelete";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function WorkoutsList({
   onAddWorkout,
@@ -11,67 +13,76 @@ export default function WorkoutsList({
   workouts,
   exercises,
 }) {
-  const [modalDelete, setModalDelete] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [workoutIdToDelete, setWorkoutIdToDelete] = useState(0);
-  const [isWorkoutDeleted, setIsWorkoutDeleted] = useState(false);
 
-  const handleDelete = (event) => {
-    const id = event.target.dataset.workoutid; // data-workoutid auslesen
-    setWorkoutIdToDelete(id); // id speichern
-    setModalDelete(true);
+  const handleDelete = (id) => {
+    setWorkoutIdToDelete(id);
+    setShowModal(true);
   };
 
   function handleDeleteCancel() {
-    setModalDelete(false);
+    setShowModal(false);
+    setWorkoutIdToDelete(null);
+  }
+
+  function successMessage() {
+    toast.success("Workout deleted successfully!");
   }
 
   function handleDeleteConfirm() {
     onDeleteWorkout(workoutIdToDelete);
-    setModalDelete(false);
-    setIsWorkoutDeleted(true);
+    setShowModal(false);
+    setWorkoutIdToDelete(null);
+    successMessage();
   }
 
   return (
     <>
-      {workouts.length != 0 && isWorkoutDeleted && (
-        <SuccessMessage>Workout deleted successfully!</SuccessMessage>
-      )}
-
-      {workouts.length == 0 && (
-        <SuccessMessage>
-          Oops! No Workouts yet.<br></br>
-          Create a new Workout to start your journey!
-        </SuccessMessage>
-      )}
-
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <WorkoutCard>
         <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
+        {workouts.length == 0 && (
+          <AlertMessage>
+            Oops! No Workouts yet.<br></br>
+            Create a new Workout to start your journey!
+          </AlertMessage>
+        )}
         {workouts.map((workout) => (
           <WorkoutItem key={workout.id}>
             <Actions>
-              <DeleteButton data-workoutid={workout.id} onClick={handleDelete}>
-                ✘ Delete 
+              <DeleteButton onClick={() => handleDelete(workout.id)}>
+                ✘ Delete
               </DeleteButton>
-              <EditLink href={`workouts/${workout.id}/edit`}>
-                ✎ Edit 
-              </EditLink>
+              <EditLink href={`workouts/${workout.id}/edit`}>✎ Edit</EditLink>
             </Actions>
-
             <WorkoutPreview
               name={workout.name}
               workoutExercises={workout.exercises}
               exercises={exercises}
               workouts={workouts}
             />
+            {showModal && (
+              <ModalDelete
+                id={workoutIdToDelete}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+              />
+            )}
           </WorkoutItem>
         ))}
       </WorkoutCard>
-      {modalDelete && (
-        <ModalDelete
-          onConfirm={handleDeleteConfirm}
-          onCancel={handleDeleteCancel}
-        />
-      )}
     </>
   );
 }
@@ -124,13 +135,13 @@ const EditLink = styled(Link)`
   font-size: large;
 `;
 
-const SuccessMessage = styled.p`
+const AlertMessage = styled.p`
   border-radius: 15px;
   padding: 15px;
   margin: auto;
   background-color: #bebebe;
   text-align: center;
   line-height: 2rem;
-   max-width: 1000px;
+  max-width: 1000px;
   width: 80vw;
 `;
