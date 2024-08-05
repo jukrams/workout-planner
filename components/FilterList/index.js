@@ -10,36 +10,35 @@ export default function FilterList({
 }) {
   return (
     <>
-      <MuscleList>
+      <MuscleTagList>
         {muscleGroups.map((muscleGroup) => (
           <MuscleTags key={muscleGroup} onClick={() => onSelect(muscleGroup)}>
             {muscleGroup}
           </MuscleTags>
         ))}
-      </MuscleList>
+      </MuscleTagList>
       <SelectedMuscleList>
-        {selectedMuscleGroups.length !== 0
-          ? selectedMuscleGroups.map((selectedMuscleGroup) => (
+        {selectedMuscleGroups.length !== 0 && (
+          <>
+            {selectedMuscleGroups.map((selectedMuscleGroup) => (
               <SelectedMuscleTags
                 key={selectedMuscleGroup}
                 onClick={() => onDeselect(selectedMuscleGroup)}
               >
                 {selectedMuscleGroup} X
               </SelectedMuscleTags>
-            ))
-          : null}
-
-        {selectedMuscleGroups.length !== 0 ? (
-          <ClearButton type="button" onClick={onClear}>
-            Clear
-          </ClearButton>
-        ) : null}
+            ))}
+            <ClearButton type="button" onClick={onClear}>
+              Clear
+            </ClearButton>
+          </>
+        )}
       </SelectedMuscleList>
     </>
   );
 }
 
-const MuscleList = styled.ul`
+const MuscleTagList = styled.ul`
   list-style: none;
   display: flex;
   flex-wrap: wrap;
@@ -55,6 +54,7 @@ const MuscleTags = styled.li`
   border-radius: 0.5rem;
   padding: 0.25rem;
   margin: 0.25rem;
+  cursor: pointer;
 `;
 
 const ClearButton = styled.button`
