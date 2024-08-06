@@ -4,6 +4,7 @@ import { exercises } from "@/lib/exercises.js";
 import { workouts } from "@/lib/workouts";
 import useLocalStorageState from "use-local-storage-state";
 import { uid } from "uid";
+import { muscleGroups } from "@/lib/muscle-groups";
 
 export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
@@ -39,6 +40,7 @@ export default function App({ Component, pageProps }) {
           onAddWorkout={handleAddWorkout}
           onEditWorkout={handleEditWorkout}
           onDeleteWorkout={handleDeleteWorkout}
+          muscleGroups={muscleGroups}
         />
       </Layout>
     </>
