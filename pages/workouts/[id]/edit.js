@@ -47,5 +47,4 @@ export default function EditPage({ exercises, workouts, onEditWorkout }) {
 const FormSection = styled.section`
   display: flex;
   justify-content: center;
-  margin-bottom: 4rem;
 `;

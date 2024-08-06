@@ -1,15 +1,9 @@
-import WorkoutForm from "../WorkoutForm";
 import styled from "styled-components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Workout from "../Workout";
 
-export default function WorkoutsList({
-  onAddWorkout,
-  onDeleteWorkout,
-  workouts,
-  exercises,
-}) {
+export default function WorkoutsList({ onDeleteWorkout, workouts, exercises }) {
   return (
     <>
       <ToastContainer
@@ -25,7 +19,6 @@ export default function WorkoutsList({
         theme="dark"
       />
       <WorkoutCard>
-        <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
         {workouts.length == 0 && (
           <AlertMessage>
             Oops! No Workouts yet.<br></br>

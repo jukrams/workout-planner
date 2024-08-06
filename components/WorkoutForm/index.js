@@ -68,6 +68,7 @@ export default function WorkoutForm({
         }),
       };
       onAddWorkout(newWorkout);
+      router.push("/workouts");
     } else {
       const editedWorkout = {
         id: defaultData.id,
@@ -93,7 +94,6 @@ export default function WorkoutForm({
 
   return (
     <FormSection>
-      {!isEditMode ? <h2>Create a new Workout</h2> : null}
       <StyledForm onSubmit={handleSubmit}>
         <StyledSection>
           <label htmlFor="name">Workout name:</label>
@@ -201,6 +201,7 @@ const FormSection = styled.section`
   padding: 1rem 2rem;
   max-width: 1000px;
   width: 80vw;
+  margin-bottom: 5.5rem;
 `;
 
 const StyledForm = styled.form`
