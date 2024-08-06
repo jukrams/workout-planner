@@ -25,6 +25,10 @@ export default function App({ Component, pageProps }) {
     );
   }
 
+  function handleDeleteWorkout(id) {
+    setWorkoutsList(workoutsList.filter((workout) => workout.id !== id));
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -35,6 +39,7 @@ export default function App({ Component, pageProps }) {
           workouts={workoutsList}
           onAddWorkout={handleAddWorkout}
           onEditWorkout={handleEditWorkout}
+          onDeleteWorkout={handleDeleteWorkout}
           muscleGroups={muscleGroups}
         />
       </Layout>

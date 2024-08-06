@@ -5,6 +5,8 @@ export default function WorkoutsPage({
   exercises,
   onAddWorkout,
   onEditWorkout,
+  onDeleteWorkout
+
 }) {
   return (
     <>
@@ -14,6 +16,7 @@ export default function WorkoutsPage({
         exercises={exercises}
         onAddWorkout={onAddWorkout}
         onEditWorkout={onEditWorkout}
+        onDeleteWorkout={onDeleteWorkout}
       />
     </>
   );
