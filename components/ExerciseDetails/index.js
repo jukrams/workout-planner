@@ -37,5 +37,5 @@ const ExerciseDetailsInstruction = styled.ol`
   margin-top: 2rem;
   background-color: #fdfd96;
   border-radius: 1.5rem;
-  margin-bottom: 4rem;
+  margin-bottom: 5.5rem;
 `;

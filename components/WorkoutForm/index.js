@@ -23,9 +23,9 @@ export default function WorkoutForm({
       sets.value !== "" &&
       reps.value !== "" &&
       sets.value >= 1 &&
-      sets.value <= 150 &&
+      sets.value <= 20 &&
       reps.value >= 1 &&
-      reps.value <= 20
+      reps.value <= 150
     ) {
       setAddedExercises([
         ...addedExercises,
@@ -146,8 +146,8 @@ export default function WorkoutForm({
             id="sets"
             type="number"
             min="1"
-            max="150"
-            placeholder="1-150"
+            max="20"
+            placeholder="1-20"
             required={addedExercises.length === 0 ? true : false}
           />
           <label htmlFor="reps">Reps:</label>
@@ -156,8 +156,8 @@ export default function WorkoutForm({
             id="reps"
             name="reps"
             min="1"
-            max="20"
-            placeholder="1-20"
+            max="150"
+            placeholder="1-150"
             required={addedExercises.length === 0 ? true : false}
           />
           <Button
