@@ -30,7 +30,6 @@ const Navbar = styled.ul`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  font-family: Verdana;
   color: black;
   font-size: large;
   height: 100%;

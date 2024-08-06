@@ -4,6 +4,7 @@ import WorkoutPreview from "../WorkoutPreview";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import ModalDelete from "../ModalDelete";
+import Image from "next/image";
 
 export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   const [showModal, setShowModal] = useState(false);
@@ -31,42 +32,64 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   }
   return (
     <>
+      {workouts.map((workout, index) => (
+        <WorkoutCard key={workout.id} isEven={index % 2 === 0}>
+          <IconsSection>
+            <EditButton href={`workouts/${workout.id}/edit`}>
+              <Icon
+                alt="Edit"
+                width={35}
+                height={35}
+                src={
+                  index % 2 === 0 ? "/icons/edit.svg" : "/icons/edit-orange.svg"
+                }
+                isEven={index % 2 === 0}
+              />
+            </EditButton>
+            <DeleteButton
+              type="button"
+              onClick={() => handleDelete(workout.id)}
+            >
+              <Icon
+                alt="Edit"
+                width={35}
+                height={35}
+                src={
+                  index % 2 === 0
+                    ? "/icons/delete.svg"
+                    : "/icons/delete-orange.svg"
+                }
+                isEven={index % 2 === 0}
+              />
+            </DeleteButton>
+          </IconsSection>
+          <WorkoutPreview
+            name={workout.name}
+            workoutExercises={workout.exercises}
+            exercises={exercises}
+            workouts={workouts}
+            isEven={index % 2 === 0}
+          />
+        </WorkoutCard>
+      ))}
       {showModal && (
         <ModalDelete
           onConfirm={handleDeleteConfirm}
           onCancel={handleDeleteCancel}
         />
       )}
-      {workouts.map((workout) => (
-        <WorkoutItem key={workout.id}>
-          <Actions>
-            <DeleteButton
-              type="button"
-              onClick={() => handleDelete(workout.id)}
-            >
-              ✘ Delete
-            </DeleteButton>
-            <EditLink href={`workouts/${workout.id}/edit`}>✎ Edit</EditLink>
-          </Actions>
-          <WorkoutPreview
-            name={workout.name}
-            workoutExercises={workout.exercises}
-            exercises={exercises}
-            workouts={workouts}
-          />
-        </WorkoutItem>
-      ))}
     </>
   );
 }
 
-const WorkoutItem = styled.li`
-  margin: 2rem;
-  border: 3px solid black;
+const WorkoutCard = styled.li`
+  background-color: ${(props) =>
+    props.isEven ? "var(--dark-orange)" : "var(--light-orange)"};
+  margin-bottom: 3rem;
   border-radius: 1.5rem;
   padding: 1rem 2rem;
+  width: 85vw;
   max-width: 1000px;
-  width: 80vw;
   display: flex;
   flex-direction: column;
 
@@ -75,26 +98,27 @@ const WorkoutItem = styled.li`
   }
 `;
 
-const Actions = styled.section`
+const Icon = styled(Image)`
+  border: ${(props) =>
+    props.isEven ? "1px solid white" : "1px solid var(--dark-orange)"};
+  border-radius: 50%;
+  padding: 0.25rem;
+`;
+
+const IconsSection = styled.section`
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: right;
+  margin: 0.5rem -1rem -1.5rem 0;
 `;
 
 const DeleteButton = styled.button`
-  color: orange;
-  font-weight: bold;
-  font-size: large;
   border: none;
-  background-color: white;
+  background: none;
   cursor: pointer;
-  margin-right: 20px;
 `;
 
-const EditLink = styled(Link)`
+const EditButton = styled(Link)`
   text-decoration: none;
-  color: orange;
-  font-weight: bold;
-  font-size: large;
+  cursor: pointer;
 `;
