@@ -59,4 +59,5 @@ const AlertMessage = styled.p`
   line-height: 2rem;
   max-width: 1000px;
   width: 80vw;
+  margin-bottom: 5.5rem;
 `;

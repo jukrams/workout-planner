@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import ModalDelete from "../ModalDelete";
 import Link from "next/link";
 import WorkoutPreview from "../WorkoutPreview";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import ModalDelete from "../ModalDelete";
 
 export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   const [showModal, setShowModal] = useState(false);
-  const [workoutIdToDelete, setWorkoutIdToDelete] = useState(0);
+  const [workoutIdToDelete, setWorkoutIdToDelete] = useState(null);
 
   const handleDelete = (id) => {
     setWorkoutIdToDelete(id);
@@ -31,6 +31,12 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   }
   return (
     <>
+      {showModal && (
+        <ModalDelete
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
+      )}
       {workouts.map((workout) => (
         <WorkoutItem key={workout.id}>
           <Actions>
@@ -48,13 +54,6 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
             exercises={exercises}
             workouts={workouts}
           />
-          {showModal && (
-            <ModalDelete
-              id={workoutIdToDelete}
-              onConfirm={handleDeleteConfirm}
-              onCancel={handleDeleteCancel}
-            />
-          )}
         </WorkoutItem>
       ))}
     </>

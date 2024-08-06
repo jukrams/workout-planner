@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export default function ModalDelete({ onConfirm, onCancel, id }) {
+export default function ModalDelete({ onConfirm, onCancel }) {
   return (
     <Modal>
       <p>Do you want to delete this workout?</p>
       <Button type="button" onClick={onCancel}>
         Cancel
       </Button>
-      <Button type="button" onClick={() => onConfirm(id)}>
+      <Button type="button" onClick={onConfirm}>
         Confirm
       </Button>
     </Modal>
@@ -32,6 +32,7 @@ export const Button = styled.button`
   font-weight: bold;
   font-size: 0.8rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 102;
 `;
 
 const ModalContainer = styled.div`
@@ -44,6 +45,7 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 101;
 `;
 
 const PageBackground = styled.div`
@@ -52,6 +54,6 @@ const PageBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #b1b1b1;
-  opacity: 0.4;
+  background-color: rgba(128, 128, 128, 0.5);
+  z-index: 100;
 `;
