@@ -5,12 +5,15 @@ import { workouts } from "@/lib/workouts";
 import useLocalStorageState from "use-local-storage-state";
 import { uid } from "uid";
 import { muscleGroups } from "@/lib/muscle-groups";
+import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
     defaultValue: workouts,
   });
-
+  const router = useRouter();
+  const showNavbar =
+    router.pathname !== "/home" && !router.pathname.startsWith("/exercises/");
   function handleAddWorkout(newWorkout) {
     setWorkoutsList([{ id: uid(), ...newWorkout }, ...workoutsList]);
   }
@@ -32,7 +35,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <Layout>
+      <Layout showNavbar={showNavbar}>
         <Component
           {...pageProps}
           exercises={exercises}
