@@ -6,11 +6,11 @@ export const koulen = Koulen({ subsets: ["latin"], weight: "400" });
 const StyledLink = styled(Link)`
   text-decoration: none;
   font-family: ${koulen.style.fontFamily};
-  font-size: 1.5rem;
+  font-size: 2.5vh;
   background-color: #fdedc8;
-  border-radius: 25px;
-  padding-left: 20px;
-  padding-right: 20px;
+  border-radius: 3rem;
+  padding-left: 10vw;
+  padding-right: 10vw;
   color: #4d4020;
   text-align: center;
   padding-top: 2px;

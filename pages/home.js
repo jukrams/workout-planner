@@ -8,14 +8,14 @@ const HomeBody = styled.section`
   min-width: 100%;
   min-height: 100%;
   position: absolute;
-  box-sizing: borderbox;
+  box-sizing: border-box;
 `;
 
 const HomeSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 12rem;
+  margin-top: 20vh;
   padding: 1rem;
 `;
 export default function HomePage() {
