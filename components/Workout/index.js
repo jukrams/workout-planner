@@ -46,7 +46,9 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
             >
               ✘ Delete
             </DeleteButton>
-            <EditLink href={`workouts/${workout.id}/edit`}>✎ Edit</EditLink>
+            <EditLink href={`workouts/${workout.id}/edit`}>
+            ✎ Edit
+            </EditLink>
           </Actions>
           <WorkoutPreview
             name={workout.name}
