@@ -33,10 +33,11 @@ export const Button = styled.button`
   font-size: 0.8rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 102;
+  color: var(--dark-brown);
 `;
 
-const ModalContainer = styled.div`
-  background-color: #ee9a00;
+const ModalContainer = styled.section`
+  background-color: var(--dark-orange);
   border-radius: 20px;
   padding: 30px;
   width: 400px;
@@ -48,7 +49,7 @@ const ModalContainer = styled.div`
   z-index: 101;
 `;
 
-const PageBackground = styled.div`
+const PageBackground = styled.section`
   position: fixed;
   top: 0;
   left: 0;

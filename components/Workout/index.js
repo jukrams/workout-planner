@@ -33,7 +33,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   return (
     <>
       {workouts.map((workout, index) => (
-        <WorkoutCard key={workout.id} isEven={index % 2 === 0}>
+        <WorkoutCard key={workout.id} $even={index % 2 === 0}>
           <IconsSection>
             <EditButton href={`workouts/${workout.id}/edit`}>
               <Icon
@@ -43,7 +43,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
                 src={
                   index % 2 === 0 ? "/icons/edit.svg" : "/icons/edit-orange.svg"
                 }
-                isEven={index % 2 === 0}
+                $even={index % 2 === 0}
               />
             </EditButton>
             <DeleteButton
@@ -59,7 +59,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
                     ? "/icons/delete.svg"
                     : "/icons/delete-orange.svg"
                 }
-                isEven={index % 2 === 0}
+                $even={index % 2 === 0}
               />
             </DeleteButton>
           </IconsSection>
@@ -68,7 +68,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
             workoutExercises={workout.exercises}
             exercises={exercises}
             workouts={workouts}
-            isEven={index % 2 === 0}
+            even={index % 2 === 0}
           />
         </WorkoutCard>
       ))}
@@ -84,7 +84,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
 
 const WorkoutCard = styled.li`
   background-color: ${(props) =>
-    props.isEven ? "var(--dark-orange)" : "var(--light-orange)"};
+    props.$even ? "var(--dark-orange)" : "var(--light-orange)"};
   margin-bottom: 3rem;
   border-radius: 1.5rem;
   padding: 1rem 2rem;
@@ -92,6 +92,7 @@ const WorkoutCard = styled.li`
   max-width: 1000px;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   &:last-of-type {
     margin-bottom: 5.5rem;
@@ -100,25 +101,31 @@ const WorkoutCard = styled.li`
 
 const Icon = styled(Image)`
   border: ${(props) =>
-    props.isEven ? "1px solid white" : "1px solid var(--dark-orange)"};
+    props.$even ? "1px solid white" : "1px solid var(--dark-orange)"};
   border-radius: 50%;
   padding: 0.25rem;
 `;
 
 const IconsSection = styled.section`
+  position: absolute;
   display: flex;
-  align-items: center;
-  justify-content: right;
-  margin: 0.5rem -1rem -1.5rem 0;
+  width: fit-content;
+  right: 1.5rem;
 `;
 
 const DeleteButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  height: fit-content;
+  height: 35px;
+  width: 35px;
 `;
 
 const EditButton = styled(Link)`
   text-decoration: none;
   cursor: pointer;
+  height: fit-content;
+  height: 35px;
+  width: 35px;
 `;

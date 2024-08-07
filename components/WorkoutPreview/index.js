@@ -4,7 +4,7 @@ export default function WorkoutPreview({
   name,
   exercises,
   workoutExercises,
-  isEven,
+  even,
 }) {
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
@@ -28,7 +28,7 @@ export default function WorkoutPreview({
     <>
       <HeadlineSection>
         {splittedName.map((word, index) => (
-          <Headline key={index} isEven={isEven}>
+          <Headline key={index} $even={even}>
             {word}
           </Headline>
         ))}
@@ -40,8 +40,8 @@ export default function WorkoutPreview({
       </MusclesList>
       <ExercisesList>
         {includedExercises.map((includedExercise) => (
-          <Exercises key={includedExercise.id} isEven={isEven}>
-            <ExerciseName isEven={isEven}>{includedExercise.name}</ExerciseName>
+          <Exercises key={includedExercise.id} $even={even}>
+            <ExerciseName $even={even}>{includedExercise.name}</ExerciseName>
             <SetsReps>
               {includedExercise.sets} sets / {includedExercise.reps} reps
             </SetsReps>
@@ -53,7 +53,7 @@ export default function WorkoutPreview({
 }
 
 const HeadlineSection = styled.section`
-  margin: -0.75rem 0 1rem;
+  margin-bottom: 1rem;
 `;
 
 const Headline = styled.h2`
@@ -61,7 +61,7 @@ const Headline = styled.h2`
   font-size: 3rem;
   font-weight: normal;
   line-height: 1;
-  color: ${(props) => (props.isEven ? "white" : "var(--dark-orange)")};
+  color: ${(props) => (props.$even ? "white" : "var(--dark-orange)")};
 
   &:last-of-type {
     margin-bottom: 0.5rem;
@@ -90,7 +90,7 @@ const ExercisesList = styled.ol`
 
 const Exercises = styled.li`
   border-bottom: ${(props) =>
-    props.isEven ? "1px solid white" : "1px solid var(--dark-orange)"};
+    props.$even ? "1px solid white" : "1px solid var(--dark-orange)"};
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -107,7 +107,7 @@ const Exercises = styled.li`
 const ExerciseName = styled.p`
   font-size: x-large;
   margin: 0.75rem 0 -0.25rem 0;
-  color: ${(props) => (props.isEven ? "white" : "var(--dark-orange)")};
+  color: ${(props) => (props.$even ? "white" : "var(--dark-orange)")};
 `;
 
 const SetsReps = styled.p`
