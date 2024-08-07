@@ -40,21 +40,21 @@ export default function WorkoutPreview({
           <MuscleTags key={workoutMuscleGroup}>{workoutMuscleGroup}</MuscleTags>
         ))}
       </MusclesList>
-      <ShowButton onClick={() => setIsDetailsMode(!isDetailsMode)}>
-        {isDetailsMode ? "SHOW LESS" : "SHOW MORE"}
-      </ShowButton>
       {isDetailsMode && (
         <ExercisesList>
-        {includedExercises.map((includedExercise) => (
-          <Exercises key={includedExercise.id} $even={even}>
-            <ExerciseName $even={even}>{includedExercise.name}</ExerciseName>
-            <SetsReps>
-              {includedExercise.sets} sets / {includedExercise.reps} reps
-            </SetsReps>
-          </Exercises>
-        ))}
-      </ExercisesList>
+          {includedExercises.map((includedExercise) => (
+            <Exercises key={includedExercise.id} $even={even}>
+              <ExerciseName $even={even}>{includedExercise.name}</ExerciseName>
+              <SetsReps>
+                {includedExercise.sets} sets / {includedExercise.reps} reps
+              </SetsReps>
+            </Exercises>
+          ))}
+        </ExercisesList>
       )}
+      <DetailsButton onClick={() => setIsDetailsMode(!isDetailsMode)}>
+        {isDetailsMode ? "SHOW LESS" : "SHOW MORE"}
+      </DetailsButton>
     </>
   );
 }
@@ -90,6 +90,18 @@ const MuscleTags = styled.li`
   margin: 0.25rem;
 `;
 
+const DetailsButton = styled.button`
+  background: none;
+  width: fit-content;
+  color: var(--dark-brown);
+  font-size: large;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 0.75rem;
+  padding: 0;
+`;
+
 const ExercisesList = styled.ol`
   padding: 0;
   list-style-position: inside;
@@ -121,16 +133,4 @@ const SetsReps = styled.p`
   font-size: normal;
   margin: 0;
   color: var(--dark-brown);
-`;
-
-const ShowButton = styled.button`
-  width: 8rem;
-  color: orange;
-  font-weight: bold;
-  font-size: 1rem;
-  border: none;
-  text-decoration-line: underline;
-  background-color: white;
-  cursor: pointer;
-  margin-right: 20px;
 `;
