@@ -51,7 +51,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
               onClick={() => handleDelete(workout.id)}
             >
               <Icon
-                alt="Edit"
+                alt="Delete"
                 width={35}
                 height={35}
                 src={

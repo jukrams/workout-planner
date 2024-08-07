@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 export default function WorkoutPreview({
@@ -21,6 +22,7 @@ export default function WorkoutPreview({
     (includedExercise) => includedExercise.muscleGroups
   );
   const workoutMuscleGroups = [...new Set(allMuscleGroups)];
+  const [isDetailsMode, setIsDetailsMode] = useState(false);
 
   const splittedName = name.split(" ");
 
@@ -38,7 +40,11 @@ export default function WorkoutPreview({
           <MuscleTags key={workoutMuscleGroup}>{workoutMuscleGroup}</MuscleTags>
         ))}
       </MusclesList>
-      <ExercisesList>
+      <ShowButton onClick={() => setIsDetailsMode(!isDetailsMode)}>
+        {isDetailsMode ? "SHOW LESS" : "SHOW MORE"}
+      </ShowButton>
+      {isDetailsMode && (
+        <ExercisesList>
         {includedExercises.map((includedExercise) => (
           <Exercises key={includedExercise.id} $even={even}>
             <ExerciseName $even={even}>{includedExercise.name}</ExerciseName>
@@ -48,6 +54,7 @@ export default function WorkoutPreview({
           </Exercises>
         ))}
       </ExercisesList>
+      )}
     </>
   );
 }
@@ -114,4 +121,16 @@ const SetsReps = styled.p`
   font-size: normal;
   margin: 0;
   color: var(--dark-brown);
+`;
+
+const ShowButton = styled.button`
+  width: 8rem;
+  color: orange;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  text-decoration-line: underline;
+  background-color: white;
+  cursor: pointer;
+  margin-right: 20px;
 `;
