@@ -307,13 +307,14 @@ const AddButton = styled.button`
 
 const SubmitButton = styled.button`
   width: 85vw;
+  max-width: 1000px;
   background-color: var(--dark-brown);
   color: rgba(255, 255, 255, 0.95);
   font-size: larger;
   border-radius: 1.5rem;
   border: none;
   padding: 0.2rem 0;
-  margin: 0.5rem 0;
+  margin: 0.5rem auto;
 
   &:hover {
     background-color: var(--dark-orange);
