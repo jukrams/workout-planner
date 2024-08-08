@@ -17,5 +17,5 @@ const StyledLink = styled(Link)`
 `;
 
 export default function HomeLink() {
-  return <StyledLink href="/">Start</StyledLink>;
+  return <StyledLink href="/exercises">Start</StyledLink>;
 }

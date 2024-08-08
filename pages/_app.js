@@ -13,7 +13,9 @@ export default function App({ Component, pageProps }) {
   });
   const router = useRouter();
   const showNavbar =
-    router.pathname !== "/home" && !router.pathname.startsWith("/exercises/");
+    router.pathname !== "/" &&
+    !router.pathname.startsWith("/exercises/") &&
+    !router.pathname.startsWith("/workouts/");
   function handleAddWorkout(newWorkout) {
     setWorkoutsList([{ id: uid(), ...newWorkout }, ...workoutsList]);
   }

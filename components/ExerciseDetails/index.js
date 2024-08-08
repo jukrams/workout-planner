@@ -24,12 +24,10 @@ const ExerciseImage = styled.img`
   border-radius: 1rem;
 `;
 const ExerciseDetailsMuscle = styled.figcaption`
-  font-family: Verdana;
   font-size: medium;
   font-weight: bold;
 `;
 const ExerciseDetailsInstruction = styled.ol`
-  font-family: Verdana;
   font-size: 1rem;
   line-height: 1.5rem;
   width: 75vw;
