@@ -1,5 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
+import ConfettiExplosion from "react-confetti-explosion";
+import ProgressBar from "../ProgressBar";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function WorkoutPreview({
   name,
@@ -26,6 +29,19 @@ export default function WorkoutPreview({
 
   const splittedName = name.split(" ");
 
+  const [completedExercises, setCompletedExercises] = useState([]);
+  const progress = (completedExercises.length / includedExercises.length) * 100;
+
+  function toggleExerciseCompletion(exerciseId) {
+    setCompletedExercises(
+      completedExercises.includes(exerciseId)
+        ? completedExercises.filter(
+            (completedExercise) => completedExercise !== exerciseId
+          )
+        : [...completedExercises, exerciseId]
+    );
+  }
+
   return (
     <>
       <HeadlineSection>
@@ -41,16 +57,39 @@ export default function WorkoutPreview({
         ))}
       </MusclesList>
       {isDetailsMode && (
-        <ExercisesList>
-          {includedExercises.map((includedExercise) => (
-            <Exercises key={includedExercise.id} $even={even}>
-              <ExerciseName $even={even}>{includedExercise.name}</ExerciseName>
-              <SetsReps>
-                {includedExercise.sets} sets / {includedExercise.reps} reps
-              </SetsReps>
-            </Exercises>
-          ))}
-        </ExercisesList>
+        <>
+          <ProgressSection>
+            <ProgressBar progress={progress} />
+            {progress === 100 ? (
+              <ConfettiWrapper>
+                <ConfettiExplosion
+                  force={0.6}
+                  duration={2500}
+                  particleCount={80}
+                  width={1000}
+                />
+              </ConfettiWrapper>
+            ) : null}
+          </ProgressSection>
+          <ExercisesList>
+            {includedExercises.map((includedExercise) => (
+              <Exercises key={includedExercise.id} $even={even}>
+                <ExerciseName $even={even}>
+                  {includedExercise.name}
+                </ExerciseName>
+                <SetsReps>
+                  {includedExercise.sets} sets / {includedExercise.reps} reps
+                </SetsReps>
+                <Checkbox
+                  type="checkbox"
+                  $even={even}
+                  checked={completedExercises.includes(includedExercise.id)}
+                  onChange={() => toggleExerciseCompletion(includedExercise.id)}
+                />
+              </Exercises>
+            ))}
+          </ExercisesList>
+        </>
       )}
       <DetailsButton onClick={() => setIsDetailsMode(!isDetailsMode)}>
         {isDetailsMode ? "SHOW LESS" : "SHOW MORE"}
@@ -73,6 +112,22 @@ const Headline = styled.h2`
   &:last-of-type {
     margin-bottom: 0.5rem;
   }
+`;
+
+const ProgressSection = styled.section`
+  position: relative;
+`;
+
+// const ProgressBar = styled.input`
+//   margin: 1.25rem auto 0 auto;
+//   width: 100%;
+//   accent-color: ${(props) => (props.$even ? "red" : "var(--dark-orange)")};
+// `;
+
+const ConfettiWrapper = styled.section`
+  position: absolute;
+  right: 0;
+  bottom: 1rem;
 `;
 
 const MusclesList = styled.ul`
@@ -110,16 +165,12 @@ const ExercisesList = styled.ol`
 const Exercises = styled.li`
   border-bottom: ${(props) =>
     props.$even ? "1px solid white" : "1px solid var(--dark-orange)"};
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto auto 10%;
   align-items: flex-end;
 
   &:last-of-type {
     border: none;
-  }
-
-  &:first-of-type {
-    margin-top: 0.5rem;
   }
 `;
 
@@ -132,5 +183,40 @@ const ExerciseName = styled.p`
 const SetsReps = styled.p`
   font-size: normal;
   margin: 0;
+  padding-right: 1rem;
   color: var(--dark-brown);
+  text-align: end;
+`;
+
+const Checkbox = styled.input`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border: 2px solid
+    ${(props) => (props.$even ? "var(--dark-brown)" : "var(--dark-orange)")};
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+
+  &:checked {
+    background-color: ${(props) =>
+      props.$even ? "var(--dark-brown)" : "var(--dark-orange)"};
+  }
+
+  &:checked::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 9px;
+    height: 13px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
 `;
