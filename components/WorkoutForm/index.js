@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
@@ -129,7 +128,7 @@ export default function WorkoutForm({
           <StyledDropdown
             name="exerciseName"
             id="exerciseName"
-            required={addedExercises.length === 0 ? true : false}
+            required={addedExercises.length === 0}
             defaultValue=""
             $edit={isEditMode}
           >

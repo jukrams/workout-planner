@@ -7,12 +7,12 @@ export default function Navigation() {
 
   return (
     <Navbar>
-      <Section $active={router.pathname === "/"}>
+      <NavbarItem $active={router.pathname === "/"}>
         <StyledLink href="/">Exercises</StyledLink>
-      </Section>
-      <Section $active={router.pathname === "/workouts"}>
+      </NavbarItem>
+      <NavbarItem $active={router.pathname === "/workouts"}>
         <StyledLink href="/workouts">Workouts</StyledLink>
-      </Section>
+      </NavbarItem>
     </Navbar>
   );
 }
@@ -31,7 +31,7 @@ const Navbar = styled.ul`
   padding: 0;
 `;
 
-const Section = styled.li`
+const NavbarItem = styled.li`
   background-color: ${(props) => (props.$active ? "var(--orange)" : "#FBDA8B")};
   height: 100%;
   display: flex;
