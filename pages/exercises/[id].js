@@ -6,7 +6,9 @@ import { useRouter } from "next/router";
 export default function DetailsPage({ exercises }) {
   const router = useRouter();
   const { id } = router.query;
-  if (!id) { return <p>Loading...</p>; }
+  if (!id) {
+    return <p>Loading...</p>;
+  }
   const exercise = exercises.find((exercise) => exercise.id === id);
   return (
     <>
@@ -34,5 +36,4 @@ const ExerciseDetailsHeading = styled.section`
   display: flex;
   justify-content: space-between;
   margin: 0 4.5rem;
-  
 `;

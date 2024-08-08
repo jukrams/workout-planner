@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
@@ -68,6 +67,7 @@ export default function WorkoutForm({
         }),
       };
       onAddWorkout(newWorkout);
+      router.push("/workouts");
     } else {
       const editedWorkout = {
         id: defaultData.id,
@@ -93,10 +93,10 @@ export default function WorkoutForm({
 
   return (
     <FormSection>
-      {!isEditMode ? <h2>Create a new Workout</h2> : null}
       <StyledForm onSubmit={handleSubmit}>
-        <StyledSection>
-          <label htmlFor="name">Workout name:</label>
+        <StyledFieldset $edit={isEditMode}>
+          <StyledLegend $edit={isEditMode}>First step</StyledLegend>
+          <StyledLabel htmlFor="name">Workout name</StyledLabel>
           <StyledInput
             name="name"
             id="name"
@@ -105,34 +105,35 @@ export default function WorkoutForm({
             placeholder="Insert name here"
             defaultValue={defaultData?.name}
             required
+            $edit={isEditMode}
           />
-        </StyledSection>
-        <h3>Add your exercises</h3>
-        <StyledSection>
-          <h4>Added exercises:</h4>
-          <ExercisesList>
-            {addedExercises.map((addedExercise) => (
-              <li key={addedExercise.id}>
-                {addedExercise.exercise} sets: {addedExercise.sets} reps:{" "}
-                {addedExercise.reps}
-                <DeleteButton
-                  type="button"
-                  onClick={() => handleDeleteExercise(addedExercise.id)}
-                >
-                  X
-                </DeleteButton>
-              </li>
-            ))}
-          </ExercisesList>
-          <label htmlFor="exerciseName">Exercise name:</label>
+        </StyledFieldset>
+        <StyledFieldset $edit={isEditMode}>
+          <StyledLegend $edit={isEditMode}>Second step</StyledLegend>
+          <ExercisesListHeadline>Added to list:</ExercisesListHeadline>
+          {addedExercises.map((addedExercise) => (
+            <AddedExercise key={addedExercise.id}>
+              {addedExercise.exercise} {addedExercise.sets} sets /{" "}
+              {addedExercise.reps} reps
+              <DeleteButton
+                type="button"
+                onClick={() => handleDeleteExercise(addedExercise.id)}
+                $edit={isEditMode}
+              >
+                X
+              </DeleteButton>
+            </AddedExercise>
+          ))}
+          <StyledLabel htmlFor="exerciseName">Exercise name</StyledLabel>
           <StyledDropdown
             name="exerciseName"
             id="exerciseName"
-            required={addedExercises.length === 0 ? true : false}
+            required={addedExercises.length === 0}
             defaultValue=""
+            $edit={isEditMode}
           >
             <option value="" disabled>
-              Please select an exercise
+              Please select an option
             </option>
             {exercises.map((exercise) => (
               <option value={exercise.name} key={exercise.id}>
@@ -140,7 +141,7 @@ export default function WorkoutForm({
               </option>
             ))}
           </StyledDropdown>
-          <label htmlFor="sets">Sets:</label>
+          <StyledLabel htmlFor="sets">Exercise Sets</StyledLabel>
           <StyledInput
             name="sets"
             id="sets"
@@ -149,8 +150,9 @@ export default function WorkoutForm({
             max="20"
             placeholder="1-20"
             required={addedExercises.length === 0 ? true : false}
+            $edit={isEditMode}
           />
-          <label htmlFor="reps">Reps:</label>
+          <StyledLabel htmlFor="reps">Exercise Reps</StyledLabel>
           <StyledInput
             type="number"
             id="reps"
@@ -159,26 +161,30 @@ export default function WorkoutForm({
             max="150"
             placeholder="1-150"
             required={addedExercises.length === 0 ? true : false}
+            $edit={isEditMode}
           />
-          <Button
+          <AddButton
             aria-label="Add new exercise to list"
             type="button"
             onClick={handleAddExercise}
           >
-            Add new exercise to list
-          </Button>
-        </StyledSection>
+            Add exercise to list
+          </AddButton>
+        </StyledFieldset>
         {isEditMode ? (
           <ButtonSection>
-            <Link href="/workouts">
-              <Button type="button">Cancel</Button>
-            </Link>
-            <Button
+            <CancelButton
+              type="button"
+              onClick={() => router.push("/workouts")}
+            >
+              Cancel
+            </CancelButton>
+            <SaveButton
               type="submit"
               disabled={addedExercises.length === 0 ? true : false}
             >
               Save
-            </Button>
+            </SaveButton>
           </ButtonSection>
         ) : (
           <SubmitButton
@@ -195,12 +201,9 @@ export default function WorkoutForm({
 }
 
 const FormSection = styled.section`
-  margin: 2rem;
-  border: 3px solid black;
-  border-radius: 1.5rem;
-  padding: 1rem 2rem;
   max-width: 1000px;
-  width: 80vw;
+  width: 85vw;
+  margin: 0 auto 5.5rem auto;
 `;
 
 const StyledForm = styled.form`
@@ -208,61 +211,150 @@ const StyledForm = styled.form`
   flex-direction: column;
 `;
 
-const StyledSection = styled.section`
-  border: 2px solid black;
-  border-radius: 0.75rem;
+const StyledFieldset = styled.fieldset`
+  border: ${(props) =>
+    props.$edit
+      ? "3px dotted rgba(250, 199, 78, 0.5)"
+      : "3px dotted rgba(255, 255, 255, 0.5)"};
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  padding: 0 0.5rem 0.5rem;
+  padding-top: 0;
 `;
 
-const ExercisesList = styled.ol`
-  margin: 0 0 1.5rem 0;
+const StyledLegend = styled.legend`
+  color: ${(props) => (props.$edit ? "var(--orange)" : "white")};
+  font-size: xx-large;
+  padding-left: 0;
 `;
 
-const Button = styled.button`
-  width: fit-content;
-  padding: 0.5rem;
-  background-color: orange;
-  border-radius: 0.5rem;
+const StyledLabel = styled.label`
+  color: var(--dark-brown);
+  font-size: larger;
+`;
 
-  &:hover {
-    background-color: yellow;
+const ExercisesListHeadline = styled.p`
+  color: var(--dark-brown);
+  font-size: larger;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+`;
+
+const AddedExercise = styled.p`
+  color: var(--dark-brown);
+  margin: 0;
+  line-height: 1.25;
+  font-size: smaller;
+
+  &:last-of-type {
+    margin-bottom: 0.75rem;
   }
-`;
-
-const SubmitButton = styled.button`
-  margin-top: 1rem;
-  width: fit-content;
-  padding: 0.5rem;
-  background-color: orange;
-  border-radius: 0.5rem;
-  align-self: center;
-
-  &:hover {
-    background-color: yellow;
-  }
-`;
-
-const StyledInput = styled.input`
-  width: 70%;
-  margin: 0.5rem 0 0.75rem 0;
-`;
-const StyledDropdown = styled.select`
-  width: 70%;
-  margin: 0.5rem 0 0.75rem 0;
-`;
-
-const ButtonSection = styled.section`
-  display: flex;
-  justify-content: space-around;
-  margin-top: 1rem;
 `;
 
 const DeleteButton = styled.button`
   border: none;
   background: none;
-  font-weight: bold;
-  color: orange;
-  margin-left: 0.5rem;
+  color: ${(props) => (props.$edit ? "var(--orange)" : "white")};
+  font-size: 0.85rem;
+  line-height: 1;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--dark-orange);
+  }
+`;
+
+const StyledInput = styled.input`
+  width: 70%;
+  margin-bottom: 1rem;
+  background-color: ${(props) =>
+    props.$edit ? "rgba(250, 199, 78, 0.78)" : "rgba(255, 255, 255, 0.78)"};
+  color: var(--dark-brown);
+  border: none;
+  border-radius: 1rem;
+  font-size: medium;
+  padding-left: 0.75rem;
+`;
+
+const StyledDropdown = styled.select`
+  width: 70%;
+  margin-bottom: 1rem;
+  background-color: ${(props) =>
+    props.$edit ? "rgba(250, 199, 78, 0.78)" : "rgba(255, 255, 255, 0.78)"};
+  color: ${(props) => (props.$edit ? "white" : "var(--orange)")};
+  border: none;
+  border-radius: 1rem;
+  font-size: medium;
+  padding-left: 0.75rem;
+`;
+
+const AddButton = styled.button`
+  width: fit-content;
+  background-color: #af7b00;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: medium;
+  border-radius: 1rem;
+  border: none;
+  padding: 0.1rem 1rem;
+  margin: 0.5rem 0;
+
+  &:hover {
+    background-color: var(--dark-orange);
+    cursor: pointer;
+  }
+`;
+
+const SubmitButton = styled.button`
+  width: 85vw;
+  max-width: 1000px;
+  background-color: var(--dark-brown);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: larger;
+  border-radius: 1.5rem;
+  border: none;
+  padding: 0.2rem 0;
+  margin: 0.5rem auto;
+
+  &:hover {
+    background-color: var(--dark-orange);
+    cursor: pointer;
+  }
+`;
+
+const ButtonSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  width: 85vw;
+  max-width: 1000px;
+`;
+
+const CancelButton = styled.button`
+  background: none;
+  color: var(--dark-orange);
+  font-size: larger;
+  border-radius: 1.5rem;
+  border: 2px solid var(--dark-orange);
+  margin: 0.5rem 0;
+  width: 48%;
+
+  &:hover {
+    background-color: var(--dark-orange);
+    cursor: pointer;
+  }
+`;
+
+const SaveButton = styled.button`
+  width: 48%;
+  background-color: var(--dark-brown);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: larger;
+  border-radius: 1.5rem;
+  border: none;
+  margin: 0.5rem 0;
+
+  &:hover {
+    background-color: var(--dark-orange);
+    cursor: pointer;
+  }
 `;

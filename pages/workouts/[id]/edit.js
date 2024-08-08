@@ -2,6 +2,7 @@ import WorkoutForm from "@/components/WorkoutForm";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { uid } from "uid";
+import HeadlineSection from "@/components/HeadlineSection";
 
 export default function EditPage({ exercises, workouts, onEditWorkout }) {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function EditPage({ exercises, workouts, onEditWorkout }) {
 
   return (
     <>
-      <h1>Edit Workout</h1>
+      <HeadlineSection isEditMode />
       <FormSection>
         <WorkoutForm
           exercises={exercises}
@@ -47,5 +48,4 @@ export default function EditPage({ exercises, workouts, onEditWorkout }) {
 const FormSection = styled.section`
   display: flex;
   justify-content: center;
-  margin-bottom: 4rem;
 `;
