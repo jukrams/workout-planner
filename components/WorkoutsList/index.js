@@ -1,20 +1,44 @@
-import WorkoutPreview from "../WorkoutPreview";
+import WorkoutForm from "../WorkoutForm";
 import styled from "styled-components";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Workout from "../Workout";
 
-export default function WorkoutsList({ workouts, exercises }) {
+export default function WorkoutsList({
+  onAddWorkout,
+  onDeleteWorkout,
+  workouts,
+  exercises,
+}) {
   return (
-    <WorkoutCard>
-      {workouts.map((workout) => (
-        <WorkoutItem key={workout.id}>
-          <WorkoutPreview
-            name={workout.name}
-            workoutExercises={workout.exercises}
-            exercises={exercises}
-            workouts={workouts}
-          />
-        </WorkoutItem>
-      ))}
-    </WorkoutCard>
+    <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+      <WorkoutCard>
+        <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
+        {workouts.length == 0 && (
+          <AlertMessage>
+            Oops! No Workouts yet.<br></br>
+            Create a new Workout to start your journey!
+          </AlertMessage>
+        )}
+        <Workout
+          onDeleteWorkout={onDeleteWorkout}
+          workouts={workouts}
+          exercises={exercises}
+        />
+      </WorkoutCard>
+    </>
   );
 }
 
@@ -26,15 +50,14 @@ const WorkoutCard = styled.ul`
   align-items: center;
 `;
 
-const WorkoutItem = styled.li`
-  margin: 2rem;
-  border: 3px solid black;
-  border-radius: 1.5rem;
-  padding: 1rem 2rem;
+const AlertMessage = styled.p`
+  border-radius: 15px;
+  padding: 15px;
+  margin: auto;
+  background-color: #bebebe;
+  text-align: center;
+  line-height: 2rem;
   max-width: 1000px;
   width: 80vw;
-
-  &:last-of-type {
-    margin-bottom: 5.5rem;
-  }
+  margin-bottom: 5.5rem;
 `;

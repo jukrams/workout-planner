@@ -1,11 +1,23 @@
 import WorkoutsList from "@/components/WorkoutsList";
-import { exercises } from "@/lib/exercises";
 
-export default function WorkoutsPage({ workouts }) {
+export default function WorkoutsPage({
+  workouts,
+  exercises,
+  onAddWorkout,
+  onEditWorkout,
+  onDeleteWorkout
+
+}) {
   return (
     <>
       <h1>Workouts</h1>
-      <WorkoutsList workouts={workouts} exercises={exercises} />
+      <WorkoutsList
+        workouts={workouts}
+        exercises={exercises}
+        onAddWorkout={onAddWorkout}
+        onEditWorkout={onEditWorkout}
+        onDeleteWorkout={onDeleteWorkout}
+      />
     </>
   );
 }

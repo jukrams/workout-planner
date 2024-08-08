@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 export default function WorkoutPreview({ name, exercises, workoutExercises }) {
@@ -16,21 +17,27 @@ export default function WorkoutPreview({ name, exercises, workoutExercises }) {
     (includedExercise) => includedExercise.muscleGroups
   );
   const workoutMuscleGroups = [...new Set(allMuscleGroups)];
+  const [isDetailsMode, setIsDetailsMode] = useState(false);
 
   return (
     <>
       <h2>{name}</h2>
       <p>{workoutMuscleGroups.join(" - ")}</p>
-      <WorkoutsList>
-        {includedExercises.map((includedExercise) => (
-          <WorkoutExercises key={includedExercise.id}>
-            {includedExercise.name}
-            <SetsReps>
-              {includedExercise.sets} sets / {includedExercise.reps} reps
-            </SetsReps>
-          </WorkoutExercises>
-        ))}
-      </WorkoutsList>
+      <ShowButton onClick={() => setIsDetailsMode(!isDetailsMode)}>
+        {isDetailsMode ? "SHOW LESS" : "SHOW MORE"}
+      </ShowButton>
+      {isDetailsMode && (
+        <WorkoutsList>
+          {includedExercises.map((includedExercise) => (
+            <WorkoutExercises key={includedExercise.id}>
+              {includedExercise.name}
+              <SetsReps>
+                {includedExercise.sets} sets / {includedExercise.reps} reps
+              </SetsReps>
+            </WorkoutExercises>
+          ))}
+        </WorkoutsList>
+      )}
     </>
   );
 }
@@ -51,4 +58,16 @@ const WorkoutsList = styled.ol`
 const SetsReps = styled.p`
   margin: 0;
   line-height: 1.5;
+`;
+
+const ShowButton = styled.button`
+  width: 8rem;
+  color: orange;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  text-decoration-line: underline;
+  background-color: white;
+  cursor: pointer;
+  margin-right: 20px;
 `;
