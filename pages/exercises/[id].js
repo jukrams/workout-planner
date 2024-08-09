@@ -13,7 +13,7 @@ export default function DetailsPage({ exercises }) {
   return (
     <>
       <ExerciseDetailsHeading>
-        <StyledBackLink href={"/"}>←</StyledBackLink>
+        <StyledBackLink href={"/exercises"}>←</StyledBackLink>
         <h1>{exercise.name}</h1>
       </ExerciseDetailsHeading>
       <ExerciseDetailsContainer>
