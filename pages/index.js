@@ -21,7 +21,7 @@ export function StartLink() {
   return <StyledLink href="/exercises">Start</StyledLink>;
 }
 
-export default function HomePage() {
+export default function StartPage() {
   return (
     <Background>
       <Section>
