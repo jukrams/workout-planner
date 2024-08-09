@@ -2,13 +2,15 @@ import { useState } from "react";
 import styled from "styled-components";
 import ConfettiExplosion from "react-confetti-explosion";
 import ProgressBar from "../ProgressBar";
-import useLocalStorageState from "use-local-storage-state";
+import useSessionStorageState from "use-session-storage-state";
+import Image from "next/image";
 
 export default function WorkoutPreview({
   name,
   exercises,
   workoutExercises,
   even,
+  id,
 }) {
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
@@ -29,7 +31,12 @@ export default function WorkoutPreview({
 
   const splittedName = name.split(" ");
 
-  const [completedExercises, setCompletedExercises] = useState([]);
+  const sessionStorageKey = `${id}`;
+  const [completedExercises, setCompletedExercises] = useSessionStorageState(
+    sessionStorageKey,
+    { defaultValue: [] }
+  );
+
   const progress = (completedExercises.length / includedExercises.length) * 100;
 
   function toggleExerciseCompletion(exerciseId) {
@@ -40,6 +47,10 @@ export default function WorkoutPreview({
           )
         : [...completedExercises, exerciseId]
     );
+  }
+
+  function handleResetProgress() {
+    setCompletedExercises([]);
   }
 
   return (
@@ -60,7 +71,16 @@ export default function WorkoutPreview({
         <>
           <ProgressSection>
             <ProgressBar progress={progress} />
-            {progress === 100 ? (
+            <ResetButton $even={even} onClick={() => handleResetProgress()}>
+              <ResetIcon
+                alt="Reset"
+                width={24}
+                height={24}
+                src="/icons/refresh-white.svg"
+                $even={even}
+              />
+            </ResetButton>
+            {/* {progress === 100 ? (
               <ConfettiWrapper>
                 <ConfettiExplosion
                   force={0.6}
@@ -69,7 +89,7 @@ export default function WorkoutPreview({
                   width={1000}
                 />
               </ConfettiWrapper>
-            ) : null}
+            ) : null} */}
           </ProgressSection>
           <ExercisesList>
             {includedExercises.map((includedExercise) => (
@@ -114,22 +134,6 @@ const Headline = styled.h2`
   }
 `;
 
-const ProgressSection = styled.section`
-  position: relative;
-`;
-
-// const ProgressBar = styled.input`
-//   margin: 1.25rem auto 0 auto;
-//   width: 100%;
-//   accent-color: ${(props) => (props.$even ? "red" : "var(--dark-orange)")};
-// `;
-
-const ConfettiWrapper = styled.section`
-  position: absolute;
-  right: 0;
-  bottom: 1rem;
-`;
-
 const MusclesList = styled.ul`
   list-style: none;
   padding: 0;
@@ -157,9 +161,43 @@ const DetailsButton = styled.button`
   padding: 0;
 `;
 
-const ExercisesList = styled.ol`
+const ProgressSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+`;
+
+const ResetButton = styled.button`
+  width: 10.75%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: none;
+  border: none;
+  margin-left: 0.75rem;
+`;
+
+const ResetIcon = styled(Image)`
+  background-color: ${(props) =>
+    props.$even ? "var(--dark-brown)" : "var(--dark-orange)"};
+  border: 2px solid
+    ${(props) => (props.$even ? "var(--dark-brown)" : "var(--dark-orange)")};
+  border-radius: 50%;
+  transform: scaleX(-1);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+// const ConfettiWrapper = styled.section`
+//   position: absolute;
+//   right: 0;
+//   bottom: 1rem;
+// `;
+
+const ExercisesList = styled.ul`
   padding: 0;
-  list-style-position: inside;
 `;
 
 const Exercises = styled.li`

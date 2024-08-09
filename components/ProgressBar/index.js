@@ -13,7 +13,7 @@ const ProgressBackground = styled.div`
   width: 100%;
   background-color: white;
   border-radius: 1rem;
-  margin: 1.25rem auto 0 auto;
+  margin: 0 auto 0 auto;
   display: flex;
   justify-content: flex-start;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
