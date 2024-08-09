@@ -26,12 +26,16 @@ export default function WorkoutsList({
         theme="dark"
       />
       <WorkoutCard>
-        {workouts.length == 0 && (
-          <AlertMessage>
-            Oops! No Workouts yet.<br></br>
-            Create a new Workout to start your journey!
-          </AlertMessage>
-        )}
+        {workouts.length == 0 &&
+          (favouritesMode ? (
+            <AlertMessage>Oops! No favourite Workouts yet.</AlertMessage>
+          ) : (
+            <AlertMessage>
+              Oops! No Workouts yet.
+              <br />
+              Create a new Workout to start your journey!
+            </AlertMessage>
+          ))}
         <Workout
           onDeleteWorkout={onDeleteWorkout}
           workouts={workouts}
@@ -57,7 +61,7 @@ const AlertMessage = styled.p`
   border-radius: 15px;
   padding: 15px;
   margin: auto;
-  background-color: #bebebe;
+  background-color: var(--orange);
   text-align: center;
   line-height: 2rem;
   max-width: 1000px;

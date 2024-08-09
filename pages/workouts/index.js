@@ -2,7 +2,6 @@ import WorkoutsList from "@/components/WorkoutsList";
 import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
-import useLocalStorageState from "use-local-storage-state";
 import { FavouriteButton } from "@/components/Workout";
 import { useState } from "react";
 
@@ -11,32 +10,10 @@ export default function WorkoutsPage({
   exercises,
   onEditWorkout,
   onDeleteWorkout,
+  favouriteWorkouts,
+  onToggleFavourite,
 }) {
-  const [favouriteWorkouts, setFavouriteWorkouts] = useLocalStorageState(
-    "favouriteWorkouts",
-    { defaultValue: [] }
-  );
-
   const [favouritesMode, setFavouritesMode] = useState(false);
-
-  function handleToggleFavourite(idToToggle) {
-    const isFavourite = favouriteWorkouts.some(
-      (favouriteWorkout) => favouriteWorkout.id === idToToggle
-    );
-
-    if (isFavourite) {
-      setFavouriteWorkouts(
-        favouriteWorkouts.filter(
-          (favouriteWorkout) => favouriteWorkout.id !== idToToggle
-        )
-      );
-    } else {
-      const workoutToToggle = workouts.find(
-        (workout) => workout.id === idToToggle
-      );
-      setFavouriteWorkouts([workoutToToggle, ...favouriteWorkouts]);
-    }
-  }
 
   return (
     <>
@@ -55,24 +32,28 @@ export default function WorkoutsPage({
           </CreateLink>
           <FavouriteButton
             type="button"
-            onClick={() => setFavouritesMode(true)}
+            onClick={() => setFavouritesMode(!favouritesMode)}
           >
             <FavouriteIcon
               alt="Favourite"
               width={35}
               height={35}
-              src={"/icons/star-filled-white.svg"}
+              src={
+                favouritesMode
+                  ? "/icons/star-filled-white.svg"
+                  : "/icons/star-white.svg"
+              }
             />
           </FavouriteButton>
         </ButtonsSection>
       </HeadlineSection>
       <WorkoutsList
-        workouts={workouts}
+        workouts={favouritesMode ? favouriteWorkouts : workouts}
         exercises={exercises}
         onEditWorkout={onEditWorkout}
         onDeleteWorkout={onDeleteWorkout}
         favouriteWorkouts={favouriteWorkouts}
-        onToggleFavourite={handleToggleFavourite}
+        onToggleFavourite={onToggleFavourite}
         favouritesMode={favouritesMode}
       />
     </>
