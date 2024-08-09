@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import ModalDelete from "../ModalDelete";
 import Image from "next/image";
+import FavouriteButton from "../FavouriteButton";
 
 export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   const [showModal, setShowModal] = useState(false);
@@ -35,6 +36,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
       {workouts.map((workout, index) => (
         <WorkoutCard key={workout.id} $even={index % 2 === 0}>
           <IconsSection>
+            <FavouriteButton></FavouriteButton>
             <EditButton href={`workouts/${workout.id}/edit`}>
               <Icon
                 alt="Edit"
