@@ -11,9 +11,11 @@ export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
     defaultValue: workouts,
   });
+
   const router = useRouter();
   const showNavbar =
     router.pathname !== "/home" && !router.pathname.startsWith("/exercises/");
+
   function handleAddWorkout(newWorkout) {
     setWorkoutsList([{ id: uid(), ...newWorkout }, ...workoutsList]);
   }

@@ -3,7 +3,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Workout from "../Workout";
 
-export default function WorkoutsList({ onDeleteWorkout, workouts, exercises }) {
+export default function WorkoutsList({
+  onDeleteWorkout,
+  workouts,
+  exercises,
+  favouriteWorkouts,
+  onToggleFavourite,
+  favouritesMode,
+}) {
   return (
     <>
       <ToastContainer
@@ -29,6 +36,9 @@ export default function WorkoutsList({ onDeleteWorkout, workouts, exercises }) {
           onDeleteWorkout={onDeleteWorkout}
           workouts={workouts}
           exercises={exercises}
+          favouriteWorkouts={favouriteWorkouts}
+          onToggleFavourite={onToggleFavourite}
+          favouritesMode={favouritesMode}
         />
       </WorkoutCard>
     </>
