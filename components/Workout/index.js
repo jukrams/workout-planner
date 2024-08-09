@@ -5,11 +5,11 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import ModalDelete from "../ModalDelete";
 import Image from "next/image";
-import FavouriteButton from "../FavouriteButton";
 
 export default function Workout({ workouts, onDeleteWorkout, exercises }) {
   const [showModal, setShowModal] = useState(false);
   const [workoutIdToDelete, setWorkoutIdToDelete] = useState(null);
+  const [workoutInfo, setWorkoutInfo] = useState([]);
 
   const handleDelete = (id) => {
     setWorkoutIdToDelete(id);
@@ -31,12 +31,32 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
     setWorkoutIdToDelete(null);
     successMessage();
   }
+  function handleToggleFavourite(workoutId) {
+    setWorkoutInfo((prevInfo) => {
+      return {
+        ...prevInfo,
+        [workoutId]: !prevInfo[workoutId],
+      };
+    });
+  }
   return (
     <>
       {workouts.map((workout, index) => (
         <WorkoutCard key={workout.id} $even={index % 2 === 0}>
           <IconsSection>
-            <FavouriteButton></FavouriteButton>
+            <FavouriteButton>
+              <Icon
+                alt="Favourite"
+                width={35}
+                height={35}
+                src={
+                  index % 2 === 0
+                    ? "/icons/star-white.svg"
+                    : "/icons/star-orange.svg"
+                }
+                $even={index % 2 === 0}
+              />
+            </FavouriteButton>
             <EditButton href={`workouts/${workout.id}/edit`}>
               <Icon
                 alt="Edit"
@@ -130,4 +150,14 @@ const EditButton = styled(Link)`
   height: fit-content;
   height: 35px;
   width: 35px;
+`;
+
+const FavouriteButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  height: fit-content;
+  height: 35px;
+  width: 35px;
+  margin-right: 0.75rem;
 `;
