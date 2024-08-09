@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import ConfettiExplosion from "react-confetti-explosion";
 import ProgressBar from "../ProgressBar";
 import useSessionStorageState from "use-session-storage-state";
 import Image from "next/image";
+import ModalFinishedWorkout from "../ModalFinishedWorkout";
 
 export default function WorkoutPreview({
   name,
@@ -51,6 +51,26 @@ export default function WorkoutPreview({
 
   function handleResetProgress() {
     setCompletedExercises([]);
+    setHasOpenedModal(false);
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasOpenedModal, setHasOpenedModal] = useSessionStorageState(
+    `${id}-hasOpenedModal`,
+    {
+      defaultValue: false,
+    }
+  );
+
+  useEffect(() => {
+    if (progress === 100 && !hasOpenedModal) {
+      setIsModalOpen(true);
+      setHasOpenedModal(true);
+    }
+  }, [progress, hasOpenedModal, setHasOpenedModal]);
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
   }
 
   return (
@@ -80,17 +100,11 @@ export default function WorkoutPreview({
                 $even={even}
               />
             </ResetButton>
-            {/* {progress === 100 ? (
-              <ConfettiWrapper>
-                <ConfettiExplosion
-                  force={0.6}
-                  duration={2500}
-                  particleCount={80}
-                  width={1000}
-                />
-              </ConfettiWrapper>
-            ) : null} */}
           </ProgressSection>
+          <ModalFinishedWorkout
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+          />
           <ExercisesList>
             {includedExercises.map((includedExercise) => (
               <Exercises key={includedExercise.id} $even={even}>
@@ -189,12 +203,6 @@ const ResetIcon = styled(Image)`
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 `;
-
-// const ConfettiWrapper = styled.section`
-//   position: absolute;
-//   right: 0;
-//   bottom: 1rem;
-// `;
 
 const ExercisesList = styled.ul`
   padding: 0;

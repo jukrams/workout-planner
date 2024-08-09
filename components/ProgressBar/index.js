@@ -29,6 +29,5 @@ const Progress = styled.div`
   );
   border-radius: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  position: relative;
   transition: width 0.3s ease;
 `;
