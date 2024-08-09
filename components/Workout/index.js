@@ -69,6 +69,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
             exercises={exercises}
             workouts={workouts}
             even={index % 2 === 0}
+            id={workout.id}
           />
         </WorkoutCard>
       ))}

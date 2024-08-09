@@ -14,12 +14,14 @@
     "eslint-config-next": "13.4.8",
     "next": "13.4.8",
     "react": "18.2.0",
+    "react-confetti-explosion": "^2.1.2",
     "react-dom": "18.2.0",
     "react-toastify": "^10.0.5",
     "styled-components": "^6.0.2",
     "uid": "^2.0.2",
     "use-local-storage": "^3.0.0",
-    "use-local-storage-state": "^19.4.0"
+    "use-local-storage-state": "^19.4.0",
+    "use-session-storage-state": "^19.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.0.1",
