@@ -11,11 +11,19 @@ export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
     defaultValue: workouts,
   });
+
+  const [favouriteWorkouts, setFavouriteWorkouts] = useLocalStorageState(
+    "favouriteWorkouts",
+    { defaultValue: [] }
+  );
+
   const router = useRouter();
   const showNavbar =
+
     router.pathname !== "/" &&
     !router.pathname.startsWith("/exercises/") &&
     !router.pathname.startsWith("/workouts/");
+  
   function handleAddWorkout(newWorkout) {
     setWorkoutsList([{ id: uid(), ...newWorkout }, ...workoutsList]);
   }
@@ -28,10 +36,55 @@ export default function App({ Component, pageProps }) {
           : workout
       )
     );
+
+    const isFavourite = favouriteWorkouts.some(
+      (favouriteWorkout) => favouriteWorkout.id === editedWorkout.id
+    );
+
+    if (isFavourite) {
+      setFavouriteWorkouts(
+        favouriteWorkouts.map((favouriteWorkout) =>
+          favouriteWorkout.id === editedWorkout.id
+            ? { ...favouriteWorkouts, ...editedWorkout }
+            : favouriteWorkouts
+        )
+      );
+    }
   }
 
   function handleDeleteWorkout(id) {
     setWorkoutsList(workoutsList.filter((workout) => workout.id !== id));
+
+    const isFavourite = favouriteWorkouts.some(
+      (favouriteWorkout) => favouriteWorkout.id === id
+    );
+
+    if (isFavourite) {
+      setFavouriteWorkouts(
+        favouriteWorkouts.filter(
+          (favouriteWorkout) => favouriteWorkout.id !== id
+        )
+      );
+    }
+  }
+
+  function handleToggleFavourite(idToToggle) {
+    const isFavourite = favouriteWorkouts.some(
+      (favouriteWorkout) => favouriteWorkout.id === idToToggle
+    );
+
+    if (isFavourite) {
+      setFavouriteWorkouts(
+        favouriteWorkouts.filter(
+          (favouriteWorkout) => favouriteWorkout.id !== idToToggle
+        )
+      );
+    } else {
+      const workoutToToggle = workoutsList.find(
+        (workoutsListItem) => workoutsListItem.id === idToToggle
+      );
+      setFavouriteWorkouts([workoutToToggle, ...favouriteWorkouts]);
+    }
   }
 
   return (
@@ -46,6 +99,9 @@ export default function App({ Component, pageProps }) {
           onEditWorkout={handleEditWorkout}
           onDeleteWorkout={handleDeleteWorkout}
           muscleGroups={muscleGroups}
+          favouriteWorkouts={favouriteWorkouts}
+          // setFavouriteWorkouts={setFavouriteWorkouts}
+          onToggleFavourite={handleToggleFavourite}
         />
       </Layout>
     </>
