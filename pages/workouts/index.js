@@ -2,13 +2,26 @@ import WorkoutsList from "@/components/WorkoutsList";
 import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
+import { FavouriteButton } from "@/components/Workout";
+import { useState } from "react";
 
 export default function WorkoutsPage({
   workouts,
   exercises,
   onEditWorkout,
   onDeleteWorkout,
+  favouriteWorkouts,
+  onToggleFavourite,
 }) {
+  const [isFavouritesMode, setisFavouritesMode] = useState(false);
+
+  const filteredWorkouts = workouts.filter((workout) =>
+    favouriteWorkouts.find(
+      (favouriteWorkout) =>
+        favouriteWorkout.id === workout.id && favouriteWorkout.isFavourite
+    )
+  );
+
   return (
     <>
       <HeadlineSection>
@@ -19,16 +32,36 @@ export default function WorkoutsPage({
           <br />
           workouts
         </Headline>
-        <CreateLink href={"/workouts/create"}>
-          <Image alt="Edit" width={30} height={30} src="/icons/plus.svg" />
-          Create Workout
-        </CreateLink>
+        <ButtonsSection>
+          <CreateLink href={"/workouts/create"}>
+            <Image alt="Edit" width={30} height={30} src="/icons/plus.svg" />
+            Create Workout
+          </CreateLink>
+          <FavouriteButton
+            type="button"
+            onClick={() => setisFavouritesMode(!isFavouritesMode)}
+          >
+            <FavouriteIcon
+              alt="Favourite"
+              width={35}
+              height={35}
+              src={
+                isFavouritesMode
+                  ? "/icons/star-filled-white.svg"
+                  : "/icons/star-white.svg"
+              }
+            />
+          </FavouriteButton>
+        </ButtonsSection>
       </HeadlineSection>
       <WorkoutsList
-        workouts={workouts}
+        workouts={isFavouritesMode ? filteredWorkouts : workouts}
         exercises={exercises}
         onEditWorkout={onEditWorkout}
         onDeleteWorkout={onDeleteWorkout}
+        favouriteWorkouts={favouriteWorkouts}
+        onToggleFavourite={onToggleFavourite}
+        isFavouritesMode={isFavouritesMode}
       />
     </>
   );
@@ -47,10 +80,15 @@ const Headline = styled.h1`
   line-height: 1;
 `;
 
+const ButtonsSection = styled.section`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
+
 const CreateLink = styled(Link)`
   background-color: var(--dark-brown);
   border-radius: 2rem;
-  margin-bottom: 2rem;
   padding: 0 1rem;
   text-decoration: none;
   color: white;
@@ -59,4 +97,12 @@ const CreateLink = styled(Link)`
   align-items: center;
   justify-content: space-between;
   width: fit-content;
+`;
+
+const FavouriteIcon = styled(Image)`
+  border: 1px solid var(--dark-orange);
+  background-color: var(--dark-orange);
+  border-radius: 50%;
+  margin-left: 0.75rem;
+  display: block;
 `;

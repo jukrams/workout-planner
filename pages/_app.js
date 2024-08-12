@@ -6,16 +6,42 @@ import useLocalStorageState from "use-local-storage-state";
 import { uid } from "uid";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
     defaultValue: workouts,
   });
+
+  const [favouriteWorkouts, setFavouriteWorkouts] = useLocalStorageState(
+    "favouriteWorkouts",
+    {
+      defaultValue: workoutsList.map((workout) => ({
+        id: workout.id,
+        isFavourite: false,
+      })),
+    }
+  );
+
+  useEffect(() => {
+    setFavouriteWorkouts(() => {
+      const currentWorkoutIds = workoutsList.map((workout) => workout.id);
+
+      return currentWorkoutIds.map((id) => {
+        const existing = favouriteWorkouts.find(
+          (favouriteWorkout) => favouriteWorkout.id === id
+        );
+        return existing ? existing : { id, isFavourite: false };
+      });
+    });
+  }, [workoutsList, setFavouriteWorkouts, favouriteWorkouts]);
+
   const router = useRouter();
   const showNavbar =
     router.pathname !== "/" &&
     !router.pathname.startsWith("/exercises/") &&
     !router.pathname.startsWith("/workouts/");
+
   function handleAddWorkout(newWorkout) {
     setWorkoutsList([{ id: uid(), ...newWorkout }, ...workoutsList]);
   }
@@ -34,6 +60,16 @@ export default function App({ Component, pageProps }) {
     setWorkoutsList(workoutsList.filter((workout) => workout.id !== id));
   }
 
+  function handleToggleFavourite(idToToggle) {
+    setFavouriteWorkouts(
+      favouriteWorkouts.map((favouriteWorkout) =>
+        favouriteWorkout.id === idToToggle
+          ? { ...favouriteWorkout, isFavourite: !favouriteWorkout.isFavourite }
+          : favouriteWorkout
+      )
+    );
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -46,6 +82,8 @@ export default function App({ Component, pageProps }) {
           onEditWorkout={handleEditWorkout}
           onDeleteWorkout={handleDeleteWorkout}
           muscleGroups={muscleGroups}
+          favouriteWorkouts={favouriteWorkouts}
+          onToggleFavourite={handleToggleFavourite}
         />
       </Layout>
     </>
