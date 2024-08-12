@@ -9,7 +9,7 @@ export default function WorkoutsList({
   exercises,
   favouriteWorkouts,
   onToggleFavourite,
-  favouritesMode,
+  isFavouritesMode,
 }) {
   return (
     <>
@@ -27,7 +27,7 @@ export default function WorkoutsList({
       />
       <WorkoutCard>
         {workouts.length == 0 &&
-          (favouritesMode ? (
+          (isFavouritesMode ? (
             <AlertMessage>Oops! No favourite Workouts yet.</AlertMessage>
           ) : (
             <AlertMessage>
@@ -42,7 +42,7 @@ export default function WorkoutsList({
           exercises={exercises}
           favouriteWorkouts={favouriteWorkouts}
           onToggleFavourite={onToggleFavourite}
-          favouritesMode={favouritesMode}
+          isFavouritesMode={isFavouritesMode}
         />
       </WorkoutCard>
     </>

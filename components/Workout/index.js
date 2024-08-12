@@ -12,7 +12,6 @@ export default function Workout({
   exercises,
   favouriteWorkouts,
   onToggleFavourite,
-  favouritesMode,
 }) {
   const [showModal, setShowModal] = useState(false);
   const [workoutIdToDelete, setWorkoutIdToDelete] = useState(null);
@@ -53,13 +52,17 @@ export default function Workout({
                 height={35}
                 src={
                   index % 2 === 0
-                    ? favouriteWorkouts.some(
-                        (favouriteWorkout) => favouriteWorkout.id === workout.id
+                    ? favouriteWorkouts.find(
+                        (favouriteWorkout) =>
+                          favouriteWorkout.id === workout.id &&
+                          favouriteWorkout.isFavourite
                       )
                       ? "/icons/star-filled-white.svg"
                       : "/icons/star-white.svg"
-                    : favouriteWorkouts.some(
-                        (favouriteWorkout) => favouriteWorkout.id === workout.id
+                    : favouriteWorkouts.find(
+                        (favouriteWorkout) =>
+                          favouriteWorkout.id === workout.id &&
+                          favouriteWorkout.isFavourite
                       )
                     ? "/icons/star-filled-orange.svg"
                     : "/icons/star-orange.svg"

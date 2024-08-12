@@ -13,7 +13,14 @@ export default function WorkoutsPage({
   favouriteWorkouts,
   onToggleFavourite,
 }) {
-  const [favouritesMode, setFavouritesMode] = useState(false);
+  const [isFavouritesMode, setisFavouritesMode] = useState(false);
+
+  const filteredWorkouts = workouts.filter((workout) =>
+    favouriteWorkouts.find(
+      (favouriteWorkout) =>
+        favouriteWorkout.id === workout.id && favouriteWorkout.isFavourite
+    )
+  );
 
   return (
     <>
@@ -32,14 +39,14 @@ export default function WorkoutsPage({
           </CreateLink>
           <FavouriteButton
             type="button"
-            onClick={() => setFavouritesMode(!favouritesMode)}
+            onClick={() => setisFavouritesMode(!isFavouritesMode)}
           >
             <FavouriteIcon
               alt="Favourite"
               width={35}
               height={35}
               src={
-                favouritesMode
+                isFavouritesMode
                   ? "/icons/star-filled-white.svg"
                   : "/icons/star-white.svg"
               }
@@ -48,13 +55,13 @@ export default function WorkoutsPage({
         </ButtonsSection>
       </HeadlineSection>
       <WorkoutsList
-        workouts={favouritesMode ? favouriteWorkouts : workouts}
+        workouts={isFavouritesMode ? filteredWorkouts : workouts}
         exercises={exercises}
         onEditWorkout={onEditWorkout}
         onDeleteWorkout={onDeleteWorkout}
         favouriteWorkouts={favouriteWorkouts}
         onToggleFavourite={onToggleFavourite}
-        favouritesMode={favouritesMode}
+        isFavouritesMode={isFavouritesMode}
       />
     </>
   );
