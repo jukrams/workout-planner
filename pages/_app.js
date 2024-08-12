@@ -6,6 +6,7 @@ import useLocalStorageState from "use-local-storage-state";
 import { uid } from "uid";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
@@ -21,6 +22,19 @@ export default function App({ Component, pageProps }) {
       })),
     }
   );
+
+  useEffect(() => {
+    setFavouriteWorkouts(() => {
+      const currentWorkoutIds = workoutsList.map((workout) => workout.id);
+
+      return currentWorkoutIds.map((id) => {
+        const existing = favouriteWorkouts.find(
+          (favouriteWorkout) => favouriteWorkout.id === id
+        );
+        return existing ? existing : { id, isFavourite: false };
+      });
+    });
+  }, [workoutsList, setFavouriteWorkouts, favouriteWorkouts]);
 
   const router = useRouter();
   const showNavbar =
