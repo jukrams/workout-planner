@@ -24,7 +24,7 @@ export default function StartPage() {
       <Section>
         <AppName />
         <AppDescription />
-        <Login homepage />
+        <Login isHomepage />
         <StyledText>or</StyledText>
         <StyledLink href="/exercises">Start as guest</StyledLink>
       </Section>

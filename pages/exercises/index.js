@@ -1,6 +1,7 @@
 import ExercisesList from "@/components/ExercisesList";
 
 import FilterList from "@/components/FilterList";
+import Login from "@/components/Login";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import styled from "styled-components";
@@ -74,6 +75,7 @@ export default function HomePage({ exercises, muscleGroups }) {
             EXERCISE LIST
           </H1>
         )}
+        <Login isExerciseListPage />
       </HeadlineSection>
 
       <FilterButton type="button" onClick={handleShowFilter}>
@@ -114,6 +116,8 @@ const H1 = styled.h1`
   font-size: xx-large;
   font-weight: normal;
   line-height: 1;
+  margin-top: 0;
+  max-width: 70%;
 `;
 
 const Username = styled.span`
@@ -124,4 +128,8 @@ const HeadlineSection = styled.section`
   width: 85vw;
   max-width: 1000px;
   margin: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 2rem;
 `;
