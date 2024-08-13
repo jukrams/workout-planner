@@ -1,6 +1,7 @@
 import ExercisesList from "@/components/ExercisesList";
 
 import FilterList from "@/components/FilterList";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -55,13 +56,24 @@ export default function HomePage({ exercises, muscleGroups }) {
     setMuscles(muscleGroups);
   }
 
+  const { data: session } = useSession();
+
   return (
     <StyledSection>
       <HeadlineSection>
-        <H1>
-          WELCOME TO YOUR <br />
-          EXERCISE LIST
-        </H1>
+        {session ? (
+          <H1>
+            WELCOME TO YOUR <br />
+            EXERCISE LIST,{" "}
+            <Username>{session.user.name || session.user.username}</Username>!
+          </H1>
+        ) : (
+          <H1>
+            {" "}
+            WELCOME TO YOUR <br />
+            EXERCISE LIST
+          </H1>
+        )}
       </HeadlineSection>
 
       <FilterButton type="button" onClick={handleShowFilter}>
@@ -102,6 +114,10 @@ const H1 = styled.h1`
   font-size: xx-large;
   font-weight: normal;
   line-height: 1;
+`;
+
+const Username = styled.span`
+  color: var(--dark-orange);
 `;
 
 const HeadlineSection = styled.section`
