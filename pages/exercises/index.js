@@ -117,7 +117,7 @@ const H1 = styled.h1`
   font-weight: normal;
   line-height: 1;
   margin-top: 0;
-  max-width: 70%;
+  max-width: 65%;
 `;
 
 const Username = styled.span`

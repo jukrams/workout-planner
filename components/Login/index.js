@@ -22,15 +22,21 @@ export default function Login({ isHomepage }) {
       $isHovered={isHovered}
     >
       {session ? (
-        <>
-          <span className="text">Log Out</span>
-          <Image
-            alt="Log Out"
-            width={35}
-            height={35}
-            src={"/icons/account-white.svg"}
-          />
-        </>
+        isHomepage ? (
+          "Log Out"
+        ) : (
+          <>
+            <span className="text">Log Out</span>
+            <Image
+              alt="Log Out"
+              width={35}
+              height={35}
+              src={"/icons/account-white.svg"}
+            />
+          </>
+        )
+      ) : isHomepage ? (
+        "Log In with Github"
       ) : (
         <>
           <span className="text">Log In</span>
@@ -47,6 +53,26 @@ export default function Login({ isHomepage }) {
 }
 
 const HomepageButton = styled.button`
+  border: none;
+  font-size: 2.5vh;
+  background-color: var(--light-orange);
+  border-radius: 3rem;
+  color: var(--dark-brown);
+  text-align: center;
+  width: 200px;
+  height: fit-content;
+  padding: 3px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: var(--dark-orange);
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+`;
+
+const AnimatedButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,28 +89,6 @@ const HomepageButton = styled.button`
     isHovered ? "var(--dark-orange)" : "var(--orange)"};
   border-radius: ${({ isHovered }) => (isHovered ? "2rem" : "50%")};
 
-  width: fit-content;
-  height: fit-content;
-
-  &:hover {
-    background-color: var(--dark-orange);
-    transform: scale(1.05);
-    cursor: pointer;
-  }
-`;
-
-const AnimatedButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  padding: 0.2rem;
-  border-radius: 50%;
-  transition: width 0.3s ease, background-color 0.2s ease, border-radius ease;
-  background-color: var(--orange);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  overflow: hidden;
   width: fit-content;
   height: fit-content;
 
