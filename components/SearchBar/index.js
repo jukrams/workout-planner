@@ -9,7 +9,7 @@ export default function SearchBar({ searchInput, onSearch }) {
     <SearchInput
       type="text"
       value={searchInput}
-      placeholder="Search exercises..."
+      placeholder="🔎 Search exercises... "
       onChange={handleChange}
     />
   );
@@ -18,11 +18,10 @@ export default function SearchBar({ searchInput, onSearch }) {
 const SearchInput = styled.input`
   padding: 0.5rem;
   font-size: 1rem;
-  margin: 1rem auto;
   display: block;
-  width: 80%;
-  max-width: 500px;
+  width:65vw;
   background-color: var(--light-orange);
   border: none;
   border-radius: 0.5rem;
+  height: 2.5rem;
 `;
