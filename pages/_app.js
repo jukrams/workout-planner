@@ -7,6 +7,8 @@ import { uid } from "uid";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { SessionProvider } from "next-auth/react";
+import { SWRConfig } from "swr";
 
 export default function App({ Component, pageProps }) {
   const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
@@ -71,21 +73,33 @@ export default function App({ Component, pageProps }) {
   }
 
   return (
-    <>
-      <GlobalStyle />
-      <Layout showNavbar={showNavbar}>
-        <Component
-          {...pageProps}
-          exercises={exercises}
-          workouts={workoutsList}
-          onAddWorkout={handleAddWorkout}
-          onEditWorkout={handleEditWorkout}
-          onDeleteWorkout={handleDeleteWorkout}
-          muscleGroups={muscleGroups}
-          favouriteWorkouts={favouriteWorkouts}
-          onToggleFavourite={handleToggleFavourite}
-        />
-      </Layout>
-    </>
+    <SessionProvider session={pageProps.session}>
+      <SWRConfig
+        value={{
+          fetcher: async (...args) => {
+            const response = await fetch(...args);
+            if (!response.ok) {
+              throw new Error(`Request with ${JSON.stringify(args)} failed.`);
+            }
+            return await response.json();
+          },
+        }}
+      >
+        <GlobalStyle />
+        <Layout showNavbar={showNavbar}>
+          <Component
+            {...pageProps}
+            exercises={exercises}
+            workouts={workoutsList}
+            onAddWorkout={handleAddWorkout}
+            onEditWorkout={handleEditWorkout}
+            onDeleteWorkout={handleDeleteWorkout}
+            muscleGroups={muscleGroups}
+            favouriteWorkouts={favouriteWorkouts}
+            onToggleFavourite={handleToggleFavourite}
+          />
+        </Layout>
+      </SWRConfig>
+    </SessionProvider>
   );
 }
