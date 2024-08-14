@@ -76,7 +76,6 @@ export default function HomePage({ exercises, muscleGroups }) {
         )}
         <Login isExerciseListPage />
       </HeadlineSection>
-
       <FilterButton type="button" onClick={handleShowFilter}>
         Filter ☰
       </FilterButton>
@@ -126,9 +125,8 @@ const Username = styled.span`
 const HeadlineSection = styled.section`
   width: 85vw;
   max-width: 1000px;
-  margin: auto;
+  margin: 2rem auto auto auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-top: 2rem;
 `;

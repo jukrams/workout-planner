@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 import Login from "@/components/Login";
+import { useSession } from "next-auth/react";
 
 export function AppName() {
   return (
@@ -19,14 +20,22 @@ export function AppDescription() {
 }
 
 export default function StartPage() {
+  const { data: session } = useSession();
+
   return (
     <Background>
       <Section>
         <AppName />
         <AppDescription />
-        <Login isHomepage />
-        <StyledText>or</StyledText>
-        <StyledLink href="/exercises">Start as guest</StyledLink>
+        {session ? (
+          <StyledLink href="/exercises">Start</StyledLink>
+        ) : (
+          <>
+            <Login isHomepage />
+            <StyledText>or</StyledText>
+            <StyledLink href="/exercises">Start as guest</StyledLink>
+          </>
+        )}
       </Section>
     </Background>
   );
