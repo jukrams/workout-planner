@@ -93,9 +93,6 @@ export default function HomePage({ exercises, muscleGroups }) {
       ) : null}
       <ExercisesList exercises={filteredExercises} />
 
-      {/* {filteredExercises.length === 0 && (
-        <ErrorMessage>Sorry... No exercises found.</ErrorMessage>
-      )} */}
     </StyledSection>
   );
 }
@@ -140,10 +137,3 @@ const HeadlineSection = styled.section`
   max-width: 1000px;
   margin: auto;
 `;
-
-// const ErrorMessage = styled.p`
-//   text-align: center;
-//   font-size: 1.2rem;
-//   color: #ff0000;
-//   margin-top: 2rem;
-// `;

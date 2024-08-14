@@ -43,13 +43,13 @@ const ClearIcon = styled(FaTimes)`
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  color: var(--dark-gray);
+  color: var(--dark-brown);
   font-size: 1.2rem;
   cursor: pointer;
 `;
 
 const SearchInput = styled.input`
-  padding: 0.5rem 2.5rem 0.5rem 2.5rem;  // Adjust padding to make space for the icons
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem; 
   font-size: 1rem;
   width: 100%;
   background-color: var(--light-orange);
