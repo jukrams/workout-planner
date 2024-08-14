@@ -1,14 +1,15 @@
 import ExercisesList from "@/components/ExercisesList";
-
 import FilterList from "@/components/FilterList";
 import { useState } from "react";
 import styled from "styled-components";
+import SearchBar from "@/components/SearchBar";
 
 export default function HomePage({ exercises, muscleGroups }) {
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState(exercises);
   const [muscles, setMuscles] = useState(muscleGroups);
+  const [searchInput, setSearchInput] = useState("");
 
   function handleShowFilter() {
     setFilterMode(!filterMode);
@@ -20,9 +21,9 @@ export default function HomePage({ exercises, muscleGroups }) {
       setSelectedMuscleGroups(newSelectedMuscleGroups);
 
       setFilteredExercises(
-        filteredExercises.filter((filteredExercise) =>
+        exercises.filter((exercise) =>
           newSelectedMuscleGroups.every((selectedMuscleGroup) =>
-            filteredExercise.muscleGroups.includes(selectedMuscleGroup)
+            exercise.muscleGroups.includes(selectedMuscleGroup)
           )
         )
       );
@@ -44,6 +45,7 @@ export default function HomePage({ exercises, muscleGroups }) {
         )
       )
     );
+
     const newMuscles = [...muscles, muscleGroup];
     newMuscles.sort((a, b) => a.localeCompare(b));
     setMuscles(newMuscles);
@@ -55,6 +57,15 @@ export default function HomePage({ exercises, muscleGroups }) {
     setMuscles(muscleGroups);
   }
 
+  function handleSearch(input) {
+    setSearchInput(input);
+    const lowercasedInput = input.toLowerCase();
+    const filtered = exercises.filter((exercise) =>
+      exercise.name.toLowerCase().includes(lowercasedInput)
+    );
+    setFilteredExercises(filtered);
+  }
+
   return (
     <StyledSection>
       <HeadlineSection>
@@ -64,9 +75,13 @@ export default function HomePage({ exercises, muscleGroups }) {
         </H1>
       </HeadlineSection>
 
-      <FilterButton type="button" onClick={handleShowFilter}>
-        Filter ☰
-      </FilterButton>
+      <ControlsContainer>
+        <SearchBar searchInput={searchInput} onSearch={handleSearch} />
+        <FilterButton type="button" onClick={handleShowFilter}>
+          Filter ☰
+        </FilterButton>
+      </ControlsContainer>
+
       {filterMode ? (
         <FilterList
           muscleGroups={muscles}
@@ -77,6 +92,7 @@ export default function HomePage({ exercises, muscleGroups }) {
         />
       ) : null}
       <ExercisesList exercises={filteredExercises} />
+
     </StyledSection>
   );
 }
@@ -86,15 +102,27 @@ const StyledSection = styled.section`
   flex-direction: column;
 `;
 
+const ControlsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem auto;
+  width: 85vw;
+  max-width: 1000px;
+`;
+
 const FilterButton = styled.button`
   border: none;
   background-color: orange;
   border-radius: 0.25rem;
   font-weight: bold;
-  padding: 0.25rem;
-  align-self: flex-end;
-  margin-right: 3.5rem;
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
   cursor: pointer;
+
+  &:hover {
+    background-color: darkorange;
+  }
 `;
 
 const H1 = styled.h1`
