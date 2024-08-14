@@ -21,6 +21,11 @@ const ExerciseCard = styled.li`
   margin: 0 2rem 2rem 2rem;
   list-style: none;
   position: relative;
+  width: 80vw;
+  height: 350px; /* Fixed height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const ExerciseCardName = styled.p`
@@ -70,6 +75,8 @@ const StyledLink = styled(Link)`
 
 const ExerciseImage = styled.img`
   width: 80vw;
-  height: auto;
+  height: 100%; /* Ensure the image fills the height of the container */
+  object-fit: cover; /* Crop the image to fit the container */
+  object-position: center; /* Center the image, cropping equally at top and bottom */
   border-radius: 1rem;
 `;
