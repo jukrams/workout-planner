@@ -1,5 +1,4 @@
 import ExercisesList from "@/components/ExercisesList";
-
 import FilterList from "@/components/FilterList";
 import Login from "@/components/Login";
 import { useSession } from "next-auth/react";

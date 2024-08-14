@@ -13,14 +13,14 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user, account, profile }) {
       if (profile) {
-        token.username = profile.login; // GitHub-Benutzername
-        token.name = profile.name; // Vollständiger Name
+        token.username = profile.login;
+        token.name = profile.name;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.username = token.username; // Füge den Benutzernamen zur Session hinzu
-      session.user.name = token.name; // Vollständigen Namen zur Session hinzufügen
+      session.user.username = token.username;
+      session.user.name = token.name;
       return session;
     },
   },
