@@ -6,7 +6,7 @@ export default function ExercisesList({ exercises }) {
     <List>
       {exercises.length !== 0 ? (
         exercises.map((exercise) => (
-          <ExercisePreview key={exercise.id} exercise={exercise} />
+          <ExercisePreview key={exercise._id} exercise={exercise} />
         ))
       ) : (
         <p>No exercises found!</p>

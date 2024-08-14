@@ -14,11 +14,12 @@ export default function WorkoutsPage({
   onToggleFavourite,
 }) {
   const [isFavouritesMode, setisFavouritesMode] = useState(false);
+  console.log(workouts);
 
   const filteredWorkouts = workouts.filter((workout) =>
     favouriteWorkouts.find(
       (favouriteWorkout) =>
-        favouriteWorkout.id === workout.id && favouriteWorkout.isFavourite
+        favouriteWorkout._id === workout._id && favouriteWorkout.isFavourite
     )
   );
 

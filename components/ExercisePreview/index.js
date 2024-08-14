@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export default function ExercisePreview({ exercise }) {
   return (
-    <StyledLink href={`/exercises/${exercise.id}`}>
+    <StyledLink href={`/exercises/${exercise._id}`}>
       <ExerciseCard>
         <ExerciseImage src={exercise.imageUrl} />
         <ExerciseCardName>{exercise.name}</ExerciseCardName>

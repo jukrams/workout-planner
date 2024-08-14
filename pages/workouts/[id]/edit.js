@@ -8,7 +8,7 @@ export default function EditPage({ exercises, workouts, onEditWorkout }) {
   const router = useRouter();
   const { id } = router.query;
 
-  const workoutToEdit = workouts.find((workout) => workout.id === id);
+  const workoutToEdit = workouts.find((workout) => workout._id === id);
 
   if (!workoutToEdit) {
     return <p>Loading...</p>;
@@ -19,7 +19,7 @@ export default function EditPage({ exercises, workouts, onEditWorkout }) {
     name: workoutToEdit.name,
     exercises: workoutToEdit.exercises.map((workoutToEditExercise) => {
       const foundExercise = exercises.find(
-        (exercise) => exercise.id === workoutToEditExercise.exerciseId
+        (exercise) => exercise._id === workoutToEditExercise.exerciseId
       );
       return {
         exercise: foundExercise.name,

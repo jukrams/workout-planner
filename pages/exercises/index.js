@@ -4,16 +4,23 @@ import FilterList from "@/components/FilterList";
 import { useState } from "react";
 import styled from "styled-components";
 
-export default function HomePage({ exercises, muscleGroups }) {
+export default function HomePage({
+  exercises,
+  muscleGroups,
+  exerciseIsLoading,
+}) {
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState(exercises);
   const [muscles, setMuscles] = useState(muscleGroups);
-
+  if (exerciseIsLoading) {
+    return <div>Loading</div>;
+  }
   function handleShowFilter() {
     setFilterMode(!filterMode);
   }
-
+  console.log("exercises in exercises", exercises);
+  console.log("hier sind die filtere", filteredExercises);
   function handleSelect(muscleGroup) {
     if (!selectedMuscleGroups.includes(muscleGroup)) {
       const newSelectedMuscleGroups = [...selectedMuscleGroups, muscleGroup];
@@ -76,7 +83,7 @@ export default function HomePage({ exercises, muscleGroups }) {
           onClear={handleClear}
         />
       ) : null}
-      <ExercisesList exercises={filteredExercises} />
+      <ExercisesList exercises={exercises} />
     </StyledSection>
   );
 }

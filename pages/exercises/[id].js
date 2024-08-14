@@ -9,7 +9,7 @@ export default function DetailsPage({ exercises }) {
   if (!id) {
     return <p>Loading...</p>;
   }
-  const exercise = exercises.find((exercise) => exercise.id === id);
+  const exercise = exercises.find((exercise) => exercise._id === id);
   return (
     <>
       <ExerciseDetailsHeading>

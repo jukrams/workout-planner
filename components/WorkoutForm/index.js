@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
 export default function WorkoutForm({
   onAddWorkout,
@@ -10,6 +11,7 @@ export default function WorkoutForm({
   defaultData,
   onEditWorkout,
 }) {
+  const { mutate } = useSWR("/api/workouts");
   const router = useRouter();
 
   const [addedExercises, setAddedExercises] = useState(
@@ -45,51 +47,71 @@ export default function WorkoutForm({
 
   function handleDeleteExercise(id) {
     setAddedExercises(
-      addedExercises.filter((addedExercise) => addedExercise.id !== id)
+      addedExercises.filter((addedExercise) => addedExercise._id !== id)
     );
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!isEditMode) {
-      const newWorkout = {
-        name: event.target.name.value,
-        exercises: addedExercises.map((addedExercise) => {
-          const selectedExercise = exercises.find(
-            (exercise) => exercise.name === addedExercise.exercise
-          );
-          return {
-            exerciseId: selectedExercise.id,
-            sets: addedExercise.sets,
-            reps: addedExercise.reps,
-          };
-        }),
-      };
-      onAddWorkout(newWorkout);
-      router.push("/workouts");
-    } else {
-      const editedWorkout = {
-        id: defaultData.id,
-        name: event.target.name.value,
-        exercises: addedExercises.map((addedExercise) => {
-          const selectedExercise = exercises.find(
-            (exercise) => exercise.name === addedExercise.exercise
-          );
-          return {
-            exerciseId: selectedExercise.id,
-            sets: addedExercise.sets,
-            reps: addedExercise.reps,
-          };
-        }),
-      };
-      onEditWorkout(editedWorkout);
-      router.push("/workouts");
+    const formData = new FormData(event.target);
+    const workoutData = Object.fromEntries(formData);
+
+    const response = await fetch("/api/workouts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(workoutData),
+    });
+
+    if (!response.ok) {
+      console.error(response.status);
+      return;
+    } else if (response.ok) {
+      mutate();
     }
 
     event.target.reset();
-    setAddedExercises([]);
   }
+  // if (!isEditMode) {
+  //   const newWorkout = {
+  //     name: event.target.name.value,
+  //     exercises: addedExercises.map((addedExercise) => {
+  //       const selectedExercise = exercises.find(
+  //         (exercise) => exercise.name === addedExercise.exercise
+  //       );
+  //       return {
+  //         exerciseId: selected,
+  //         sets: addedExercise.sets,
+  //         reps: addedExercise.reps,
+  //       };
+  //     }),
+  //   };
+  //   onAddWorkout(newWorkout);
+  //   router.push("/workouts");
+  // } else {
+  //   const editedWorkout = {
+  //     id: defaultData.id,
+  //     name: event.target.name.value,
+  //     exercises: addedExercises.map((addedExercise) => {
+  //       const selectedExercise = exercises.find(
+  //         (exercise) => exercise.name === addedExercise.exercise
+  //       );
+  //       return {
+  //         exerciseId: selectedExercise.id,
+  //         sets: addedExercise.sets,
+  //         reps: addedExercise.reps,
+  //       };
+  //     }),
+  //   };
+  //   onEditWorkout(editedWorkout);
+  //   router.push("/workouts");
+  // }
+
+  // event.target.reset();
+  // setAddedExercises([]);
+  // }
 
   return (
     <FormSection>
@@ -112,12 +134,12 @@ export default function WorkoutForm({
           <StyledLegend $edit={isEditMode}>Second step</StyledLegend>
           <ExercisesListHeadline>Added to list:</ExercisesListHeadline>
           {addedExercises.map((addedExercise) => (
-            <AddedExercise key={addedExercise.id}>
+            <AddedExercise key={addedExercise._id}>
               {addedExercise.exercise} {addedExercise.sets} sets /{" "}
               {addedExercise.reps} reps
               <DeleteButton
                 type="button"
-                onClick={() => handleDeleteExercise(addedExercise.id)}
+                onClick={() => handleDeleteExercise(addedExercise._id)}
                 $edit={isEditMode}
               >
                 X
@@ -136,7 +158,7 @@ export default function WorkoutForm({
               Please select an option
             </option>
             {exercises.map((exercise) => (
-              <option value={exercise.name} key={exercise.id}>
+              <option value={exercise.name} key={exercise._id}>
                 {exercise.name}
               </option>
             ))}

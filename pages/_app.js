@@ -1,40 +1,57 @@
 import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
-import { exercises } from "@/lib/exercises.js";
-import { workouts } from "@/lib/workouts";
-import useLocalStorageState from "use-local-storage-state";
-import { uid } from "uid";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import useSWR, { SWRConfig } from "swr";
+import useLocalStorageState from "use-local-storage-state";
+
+const fetcher = async (url) => {
+  const res = await fetch(url);
+
+  // If the status code is not in the range 200-299,
+  // we still try to parse and throw it.
+  if (!res.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+
+  return res.json();
+};
 
 export default function App({ Component, pageProps }) {
-  const [workoutsList, setWorkoutsList] = useLocalStorageState("workoutsList", {
-    defaultValue: workouts,
-  });
-
+  // Verwende SWR zum Laden von Workouts und Übungen
+  const { data: dataWorkouts = [], error: errorWorkouts } = useSWR(
+    "/api/workouts",
+    fetcher
+  );
+  const {
+    data: dataExercises = [],
+    error: errorExercises,
+    isLoading: exerciseIsLoading,
+  } = useSWR("/api/exercises", fetcher);
+  console.log(dataExercises);
+  // Initialisiere favouriteWorkouts mit den geladenen Workouts
   const [favouriteWorkouts, setFavouriteWorkouts] = useLocalStorageState(
     "favouriteWorkouts",
     {
-      defaultValue: workoutsList.map((workout) => ({
-        id: workout.id,
+      defaultValue: dataWorkouts.map((workout) => ({
+        id: workout._id,
         isFavourite: false,
       })),
     }
   );
 
-  useEffect(() => {
-    setFavouriteWorkouts(() => {
-      const currentWorkoutIds = workoutsList.map((workout) => workout.id);
+  const [workoutsList, setWorkoutsList] = useState(dataWorkouts);
 
-      return currentWorkoutIds.map((id) => {
-        const existing = favouriteWorkouts.find(
-          (favouriteWorkout) => favouriteWorkout.id === id
-        );
-        return existing ? existing : { id, isFavourite: false };
-      });
-    });
-  }, [workoutsList, setFavouriteWorkouts, favouriteWorkouts]);
+  useEffect(() => {
+    if (dataWorkouts.length > 0) {
+      setWorkoutsList(dataWorkouts);
+    }
+  }, [dataWorkouts]);
 
   const router = useRouter();
   const showNavbar =
@@ -49,7 +66,7 @@ export default function App({ Component, pageProps }) {
   function handleEditWorkout(editedWorkout) {
     setWorkoutsList(
       workoutsList.map((workout) =>
-        workout.id === editedWorkout.id
+        workout._id === editedWorkout._id
           ? { ...workout, ...editedWorkout }
           : workout
       )
@@ -57,7 +74,7 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleDeleteWorkout(id) {
-    setWorkoutsList(workoutsList.filter((workout) => workout.id !== id));
+    setWorkoutsList(workoutsList.filter((workout) => workout._id !== id));
   }
 
   function handleToggleFavourite(idToToggle) {
@@ -74,17 +91,20 @@ export default function App({ Component, pageProps }) {
     <>
       <GlobalStyle />
       <Layout showNavbar={showNavbar}>
-        <Component
-          {...pageProps}
-          exercises={exercises}
-          workouts={workoutsList}
-          onAddWorkout={handleAddWorkout}
-          onEditWorkout={handleEditWorkout}
-          onDeleteWorkout={handleDeleteWorkout}
-          muscleGroups={muscleGroups}
-          favouriteWorkouts={favouriteWorkouts}
-          onToggleFavourite={handleToggleFavourite}
-        />
+        <SWRConfig value={{ fetcher }}>
+          <Component
+            {...pageProps}
+            exercises={dataExercises}
+            exerciseIsLoading={exerciseIsLoading}
+            workouts={workoutsList}
+            onAddWorkout={handleAddWorkout}
+            onEditWorkout={handleEditWorkout}
+            onDeleteWorkout={handleDeleteWorkout}
+            muscleGroups={muscleGroups}
+            favouriteWorkouts={favouriteWorkouts}
+            onToggleFavourite={handleToggleFavourite}
+          />
+        </SWRConfig>
       </Layout>
     </>
   );

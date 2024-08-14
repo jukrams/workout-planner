@@ -107,7 +107,7 @@ export default function WorkoutPreview({
           />
           <ExercisesList>
             {includedExercises.map((includedExercise) => (
-              <Exercises key={includedExercise.id} $even={even}>
+              <Exercises key={includedExercise._id} $even={even}>
                 <ExerciseName $even={even}>
                   {includedExercise.name}
                 </ExerciseName>
@@ -117,8 +117,10 @@ export default function WorkoutPreview({
                 <Checkbox
                   type="checkbox"
                   $even={even}
-                  checked={completedExercises.includes(includedExercise.id)}
-                  onChange={() => toggleExerciseCompletion(includedExercise.id)}
+                  checked={completedExercises.includes(includedExercise._id)}
+                  onChange={() =>
+                    toggleExerciseCompletion(includedExercise._id)
+                  }
                 />
               </Exercises>
             ))}
