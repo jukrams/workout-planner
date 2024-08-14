@@ -75,8 +75,8 @@ const StyledLink = styled(Link)`
 
 const ExerciseImage = styled.img`
   width: 80vw;
-  height: 100%; /* Ensure the image fills the height of the container */
-  object-fit: cover; /* Crop the image to fit the container */
-  object-position: center; /* Center the image, cropping equally at top and bottom */
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   border-radius: 1rem;
 `;
