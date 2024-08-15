@@ -19,8 +19,7 @@ export default function HomePage({
   function handleShowFilter() {
     setFilterMode(!filterMode);
   }
-  console.log("exercises in exercises", exercises);
-  console.log("hier sind die filtere", filteredExercises);
+
   function handleSelect(muscleGroup) {
     if (!selectedMuscleGroups.includes(muscleGroup)) {
       const newSelectedMuscleGroups = [...selectedMuscleGroups, muscleGroup];
@@ -70,7 +69,6 @@ export default function HomePage({
           EXERCISE LIST
         </H1>
       </HeadlineSection>
-
       <FilterButton type="button" onClick={handleShowFilter}>
         Filter ☰
       </FilterButton>

@@ -6,11 +6,8 @@ const workoutSchema = new Schema({
   name: { type: String, required: true },
   exercises: [
     {
-      exerciseId: {
-        type: [Schema.Types.ObjectId],
-        ref: "Exercise",
-        required: true,
-      },
+      _id: false,
+      exerciseId: { type: String, required: true },
       sets: { type: Number, required: true },
       reps: { type: Number, required: true },
     },

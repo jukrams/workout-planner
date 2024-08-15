@@ -34,7 +34,7 @@ export default function WorkoutForm({
           exercise: exerciseName.value,
           sets: sets.value,
           reps: reps.value,
-          id: uid(),
+          _id: uid(),
         },
       ]);
       exerciseName.value = "";

@@ -3,20 +3,79 @@ import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
 import { FavouriteButton } from "@/components/Workout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useSWR from "swr";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function WorkoutsPage({
-  workouts,
+  // workouts,
   exercises,
-  onEditWorkout,
-  onDeleteWorkout,
-  favouriteWorkouts,
-  onToggleFavourite,
+  // onEditWorkout,
+  // onDeleteWorkout,
+  // favouriteWorkouts,
+  // onToggleFavourite,
 }) {
-  const [isFavouritesMode, setisFavouritesMode] = useState(false);
-  console.log(workouts);
+  const {
+    data: dataWorkouts = [],
+    isLoading,
+    error: errorWorkouts,
+  } = useSWR("/api/workouts");
 
-  const filteredWorkouts = workouts.filter((workout) =>
+  // if (isLoading || errorWorkouts) return <p>Loading...</p>;
+
+  // if (!dataWorkouts) {
+  //   return <div>Loading...</div>;
+  // }
+
+  const [workoutsList, setWorkoutsList] = useState(dataWorkouts);
+
+  const [favouriteWorkouts, setFavouriteWorkouts] = useLocalStorageState(
+    "favouriteWorkouts",
+    {
+      defaultValue: dataWorkouts.map((workout) => ({
+        _id: workout._id,
+        isFavourite: false,
+      })),
+    }
+  );
+
+  const [isFavouritesMode, setisFavouritesMode] = useState(false);
+
+  useEffect(() => {
+    if (dataWorkouts.length > 0) {
+      setWorkoutsList(dataWorkouts);
+    }
+  }, [dataWorkouts]);
+
+  function handleAddWorkout(newWorkout) {
+    setWorkoutsList([{ _id: uid(), ...newWorkout }, ...workoutsList]);
+  }
+
+  function handleEditWorkout(editedWorkout) {
+    setWorkoutsList(
+      workoutsList.map((workout) =>
+        workout._id === editedWorkout._id
+          ? { ...workout, ...editedWorkout }
+          : workout
+      )
+    );
+  }
+
+  function handleDeleteWorkout(id) {
+    setWorkoutsList(workoutsList.filter((workout) => workout._id !== id));
+  }
+
+  function handleToggleFavourite(idToToggle) {
+    setFavouriteWorkouts(
+      favouriteWorkouts.map((favouriteWorkout) =>
+        favouriteWorkout._id === idToToggle
+          ? { ...favouriteWorkout, isFavourite: !favouriteWorkout.isFavourite }
+          : favouriteWorkout
+      )
+    );
+  }
+
+  const filteredWorkouts = workoutsList.filter((workout) =>
     favouriteWorkouts.find(
       (favouriteWorkout) =>
         favouriteWorkout._id === workout._id && favouriteWorkout.isFavourite
@@ -56,13 +115,21 @@ export default function WorkoutsPage({
         </ButtonsSection>
       </HeadlineSection>
       <WorkoutsList
-        workouts={isFavouritesMode ? filteredWorkouts : workouts}
+        // workouts={isFavouritesMode ? filteredWorkouts : workouts}
+        workouts={isFavouritesMode ? filteredWorkouts : workoutsList}
         exercises={exercises}
-        onEditWorkout={onEditWorkout}
-        onDeleteWorkout={onDeleteWorkout}
-        favouriteWorkouts={favouriteWorkouts}
-        onToggleFavourite={onToggleFavourite}
+        // onEditWorkout={onEditWorkout}
+        // onDeleteWorkout={onDeleteWorkout}
+        // favouriteWorkouts={favouriteWorkouts}
+        // onToggleFavourite={onToggleFavourite}
         isFavouritesMode={isFavouritesMode}
+        //
+        // workouts={workoutsList}
+        onAddWorkout={handleAddWorkout}
+        onEditWorkout={handleEditWorkout}
+        onDeleteWorkout={handleDeleteWorkout}
+        favouriteWorkouts={favouriteWorkouts}
+        onToggleFavourite={handleToggleFavourite}
       />
     </>
   );

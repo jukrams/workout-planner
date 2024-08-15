@@ -105,7 +105,7 @@ export default function Workout({
             exercises={exercises}
             workouts={workouts}
             even={index % 2 === 0}
-            id={workout._id}
+            _id={workout._id}
           />
         </WorkoutCard>
       ))}

@@ -10,11 +10,11 @@ export default function WorkoutPreview({
   exercises,
   workoutExercises,
   even,
-  id,
+  _id,
 }) {
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
-      (exerciseItem) => exerciseItem.id === workoutExercise.exerciseId
+      (exerciseItem) => exerciseItem._id === workoutExercise.exerciseId
     );
     return {
       ...exercise,
@@ -31,7 +31,7 @@ export default function WorkoutPreview({
 
   const splittedName = name.split(" ");
 
-  const sessionStorageKey = `${id}`;
+  const sessionStorageKey = `${_id}`;
   const [completedExercises, setCompletedExercises] = useSessionStorageState(
     sessionStorageKey,
     { defaultValue: [] }
@@ -56,7 +56,7 @@ export default function WorkoutPreview({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasOpenedModal, setHasOpenedModal] = useSessionStorageState(
-    `${id}-hasOpenedModal`,
+    `${_id}-hasOpenedModal`,
     {
       defaultValue: false,
     }

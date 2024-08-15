@@ -6,7 +6,7 @@ export default async function handler(request, response) {
   const { id } = request.query;
 
   if (request.method === "GET") {
-    const workout = await Workout.findById(id).populate("exercises");
+    const workout = await Workout.findById(id);
 
     if (!workout) {
       return response.status(404).json({ status: "Not Found" });
@@ -18,9 +18,9 @@ export default async function handler(request, response) {
     try {
       const updatedWorkout = request.body;
       await Workout.findByIdAndUpdate(id, updatedWorkout);
-      response.status(200).jason({ status: "Workout successfully updated." });
+      response.status(200).json({ status: "Workout successfully updated." });
     } catch (error) {
-      response.status(400).jason({ error: error.message });
+      response.status(400).json({ error: error.message });
     }
   }
 }
