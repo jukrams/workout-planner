@@ -77,14 +77,13 @@ export default function WorkoutForm({
             (exercise) => exercise.name === addedExercise.exercise
           );
           return {
-            exerciseId: selectedExercise.id,
+            exerciseId: selectedExercise._id,
             sets: addedExercise.sets,
             reps: addedExercise.reps,
           };
         }),
       };
       onEditWorkout(editedWorkout);
-      router.push("/workouts");
     }
 
     event.target.reset();
@@ -111,8 +110,8 @@ export default function WorkoutForm({
         <StyledFieldset $edit={isEditMode}>
           <StyledLegend $edit={isEditMode}>Second step</StyledLegend>
           <ExercisesListHeadline>Added to list:</ExercisesListHeadline>
-          {addedExercises.map((addedExercise) => (
-            <AddedExercise key={addedExercise._id}>
+          {addedExercises.map((addedExercise, index) => (
+            <AddedExercise key={index}>
               {addedExercise.exercise} {addedExercise.sets} sets /{" "}
               {addedExercise.reps} reps
               <DeleteButton

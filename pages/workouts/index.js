@@ -34,15 +34,15 @@ export default function WorkoutsPage({ exercises }) {
     }
   }, [dataWorkouts]);
 
-  function handleEditWorkout(editedWorkout) {
-    setWorkoutsList(
-      workoutsList.map((workout) =>
-        workout._id === editedWorkout._id
-          ? { ...workout, ...editedWorkout }
-          : workout
-      )
-    );
-  }
+  // function handleEditWorkout(editedWorkout) {
+  //   setWorkoutsList(
+  //     workoutsList.map((workout) =>
+  //       workout._id === editedWorkout._id
+  //         ? { ...workout, ...editedWorkout }
+  //         : workout
+  //     )
+  //   );
+  // }
 
   function handleDeleteWorkout(id) {
     setWorkoutsList(workoutsList.filter((workout) => workout._id !== id));
@@ -105,7 +105,7 @@ export default function WorkoutsPage({ exercises }) {
         workouts={isFavouritesMode ? filteredWorkouts : workoutsList}
         exercises={exercises}
         isFavouritesMode={isFavouritesMode}
-        onEditWorkout={handleEditWorkout}
+        // onEditWorkout={handleEditWorkout}
         onDeleteWorkout={handleDeleteWorkout}
         favouriteWorkouts={favouriteWorkouts}
         onToggleFavourite={handleToggleFavourite}
