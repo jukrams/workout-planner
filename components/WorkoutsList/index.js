@@ -11,10 +11,6 @@ export default function WorkoutsList({
   onToggleFavourite,
   isFavouritesMode,
 }) {
-  if (!workouts) {
-    return <div>Loading...</div>;
-  }
-  console.log("workouts:", workouts);
   return (
     <>
       <ToastContainer

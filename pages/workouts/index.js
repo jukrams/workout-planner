@@ -7,25 +7,12 @@ import { useState, useEffect } from "react";
 import useSWR from "swr";
 import useLocalStorageState from "use-local-storage-state";
 
-export default function WorkoutsPage({
-  // workouts,
-  exercises,
-  // onEditWorkout,
-  // onDeleteWorkout,
-  // favouriteWorkouts,
-  // onToggleFavourite,
-}) {
+export default function WorkoutsPage({ exercises }) {
   const {
     data: dataWorkouts = [],
     isLoading,
     error: errorWorkouts,
   } = useSWR("/api/workouts");
-
-  // if (isLoading || errorWorkouts) return <p>Loading...</p>;
-
-  // if (!dataWorkouts) {
-  //   return <div>Loading...</div>;
-  // }
 
   const [workoutsList, setWorkoutsList] = useState(dataWorkouts);
 
@@ -82,6 +69,10 @@ export default function WorkoutsPage({
     )
   );
 
+  if (!dataWorkouts) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <HeadlineSection>
@@ -115,16 +106,9 @@ export default function WorkoutsPage({
         </ButtonsSection>
       </HeadlineSection>
       <WorkoutsList
-        // workouts={isFavouritesMode ? filteredWorkouts : workouts}
         workouts={isFavouritesMode ? filteredWorkouts : workoutsList}
         exercises={exercises}
-        // onEditWorkout={onEditWorkout}
-        // onDeleteWorkout={onDeleteWorkout}
-        // favouriteWorkouts={favouriteWorkouts}
-        // onToggleFavourite={onToggleFavourite}
         isFavouritesMode={isFavouritesMode}
-        //
-        // workouts={workoutsList}
         onAddWorkout={handleAddWorkout}
         onEditWorkout={handleEditWorkout}
         onDeleteWorkout={handleDeleteWorkout}

@@ -83,8 +83,8 @@ export default function WorkoutPreview({
         ))}
       </HeadlineSection>
       <MusclesList>
-        {workoutMuscleGroups.map((workoutMuscleGroup) => (
-          <MuscleTags key={workoutMuscleGroup}>{workoutMuscleGroup}</MuscleTags>
+        {workoutMuscleGroups.map((workoutMuscleGroup, index) => (
+          <MuscleTags key={index}>{workoutMuscleGroup}</MuscleTags>
         ))}
       </MusclesList>
       {isDetailsMode && (
