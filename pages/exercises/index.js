@@ -76,8 +76,7 @@ export default function HomePage({ exercises, muscleGroups }) {
         {session ? (
           <H1>
             WELCOME TO YOUR <br />
-            EXERCISE LIST,{" "}
-            <Username>{session.user.name || session.user.username}</Username>!
+            EXERCISE LIST, <Username>{session.user.name}</Username>!
           </H1>
         ) : (
           <H1>
@@ -86,7 +85,7 @@ export default function HomePage({ exercises, muscleGroups }) {
             EXERCISE LIST
           </H1>
         )}
-        <Login isExerciseListPage />
+        <Login />
       </HeadlineSection>
 
       <ControlsContainer>
@@ -106,7 +105,6 @@ export default function HomePage({ exercises, muscleGroups }) {
         />
       ) : null}
       <ExercisesList exercises={filteredExercises} />
-
     </StyledSection>
   );
 }
