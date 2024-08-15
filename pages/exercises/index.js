@@ -1,5 +1,7 @@
 import ExercisesList from "@/components/ExercisesList";
 import FilterList from "@/components/FilterList";
+import Login from "@/components/Login";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import styled from "styled-components";
 import SearchBar from "@/components/SearchBar";
@@ -57,6 +59,8 @@ export default function HomePage({ exercises, muscleGroups }) {
     setMuscles(muscleGroups);
   }
 
+  const { data: session } = useSession();
+
   function handleSearch(input) {
     setSearchInput(input);
     const lowercasedInput = input.toLowerCase();
@@ -69,10 +73,19 @@ export default function HomePage({ exercises, muscleGroups }) {
   return (
     <StyledSection>
       <HeadlineSection>
-        <H1>
-          WELCOME TO YOUR <br />
-          EXERCISE LIST
-        </H1>
+        {session ? (
+          <H1>
+            WELCOME TO YOUR <br />
+            EXERCISE LIST, <Username>{session.user.name}</Username>!
+          </H1>
+        ) : (
+          <H1>
+            {" "}
+            WELCOME TO YOUR <br />
+            EXERCISE LIST
+          </H1>
+        )}
+        <Login />
       </HeadlineSection>
 
       <ControlsContainer>
@@ -92,7 +105,6 @@ export default function HomePage({ exercises, muscleGroups }) {
         />
       ) : null}
       <ExercisesList exercises={filteredExercises} />
-
     </StyledSection>
   );
 }
@@ -130,10 +142,19 @@ const H1 = styled.h1`
   font-size: xx-large;
   font-weight: normal;
   line-height: 1;
+  margin-top: 0;
+  max-width: 65%;
+`;
+
+const Username = styled.span`
+  color: var(--dark-orange);
 `;
 
 const HeadlineSection = styled.section`
   width: 85vw;
   max-width: 1000px;
-  margin: auto;
+  margin: 2rem auto auto auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
