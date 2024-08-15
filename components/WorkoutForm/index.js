@@ -11,7 +11,6 @@ export default function WorkoutForm({
   defaultData,
   onEditWorkout,
 }) {
-  const { mutate } = useSWR("/api/workouts");
   const router = useRouter();
 
   const [addedExercises, setAddedExercises] = useState(
@@ -54,64 +53,43 @@ export default function WorkoutForm({
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const workoutData = Object.fromEntries(formData);
-
-    const response = await fetch("/api/workouts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(workoutData),
-    });
-
-    if (!response.ok) {
-      console.error(response.status);
-      return;
-    } else if (response.ok) {
-      mutate();
+    if (!isEditMode) {
+      const newWorkout = {
+        name: event.target.name.value,
+        exercises: addedExercises.map((addedExercise) => {
+          const selectedExercise = exercises.find(
+            (exercise) => exercise.name === addedExercise.exercise
+          );
+          return {
+            exerciseId: selectedExercise._id,
+            sets: addedExercise.sets,
+            reps: addedExercise.reps,
+          };
+        }),
+      };
+      onAddWorkout(newWorkout);
+    } else {
+      const editedWorkout = {
+        id: defaultData.id,
+        name: event.target.name.value,
+        exercises: addedExercises.map((addedExercise) => {
+          const selectedExercise = exercises.find(
+            (exercise) => exercise.name === addedExercise.exercise
+          );
+          return {
+            exerciseId: selectedExercise.id,
+            sets: addedExercise.sets,
+            reps: addedExercise.reps,
+          };
+        }),
+      };
+      onEditWorkout(editedWorkout);
+      router.push("/workouts");
     }
 
     event.target.reset();
+    setAddedExercises([]);
   }
-  // if (!isEditMode) {
-  //   const newWorkout = {
-  //     name: event.target.name.value,
-  //     exercises: addedExercises.map((addedExercise) => {
-  //       const selectedExercise = exercises.find(
-  //         (exercise) => exercise.name === addedExercise.exercise
-  //       );
-  //       return {
-  //         exerciseId: selected,
-  //         sets: addedExercise.sets,
-  //         reps: addedExercise.reps,
-  //       };
-  //     }),
-  //   };
-  //   onAddWorkout(newWorkout);
-  //   router.push("/workouts");
-  // } else {
-  //   const editedWorkout = {
-  //     id: defaultData.id,
-  //     name: event.target.name.value,
-  //     exercises: addedExercises.map((addedExercise) => {
-  //       const selectedExercise = exercises.find(
-  //         (exercise) => exercise.name === addedExercise.exercise
-  //       );
-  //       return {
-  //         exerciseId: selectedExercise.id,
-  //         sets: addedExercise.sets,
-  //         reps: addedExercise.reps,
-  //       };
-  //     }),
-  //   };
-  //   onEditWorkout(editedWorkout);
-  //   router.push("/workouts");
-  // }
-
-  // event.target.reset();
-  // setAddedExercises([]);
-  // }
 
   return (
     <FormSection>

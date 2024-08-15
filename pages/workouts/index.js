@@ -34,10 +34,6 @@ export default function WorkoutsPage({ exercises }) {
     }
   }, [dataWorkouts]);
 
-  function handleAddWorkout(newWorkout) {
-    setWorkoutsList([{ _id: uid(), ...newWorkout }, ...workoutsList]);
-  }
-
   function handleEditWorkout(editedWorkout) {
     setWorkoutsList(
       workoutsList.map((workout) =>
@@ -109,7 +105,6 @@ export default function WorkoutsPage({ exercises }) {
         workouts={isFavouritesMode ? filteredWorkouts : workoutsList}
         exercises={exercises}
         isFavouritesMode={isFavouritesMode}
-        onAddWorkout={handleAddWorkout}
         onEditWorkout={handleEditWorkout}
         onDeleteWorkout={handleDeleteWorkout}
         favouriteWorkouts={favouriteWorkouts}

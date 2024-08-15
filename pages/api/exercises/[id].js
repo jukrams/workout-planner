@@ -14,13 +14,4 @@ export default async function handler(request, response) {
 
     response.status(200).json(exercise);
   }
-  //   if (request.method === "PUT") {
-  //     try {
-  //       const updatedExercise = request.body;
-  //       await Workout.findByIdAndUpdate(id, updatedWorkout);
-  //       response.status(200).json({ status: "Workout successfully updated." });
-  //     } catch (error) {
-  //       response.status(400).json({ error: error.message });
-  //     }
-  //   }
 }
