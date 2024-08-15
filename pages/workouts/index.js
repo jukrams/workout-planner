@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import { FavouriteButton } from "@/components/Workout";
 import { useState, useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import useLocalStorageState from "use-local-storage-state";
 
 export default function WorkoutsPage({ exercises }) {
@@ -12,6 +12,7 @@ export default function WorkoutsPage({ exercises }) {
     data: dataWorkouts = [],
     isLoading,
     error: errorWorkouts,
+    mutate,
   } = useSWR("/api/workouts");
 
   const [workoutsList, setWorkoutsList] = useState(dataWorkouts);
@@ -34,18 +35,13 @@ export default function WorkoutsPage({ exercises }) {
     }
   }, [dataWorkouts]);
 
-  // function handleEditWorkout(editedWorkout) {
-  //   setWorkoutsList(
-  //     workoutsList.map((workout) =>
-  //       workout._id === editedWorkout._id
-  //         ? { ...workout, ...editedWorkout }
-  //         : workout
-  //     )
-  //   );
-  // }
-
-  function handleDeleteWorkout(id) {
-    setWorkoutsList(workoutsList.filter((workout) => workout._id !== id));
+  async function handleDeleteWorkout(id) {
+    const response = await fetch(`/api/workouts/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      mutate();
+    }
   }
 
   function handleToggleFavourite(idToToggle) {

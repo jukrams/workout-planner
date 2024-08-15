@@ -23,4 +23,12 @@ export default async function handler(request, response) {
       response.status(400).json({ error: error.message });
     }
   }
+  if (request.method === "DELETE") {
+    try {
+      await Workout.findByIdAndDelete(id);
+      response.status(200).json({ status: "Workout successfully deleted." });
+    } catch (error) {
+      response.status(400).json({ error: error.message });
+    }
+  }
 }
