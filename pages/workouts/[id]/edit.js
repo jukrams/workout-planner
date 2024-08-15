@@ -48,8 +48,6 @@ export default function EditPage() {
     }),
   };
 
-  console.log(defaultData);
-
   return (
     <>
       <HeadlineSection isEditMode />

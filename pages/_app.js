@@ -19,11 +19,11 @@ const fetcher = async (url) => {
 };
 
 export default function App({ Component, pageProps }) {
-  const {
-    data: dataExercises = [],
-    error: errorExercises,
-    isLoading: exerciseIsLoading,
-  } = useSWR("/api/exercises", fetcher);
+  // const {
+  //   data: dataExercises = [],
+  //   error: errorExercises,
+  //   isLoading: exerciseIsLoading,
+  // } = useSWR("/api/exercises", fetcher);
 
   const router = useRouter();
   const showNavbar =
@@ -38,8 +38,8 @@ export default function App({ Component, pageProps }) {
         <SWRConfig value={{ fetcher }}>
           <Component
             {...pageProps}
-            exercises={dataExercises}
-            exerciseIsLoading={exerciseIsLoading}
+            // exercises={dataExercises}
+            // exerciseIsLoading={exerciseIsLoading}
             muscleGroups={muscleGroups}
           />
         </SWRConfig>

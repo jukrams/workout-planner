@@ -1,22 +1,36 @@
 import ExercisesList from "@/components/ExercisesList";
-
 import FilterList from "@/components/FilterList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import useSWR from "swr";
 
-export default function HomePage({
-  exercises,
-  muscleGroups,
-  exerciseIsLoading,
-}) {
+export default function HomePage({ muscleGroups }) {
+  const {
+    data: exercises = [],
+    error: errorExercises,
+    isLoading: exerciseIsLoading,
+  } = useSWR("/api/exercises");
+
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
-  const [filteredExercises, setFilteredExercises] = useState(exercises);
+  const [filteredExercises, setFilteredExercises] = useState([]);
   const [muscles, setMuscles] = useState(muscleGroups);
+  const [filterApplied, setFilterApplied] = useState(false);
+
+  useEffect(() => {
+    if (!exerciseIsLoading && exercises.length > 0) {
+      setFilteredExercises(exercises);
+    }
+  }, [exercises, exerciseIsLoading]);
+
   if (exerciseIsLoading) {
-    return <div>Loading</div>;
+    return <p>Loading...</p>;
   }
+
   function handleShowFilter() {
+    if (!filterApplied) {
+      setFilterApplied(true);
+    }
     setFilterMode(!filterMode);
   }
 
@@ -81,7 +95,10 @@ export default function HomePage({
           onClear={handleClear}
         />
       ) : null}
-      <ExercisesList exercises={exercises} />
+      <ExercisesList
+        exercises={filterApplied ? filteredExercises : exercises}
+        exerciseIsLoading={exerciseIsLoading}
+      />
     </StyledSection>
   );
 }
