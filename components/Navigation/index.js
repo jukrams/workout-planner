@@ -7,8 +7,8 @@ export default function Navigation() {
 
   return (
     <Navbar>
-      <NavbarItem $active={router.pathname === "/"}>
-        <StyledLink href="/">Exercises</StyledLink>
+      <NavbarItem $active={router.pathname === "/exercises"}>
+        <StyledLink href="/exercises">Exercises</StyledLink>
       </NavbarItem>
       <NavbarItem $active={router.pathname === "/workouts"}>
         <StyledLink href="/workouts">Workouts</StyledLink>

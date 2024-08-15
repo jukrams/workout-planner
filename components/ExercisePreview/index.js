@@ -29,14 +29,13 @@ const ExerciseCard = styled.li`
 `;
 
 const ExerciseCardName = styled.p`
-  font-family: Verdana;
   font-size: medium;
   position: absolute;
   top: 0;
   left: 4vw;
   font-weight: bold;
   color: white;
-  background-color: #EDB01E;
+  background-color: #edb01e;
   padding: 0.5rem;
   border-radius: 25px;
 `;
@@ -51,11 +50,9 @@ const ExerciseCardMuscleContainer = styled.div`
   gap: 0.2rem;
 `;
 
-
 const ExerciseCardMuscle = styled.p`
-  font-family: Verdana;
   font-size: small;
-  color: #4D4020;
+  color: #4d4020;
   position: relative;
   display: inline-block;
   font-weight: bold;
