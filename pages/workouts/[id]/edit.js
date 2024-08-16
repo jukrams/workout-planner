@@ -12,6 +12,10 @@ export default function EditPage() {
   const { data: workouts } = useSWR("/api/workouts");
   const { data: exercises } = useSWR("/api/exercises");
 
+  if (!id || !workouts || !exercises) {
+    return <p>Loading...</p>;
+  }
+
   async function handleEditWorkout(editedWorkout) {
     const response = await fetch(`/api/workouts/${id}`, {
       method: "PUT",
