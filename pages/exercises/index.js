@@ -13,7 +13,7 @@ export default function HomePage({ muscleGroups }) {
 
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
-  const [filteredExercises, setFilteredExercises] = useState([]);
+  const [filteredExercises, setFilteredExercises] = useState([exercises]);
   const [muscles, setMuscles] = useState(muscleGroups);
   const [filterApplied, setFilterApplied] = useState(false);
   const [searchInput, setSearchInput] = useState("");
@@ -80,6 +80,9 @@ export default function HomePage({ muscleGroups }) {
   }
 
   function handleSearch(input) {
+    if (!filterApplied) {
+      setFilterApplied(true);
+    }
     setSearchInput(input);
     const lowercasedInput = input.toLowerCase();
     const filtered = exercises.filter((exercise) =>
