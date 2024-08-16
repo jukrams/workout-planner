@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { SessionProvider } from "next-auth/react";
 import { SWRConfig } from "swr";
 
@@ -41,17 +40,7 @@ export default function App({ Component, pageProps }) {
       >
         <GlobalStyle />
         <Layout showNavbar={showNavbar}>
-          <Component
-            {...pageProps}
-            exercises={exercises}
-            workouts={workoutsList}
-            onAddWorkout={handleAddWorkout}
-            onEditWorkout={handleEditWorkout}
-            onDeleteWorkout={handleDeleteWorkout}
-            muscleGroups={muscleGroups}
-            favouriteWorkouts={favouriteWorkouts}
-            onToggleFavourite={handleToggleFavourite}
-          />
+          <Component {...pageProps} muscleGroups={muscleGroups} />
         </Layout>
       </SWRConfig>
     </SessionProvider>
