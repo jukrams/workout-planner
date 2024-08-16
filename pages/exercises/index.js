@@ -1,19 +1,39 @@
 import ExercisesList from "@/components/ExercisesList";
 import FilterList from "@/components/FilterList";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import useSWR from "swr";
 import Login from "@/components/Login";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import styled from "styled-components";
 import SearchBar from "@/components/SearchBar";
 
-export default function HomePage({ exercises, muscleGroups }) {
+export default function HomePage({ muscleGroups }) {
+  const { data: exercises = [], isLoading: exerciseIsLoading } =
+    useSWR("/api/exercises");
+
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
-  const [filteredExercises, setFilteredExercises] = useState(exercises);
+  const [filteredExercises, setFilteredExercises] = useState([exercises]);
   const [muscles, setMuscles] = useState(muscleGroups);
+  const [filterApplied, setFilterApplied] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (!exerciseIsLoading && exercises.length > 0) {
+      setFilteredExercises(exercises);
+    }
+  }, [exercises, exerciseIsLoading]);
+
+  if (exerciseIsLoading) {
+    return <p>Loading...</p>;
+  }
+
   function handleShowFilter() {
+    if (!filterApplied) {
+      setFilterApplied(true);
+    }
     setFilterMode(!filterMode);
   }
 
@@ -59,9 +79,10 @@ export default function HomePage({ exercises, muscleGroups }) {
     setMuscles(muscleGroups);
   }
 
-  const { data: session } = useSession();
-
   function handleSearch(input) {
+    if (!filterApplied) {
+      setFilterApplied(true);
+    }
     setSearchInput(input);
     const lowercasedInput = input.toLowerCase();
     const filtered = exercises.filter((exercise) =>
@@ -87,14 +108,12 @@ export default function HomePage({ exercises, muscleGroups }) {
         )}
         <Login />
       </HeadlineSection>
-
       <ControlsContainer>
         <SearchBar searchInput={searchInput} onSearch={handleSearch} />
         <FilterButton type="button" onClick={handleShowFilter}>
           Filter ☰
         </FilterButton>
       </ControlsContainer>
-
       {filterMode ? (
         <FilterList
           muscleGroups={muscles}
@@ -104,7 +123,10 @@ export default function HomePage({ exercises, muscleGroups }) {
           onClear={handleClear}
         />
       ) : null}
-      <ExercisesList exercises={filteredExercises} />
+      <ExercisesList
+        exercises={filterApplied ? filteredExercises : exercises}
+        exerciseIsLoading={exerciseIsLoading}
+      />
     </StyledSection>
   );
 }

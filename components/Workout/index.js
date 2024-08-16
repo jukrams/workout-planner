@@ -40,11 +40,11 @@ export default function Workout({
   return (
     <>
       {workouts.map((workout, index) => (
-        <WorkoutCard key={workout.id} $even={index % 2 === 0}>
+        <WorkoutCard key={workout._id} $even={index % 2 === 0}>
           <IconsSection>
             <FavouriteButton
               type="button"
-              onClick={() => onToggleFavourite(workout.id)}
+              onClick={() => onToggleFavourite(workout._id)}
             >
               <Icon
                 alt="Favourite"
@@ -54,14 +54,14 @@ export default function Workout({
                   index % 2 === 0
                     ? favouriteWorkouts.find(
                         (favouriteWorkout) =>
-                          favouriteWorkout.id === workout.id &&
+                          favouriteWorkout._id === workout._id &&
                           favouriteWorkout.isFavourite
                       )
                       ? "/icons/star-filled-white.svg"
                       : "/icons/star-white.svg"
                     : favouriteWorkouts.find(
                         (favouriteWorkout) =>
-                          favouriteWorkout.id === workout.id &&
+                          favouriteWorkout._id === workout._id &&
                           favouriteWorkout.isFavourite
                       )
                     ? "/icons/star-filled-orange.svg"
@@ -71,7 +71,7 @@ export default function Workout({
                 $favouriteIcon
               />
             </FavouriteButton>
-            <EditButton href={`workouts/${workout.id}/edit`}>
+            <EditButton href={`workouts/${workout._id}/edit`}>
               <Icon
                 alt="Edit"
                 width={35}
@@ -84,7 +84,7 @@ export default function Workout({
             </EditButton>
             <DeleteButton
               type="button"
-              onClick={() => handleDelete(workout.id)}
+              onClick={() => handleDelete(workout._id)}
             >
               <Icon
                 alt="Delete"
@@ -105,7 +105,7 @@ export default function Workout({
             exercises={exercises}
             workouts={workouts}
             even={index % 2 === 0}
-            id={workout.id}
+            _id={workout._id}
           />
         </WorkoutCard>
       ))}

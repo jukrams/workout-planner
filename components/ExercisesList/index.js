@@ -1,15 +1,19 @@
 import ExercisePreview from "../ExercisePreview";
 import styled from "styled-components";
 
-export default function ExercisesList({ exercises }) {
+export default function ExercisesList({ exercises, exerciseIsLoading }) {
+  if (exerciseIsLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <List>
-      {exercises.length !== 0 ? (
-        exercises.map((exercise) => (
-          <ExercisePreview key={exercise.id} exercise={exercise} />
-        ))
-      ) : (
+      {!exerciseIsLoading && exercises.length === 0 ? (
         <p>No exercises found!</p>
+      ) : (
+        exercises.map((exercise) => (
+          <ExercisePreview key={exercise._id} exercise={exercise} />
+        ))
       )}
     </List>
   );

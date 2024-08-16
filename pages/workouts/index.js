@@ -5,23 +5,51 @@ import Image from "next/image";
 import { FavouriteButton } from "@/components/Workout";
 import { useState } from "react";
 import Login from "@/components/Login";
+import useSWR from "swr";
 
-export default function WorkoutsPage({
-  workouts,
-  exercises,
-  onEditWorkout,
-  onDeleteWorkout,
-  favouriteWorkouts,
-  onToggleFavourite,
-}) {
+export default function WorkoutsPage() {
+  const { data: workouts = [], isLoading, mutate } = useSWR("/api/workouts");
+  const { data: exercises = [] } = useSWR("/api/exercises");
+
   const [isFavouritesMode, setisFavouritesMode] = useState(false);
 
-  const filteredWorkouts = workouts.filter((workout) =>
-    favouriteWorkouts.find(
-      (favouriteWorkout) =>
-        favouriteWorkout.id === workout.id && favouriteWorkout.isFavourite
-    )
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  async function handleDeleteWorkout(id) {
+    const response = await fetch(`/api/workouts/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      mutate();
+    }
+  }
+
+  async function handleToggleFavourite(id) {
+    const workout = workouts.find((workout) => workout._id === id);
+    if (workout) {
+      workout.isFavourite = !workout.isFavourite;
+      const response = await fetch(`/api/workouts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(workout),
+      });
+      if (response.ok) {
+        mutate();
+      }
+    }
+  }
+
+  const favouriteWorkouts = workouts.filter(
+    (workout) => workout.isFavourite === true
   );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -57,13 +85,13 @@ export default function WorkoutsPage({
         </FavouriteButton>
       </ButtonsSection>
       <WorkoutsList
-        workouts={isFavouritesMode ? filteredWorkouts : workouts}
+        workouts={isFavouritesMode ? favouriteWorkouts : workouts}
         exercises={exercises}
-        onEditWorkout={onEditWorkout}
-        onDeleteWorkout={onDeleteWorkout}
-        favouriteWorkouts={favouriteWorkouts}
-        onToggleFavourite={onToggleFavourite}
         isFavouritesMode={isFavouritesMode}
+        onDeleteWorkout={handleDeleteWorkout}
+        favouriteWorkouts={favouriteWorkouts}
+        onToggleFavourite={handleToggleFavourite}
+        isLoading={isLoading}
       />
     </>
   );
