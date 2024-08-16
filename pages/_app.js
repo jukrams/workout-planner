@@ -14,7 +14,6 @@ const fetcher = async (url) => {
     error.status = res.status;
     throw error;
   }
-
   return res.json();
 };
 
@@ -27,17 +26,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <SessionProvider session={pageProps.session}>
-      <SWRConfig
-        value={{
-          fetcher: async (...args) => {
-            const response = await fetch(...args);
-            if (!response.ok) {
-              throw new Error(`Request with ${JSON.stringify(args)} failed.`);
-            }
-            return await response.json();
-          },
-        }}
-      >
+      <SWRConfig value={{ fetcher }}>
         <GlobalStyle />
         <Layout showNavbar={showNavbar}>
           <Component {...pageProps} muscleGroups={muscleGroups} />
