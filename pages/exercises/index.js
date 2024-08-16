@@ -5,11 +5,8 @@ import styled from "styled-components";
 import useSWR from "swr";
 
 export default function HomePage({ muscleGroups }) {
-  const {
-    data: exercises = [],
-    error: errorExercises,
-    isLoading: exerciseIsLoading,
-  } = useSWR("/api/exercises");
+  const { data: exercises = [], isLoading: exerciseIsLoading } =
+    useSWR("/api/exercises");
 
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);

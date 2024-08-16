@@ -2,14 +2,13 @@ import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
-import useSWR, { SWRConfig } from "swr";
+import { SWRConfig } from "swr";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
 
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
-
     error.info = await res.json();
     error.status = res.status;
     throw error;
@@ -19,12 +18,6 @@ const fetcher = async (url) => {
 };
 
 export default function App({ Component, pageProps }) {
-  // const {
-  //   data: dataExercises = [],
-  //   error: errorExercises,
-  //   isLoading: exerciseIsLoading,
-  // } = useSWR("/api/exercises", fetcher);
-
   const router = useRouter();
   const showNavbar =
     router.pathname !== "/" &&
@@ -36,12 +29,7 @@ export default function App({ Component, pageProps }) {
       <GlobalStyle />
       <Layout showNavbar={showNavbar}>
         <SWRConfig value={{ fetcher }}>
-          <Component
-            {...pageProps}
-            // exercises={dataExercises}
-            // exerciseIsLoading={exerciseIsLoading}
-            muscleGroups={muscleGroups}
-          />
+          <Component {...pageProps} muscleGroups={muscleGroups} />
         </SWRConfig>
       </Layout>
     </>

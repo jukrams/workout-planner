@@ -2,7 +2,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 
 export default function WorkoutForm({
   onAddWorkout,
@@ -340,6 +339,7 @@ const CancelButton = styled.button`
 
   &:hover {
     background-color: var(--dark-orange);
+    color: white;
     cursor: pointer;
   }
 `;

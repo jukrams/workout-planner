@@ -7,11 +7,7 @@ import useSWR from "swr";
 export default function CreateWorkout() {
   const router = useRouter();
 
-  const {
-    data: exercises = [],
-    error: errorExercises,
-    isLoading: exerciseIsLoading,
-  } = useSWR("/api/exercises");
+  const { data: exercises = [] } = useSWR("/api/exercises");
 
   async function handleAddWorkout(newWorkout) {
     const response = await fetch("/api/workouts", {

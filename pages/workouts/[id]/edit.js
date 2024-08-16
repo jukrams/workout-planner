@@ -10,7 +10,6 @@ export default function EditPage() {
   const { id } = router.query;
 
   const { data: workouts } = useSWR("/api/workouts");
-
   const { data: exercises } = useSWR("/api/exercises");
 
   async function handleEditWorkout(editedWorkout) {
@@ -43,7 +42,7 @@ export default function EditPage() {
         exercise: foundExercise.name,
         sets: workoutToEditExercise.sets,
         reps: workoutToEditExercise.reps,
-        id: uid(),
+        _id: uid(),
       };
     }),
   };
