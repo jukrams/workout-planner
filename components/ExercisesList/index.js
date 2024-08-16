@@ -8,13 +8,6 @@ export default function ExercisesList({ exercises, exerciseIsLoading }) {
 
   return (
     <List>
-      {/* {exercises.length !== 0 ? (
-        exercises.map((exercise) => (
-          <ExercisePreview key={exercise._id} exercise={exercise} />
-        ))
-      ) : (
-        <p>No exercises found!</p>
-      )} */}
       {!exerciseIsLoading && exercises.length === 0 ? (
         <p>No exercises found!</p>
       ) : (
