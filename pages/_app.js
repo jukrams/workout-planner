@@ -2,6 +2,8 @@ import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { SessionProvider } from "next-auth/react";
 import { SWRConfig } from "swr";
 
 const fetcher = async (url) => {
@@ -25,13 +27,33 @@ export default function App({ Component, pageProps }) {
     !router.pathname.startsWith("/workouts/");
 
   return (
-    <>
-      <GlobalStyle />
-      <Layout showNavbar={showNavbar}>
-        <SWRConfig value={{ fetcher }}>
-          <Component {...pageProps} muscleGroups={muscleGroups} />
-        </SWRConfig>
-      </Layout>
-    </>
+    <SessionProvider session={pageProps.session}>
+      <SWRConfig
+        value={{
+          fetcher: async (...args) => {
+            const response = await fetch(...args);
+            if (!response.ok) {
+              throw new Error(`Request with ${JSON.stringify(args)} failed.`);
+            }
+            return await response.json();
+          },
+        }}
+      >
+        <GlobalStyle />
+        <Layout showNavbar={showNavbar}>
+          <Component
+            {...pageProps}
+            exercises={exercises}
+            workouts={workoutsList}
+            onAddWorkout={handleAddWorkout}
+            onEditWorkout={handleEditWorkout}
+            onDeleteWorkout={handleDeleteWorkout}
+            muscleGroups={muscleGroups}
+            favouriteWorkouts={favouriteWorkouts}
+            onToggleFavourite={handleToggleFavourite}
+          />
+        </Layout>
+      </SWRConfig>
+    </SessionProvider>
   );
 }
