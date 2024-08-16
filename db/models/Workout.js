@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const workoutSchema = new Schema({
   name: { type: String, required: true },
+  isFavourite: { type: Boolean, default: false },
   exercises: [
     {
       _id: false,

@@ -14,6 +14,7 @@ export default async function handler(request, response) {
 
     response.status(200).json(workout);
   }
+
   if (request.method === "PUT") {
     try {
       const updatedWorkout = request.body;
@@ -23,6 +24,7 @@ export default async function handler(request, response) {
       response.status(400).json({ error: error.message });
     }
   }
+
   if (request.method === "DELETE") {
     try {
       await Workout.findByIdAndDelete(id);

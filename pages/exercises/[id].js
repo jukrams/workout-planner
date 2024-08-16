@@ -2,8 +2,10 @@ import Link from "next/link";
 import styled from "styled-components";
 import ExerciseDetails from "@/components/ExerciseDetails";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
-export default function DetailsPage({ exercises }) {
+export default function DetailsPage() {
+  const { data: exercises } = useSWR("/api/exercises");
   const router = useRouter();
   const { id } = router.query;
   if (!id) {

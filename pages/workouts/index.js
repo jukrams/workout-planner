@@ -3,43 +3,18 @@ import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
 import { FavouriteButton } from "@/components/Workout";
-import { useState, useEffect } from "react";
-import useSWR, { mutate } from "swr";
-import useLocalStorageState from "use-local-storage-state";
+import { useState } from "react";
+import useSWR from "swr";
 
 export default function WorkoutsPage() {
-  const {
-    data: dataWorkouts = [],
-    isLoading,
-    error: errorWorkouts,
-    mutate,
-  } = useSWR("/api/workouts");
-
-  const {
-    data: exercises = [],
-    error: errorExercises,
-    isLoading: exerciseIsLoading,
-  } = useSWR("/api/exercises");
-
-  const [workoutsList, setWorkoutsList] = useState(dataWorkouts);
-
-  const [favouriteWorkouts, setFavouriteWorkouts] = useLocalStorageState(
-    "favouriteWorkouts",
-    {
-      defaultValue: dataWorkouts.map((workout) => ({
-        _id: workout._id,
-        isFavourite: false,
-      })),
-    }
-  );
+  const { data: workouts = [], isLoading, mutate } = useSWR("/api/workouts");
+  const { data: exercises = [] } = useSWR("/api/exercises");
 
   const [isFavouritesMode, setisFavouritesMode] = useState(false);
 
-  useEffect(() => {
-    if (dataWorkouts.length > 0) {
-      setWorkoutsList(dataWorkouts);
-    }
-  }, [dataWorkouts]);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   async function handleDeleteWorkout(id) {
     const response = await fetch(`/api/workouts/${id}`, {
@@ -50,21 +25,25 @@ export default function WorkoutsPage() {
     }
   }
 
-  function handleToggleFavourite(idToToggle) {
-    setFavouriteWorkouts(
-      favouriteWorkouts.map((favouriteWorkout) =>
-        favouriteWorkout._id === idToToggle
-          ? { ...favouriteWorkout, isFavourite: !favouriteWorkout.isFavourite }
-          : favouriteWorkout
-      )
-    );
+  async function handleToggleFavourite(id) {
+    const workout = workouts.find((workout) => workout._id === id);
+    if (workout) {
+      workout.isFavourite = !workout.isFavourite;
+      const response = await fetch(`/api/workouts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(workout),
+      });
+      if (response.ok) {
+        mutate();
+      }
+    }
   }
 
-  const filteredWorkouts = workoutsList.filter((workout) =>
-    favouriteWorkouts.find(
-      (favouriteWorkout) =>
-        favouriteWorkout._id === workout._id && favouriteWorkout.isFavourite
-    )
+  const favouriteWorkouts = workouts.filter(
+    (workout) => workout.isFavourite === true
   );
 
   if (isLoading) {
@@ -104,7 +83,7 @@ export default function WorkoutsPage() {
         </ButtonsSection>
       </HeadlineSection>
       <WorkoutsList
-        workouts={isFavouritesMode ? filteredWorkouts : workoutsList}
+        workouts={isFavouritesMode ? favouriteWorkouts : workouts}
         exercises={exercises}
         isFavouritesMode={isFavouritesMode}
         onDeleteWorkout={handleDeleteWorkout}

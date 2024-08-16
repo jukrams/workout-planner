@@ -2,9 +2,16 @@ import WorkoutForm from "@/components/WorkoutForm";
 import styled from "styled-components";
 import HeadlineSection from "@/components/HeadlineSection";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
-export default function CreateWorkout({ exercises }) {
+export default function CreateWorkout() {
   const router = useRouter();
+
+  const {
+    data: exercises = [],
+    error: errorExercises,
+    isLoading: exerciseIsLoading,
+  } = useSWR("/api/exercises");
 
   async function handleAddWorkout(newWorkout) {
     const response = await fetch("/api/workouts", {

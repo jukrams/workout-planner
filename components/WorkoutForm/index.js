@@ -56,6 +56,7 @@ export default function WorkoutForm({
     if (!isEditMode) {
       const newWorkout = {
         name: event.target.name.value,
+        isFavourite: false,
         exercises: addedExercises.map((addedExercise) => {
           const selectedExercise = exercises.find(
             (exercise) => exercise.name === addedExercise.exercise

@@ -12,7 +12,6 @@ export default function WorkoutPreview({
   even,
   _id,
 }) {
-  console.log(exercises);
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
       (exerciseItem) => exerciseItem._id === workoutExercise.exerciseId
