@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
 
 export default function HomePage({ muscleGroups }) {
+  const { data: session } = useSession();
   const { data: exercises = [], isLoading: exerciseIsLoading } =
     useSWR("/api/exercises");
 
@@ -17,8 +18,6 @@ export default function HomePage({ muscleGroups }) {
   const [muscles, setMuscles] = useState(muscleGroups);
   const [filterApplied, setFilterApplied] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-
-  const { data: session } = useSession();
 
   useEffect(() => {
     if (!exerciseIsLoading && exercises.length > 0) {

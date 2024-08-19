@@ -3,19 +3,44 @@ import styled from "styled-components";
 import HeadlineSection from "@/components/HeadlineSection";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { useSession } from "next-auth/react";
 
 export default function CreateWorkout() {
   const router = useRouter();
 
   const { data: exercises = [] } = useSWR("/api/exercises");
+  const { data: session } = useSession();
+
+  // async function handleAddWorkout(newWorkout) {
+  //   const response = await fetch("/api/workouts", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(newWorkout),
+  //   });
+
+  //   if (response.ok) {
+  //     router.push("/workouts");
+  //   }
+  // }
 
   async function handleAddWorkout(newWorkout) {
-    const response = await fetch("/api/workouts", {
+    if (!session) {
+      console.error("No active session found. Please log in.");
+      return;
+    }
+
+    const workoutWithUser = {
+      ...newWorkout,
+      userId: session.user.id,
+    };
+    const response = await fetch(`/api/workouts/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newWorkout),
+      body: JSON.stringify(workoutWithUser),
     });
 
     if (response.ok) {
