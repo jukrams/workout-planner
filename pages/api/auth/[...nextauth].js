@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     process.env.VERCEL_ENV === "preview"
       ? CredentialsProvider({
@@ -35,4 +35,6 @@ export default NextAuth({
           clientSecret: process.env.GITHUB_CLIENT_SECRET,
         }),
   ],
-});
+};
+
+export default NextAuth(authOptions);

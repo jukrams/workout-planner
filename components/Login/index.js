@@ -11,11 +11,15 @@ export default function Login({ isHomepage }) {
     signIn("github", { callbackUrl: "/exercises" });
   }
 
+  function handleSignOut() {
+    signOut({ callbackUrl: "/" });
+  }
+
   const ButtonComponent = isHomepage ? HomepageButton : AnimatedButton;
 
   return (
     <ButtonComponent
-      onClick={session ? () => signOut() : handleSignIn}
+      onClick={session ? handleSignOut : handleSignIn}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(!isHovered)}
@@ -85,9 +89,9 @@ const AnimatedButton = styled.button`
   cursor: pointer;
   overflow: hidden;
 
-  background-color: ${({ isHovered }) =>
-    isHovered ? "var(--dark-orange)" : "var(--orange)"};
-  border-radius: ${({ isHovered }) => (isHovered ? "2rem" : "50%")};
+  background-color: ${({ $isHovered }) =>
+    $isHovered ? "var(--dark-orange)" : "var(--orange)"};
+  border-radius: ${({ $isHovered }) => ($isHovered ? "2rem" : "50%")};
 
   width: fit-content;
   height: fit-content;

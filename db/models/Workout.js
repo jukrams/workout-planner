@@ -12,6 +12,7 @@ const workoutSchema = new Schema({
       reps: { type: Number, required: true },
     },
   ],
+  owner: { type: String, required: true },
 });
 
 const Workout =

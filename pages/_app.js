@@ -2,19 +2,19 @@ import Layout from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { muscleGroups } from "@/lib/muscle-groups";
 import { useRouter } from "next/router";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { SWRConfig } from "swr";
 
 const fetcher = async (url) => {
-  const res = await fetch(url);
+  const response = await fetch(url);
 
-  if (!res.ok) {
+  if (!response.ok) {
     const error = new Error("An error occurred while fetching the data.");
-    error.info = await res.json();
-    error.status = res.status;
+    error.info = await response.json();
+    error.status = response.status;
     throw error;
   }
-  return res.json();
+  return response.json();
 };
 
 export default function App({ Component, pageProps }) {
