@@ -143,6 +143,7 @@ const Headline = styled.h2`
   font-size: 3rem;
   font-weight: normal;
   line-height: 1;
+  word-break: break-word;
   color: ${(props) => (props.$even ? "white" : "var(--dark-orange)")};
 
   &:last-of-type {
