@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import ProgressBar from "../ProgressBar";
+import useSessionStorageState from "use-session-storage-state";
+import Image from "next/image";
+import ModalFinishedWorkout from "../ModalFinishedWorkout";
 
 export default function WorkoutPreview({
   name,
   exercises,
   workoutExercises,
   even,
+  id,
 }) {
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
@@ -26,6 +31,48 @@ export default function WorkoutPreview({
 
   const splittedName = name.split(" ");
 
+  const sessionStorageKey = `${id}`;
+  const [completedExercises, setCompletedExercises] = useSessionStorageState(
+    sessionStorageKey,
+    { defaultValue: [] }
+  );
+
+  const progress = (completedExercises.length / includedExercises.length) * 100;
+
+  function toggleExerciseCompletion(exerciseId) {
+    setCompletedExercises(
+      completedExercises.includes(exerciseId)
+        ? completedExercises.filter(
+            (completedExercise) => completedExercise !== exerciseId
+          )
+        : [...completedExercises, exerciseId]
+    );
+  }
+
+  function handleResetProgress() {
+    setCompletedExercises([]);
+    setHasOpenedModal(false);
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasOpenedModal, setHasOpenedModal] = useSessionStorageState(
+    `${id}-hasOpenedModal`,
+    {
+      defaultValue: false,
+    }
+  );
+
+  useEffect(() => {
+    if (progress === 100 && !hasOpenedModal) {
+      setIsModalOpen(true);
+      setHasOpenedModal(true);
+    }
+  }, [progress, hasOpenedModal, setHasOpenedModal]);
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
+  }
+
   return (
     <>
       <HeadlineSection>
@@ -41,16 +88,42 @@ export default function WorkoutPreview({
         ))}
       </MusclesList>
       {isDetailsMode && (
-        <ExercisesList>
-          {includedExercises.map((includedExercise) => (
-            <Exercises key={includedExercise.id} $even={even}>
-              <ExerciseName $even={even}>{includedExercise.name}</ExerciseName>
-              <SetsReps>
-                {includedExercise.sets} sets / {includedExercise.reps} reps
-              </SetsReps>
-            </Exercises>
-          ))}
-        </ExercisesList>
+        <>
+          <ProgressSection>
+            <ProgressBar progress={progress} />
+            <ResetButton $even={even} onClick={() => handleResetProgress()}>
+              <ResetIcon
+                alt="Reset"
+                width={24}
+                height={24}
+                src="/icons/refresh-white.svg"
+                $even={even}
+              />
+            </ResetButton>
+          </ProgressSection>
+          <ModalFinishedWorkout
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+          />
+          <ExercisesList>
+            {includedExercises.map((includedExercise) => (
+              <Exercises key={includedExercise.id} $even={even}>
+                <ExerciseName $even={even}>
+                  {includedExercise.name}
+                </ExerciseName>
+                <SetsReps>
+                  {includedExercise.sets} sets / {includedExercise.reps} reps
+                </SetsReps>
+                <Checkbox
+                  type="checkbox"
+                  $even={even}
+                  checked={completedExercises.includes(includedExercise.id)}
+                  onChange={() => toggleExerciseCompletion(includedExercise.id)}
+                />
+              </Exercises>
+            ))}
+          </ExercisesList>
+        </>
       )}
       <DetailsButton onClick={() => setIsDetailsMode(!isDetailsMode)}>
         {isDetailsMode ? "SHOW LESS" : "SHOW MORE"}
@@ -102,24 +175,48 @@ const DetailsButton = styled.button`
   padding: 0;
 `;
 
-const ExercisesList = styled.ol`
+const ProgressSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+`;
+
+const ResetButton = styled.button`
+  width: 10.75%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: none;
+  border: none;
+  margin-left: 0.75rem;
+`;
+
+const ResetIcon = styled(Image)`
+  background-color: ${(props) =>
+    props.$even ? "var(--dark-brown)" : "var(--dark-orange)"};
+  border: 2px solid
+    ${(props) => (props.$even ? "var(--dark-brown)" : "var(--dark-orange)")};
+  border-radius: 50%;
+  transform: scaleX(-1);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+const ExercisesList = styled.ul`
   padding: 0;
-  list-style-position: inside;
 `;
 
 const Exercises = styled.li`
   border-bottom: ${(props) =>
     props.$even ? "1px solid white" : "1px solid var(--dark-orange)"};
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto auto 10%;
   align-items: flex-end;
 
   &:last-of-type {
     border: none;
-  }
-
-  &:first-of-type {
-    margin-top: 0.5rem;
   }
 `;
 
@@ -132,5 +229,40 @@ const ExerciseName = styled.p`
 const SetsReps = styled.p`
   font-size: normal;
   margin: 0;
+  padding-right: 1rem;
   color: var(--dark-brown);
+  text-align: end;
+`;
+
+const Checkbox = styled.input`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border: 2px solid
+    ${(props) => (props.$even ? "var(--dark-brown)" : "var(--dark-orange)")};
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+
+  &:checked {
+    background-color: ${(props) =>
+      props.$even ? "var(--dark-brown)" : "var(--dark-orange)"};
+  }
+
+  &:checked::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 9px;
+    height: 13px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
 `;

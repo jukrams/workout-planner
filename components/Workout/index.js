@@ -6,7 +6,13 @@ import { toast } from "react-toastify";
 import ModalDelete from "../ModalDelete";
 import Image from "next/image";
 
-export default function Workout({ workouts, onDeleteWorkout, exercises }) {
+export default function Workout({
+  workouts,
+  onDeleteWorkout,
+  exercises,
+  favouriteWorkouts,
+  onToggleFavourite,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [workoutIdToDelete, setWorkoutIdToDelete] = useState(null);
 
@@ -30,11 +36,41 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
     setWorkoutIdToDelete(null);
     successMessage();
   }
+
   return (
     <>
       {workouts.map((workout, index) => (
         <WorkoutCard key={workout.id} $even={index % 2 === 0}>
           <IconsSection>
+            <FavouriteButton
+              type="button"
+              onClick={() => onToggleFavourite(workout.id)}
+            >
+              <Icon
+                alt="Favourite"
+                width={35}
+                height={35}
+                src={
+                  index % 2 === 0
+                    ? favouriteWorkouts.find(
+                        (favouriteWorkout) =>
+                          favouriteWorkout.id === workout.id &&
+                          favouriteWorkout.isFavourite
+                      )
+                      ? "/icons/star-filled-white.svg"
+                      : "/icons/star-white.svg"
+                    : favouriteWorkouts.find(
+                        (favouriteWorkout) =>
+                          favouriteWorkout.id === workout.id &&
+                          favouriteWorkout.isFavourite
+                      )
+                    ? "/icons/star-filled-orange.svg"
+                    : "/icons/star-orange.svg"
+                }
+                $even={index % 2 === 0}
+                $favouriteIcon
+              />
+            </FavouriteButton>
             <EditButton href={`workouts/${workout.id}/edit`}>
               <Icon
                 alt="Edit"
@@ -52,8 +88,8 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
             >
               <Icon
                 alt="Delete"
-                width={35}
-                height={35}
+                width={36}
+                height={36}
                 src={
                   index % 2 === 0
                     ? "/icons/delete.svg"
@@ -69,6 +105,7 @@ export default function Workout({ workouts, onDeleteWorkout, exercises }) {
             exercises={exercises}
             workouts={workouts}
             even={index % 2 === 0}
+            id={workout.id}
           />
         </WorkoutCard>
       ))}
@@ -99,16 +136,17 @@ const WorkoutCard = styled.li`
   }
 `;
 
-const Icon = styled(Image)`
+export const Icon = styled(Image)`
   border: ${(props) =>
     props.$even ? "1px solid white" : "1px solid var(--dark-orange)"};
   border-radius: 50%;
-  padding: 0.25rem;
+  padding: ${(props) => (props.$favouriteIcon ? "0" : "0.25rem")};
 `;
 
 const IconsSection = styled.section`
   position: absolute;
   display: flex;
+  align-items: center;
   width: fit-content;
   right: 1.5rem;
 `;
@@ -118,14 +156,18 @@ const DeleteButton = styled.button`
   background: none;
   cursor: pointer;
   height: fit-content;
-  height: 35px;
-  width: 35px;
+  margin-bottom: 0.2rem;
 `;
 
 const EditButton = styled(Link)`
   text-decoration: none;
   cursor: pointer;
   height: fit-content;
-  height: 35px;
-  width: 35px;
+`;
+
+export const FavouriteButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  height: fit-content;
 `;
