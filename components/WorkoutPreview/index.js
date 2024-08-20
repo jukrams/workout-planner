@@ -136,6 +136,9 @@ export default function WorkoutPreview({
 
 const HeadlineSection = styled.section`
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 `;
 
 const Headline = styled.h2`
@@ -145,6 +148,10 @@ const Headline = styled.h2`
   line-height: 1;
   word-break: break-word;
   color: ${(props) => (props.$even ? "white" : "var(--dark-orange)")};
+
+  &:first-of-type {
+    max-width: calc(100% - 120px);
+  }
 
   &:last-of-type {
     margin-bottom: 0.5rem;
