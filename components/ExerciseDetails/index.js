@@ -9,8 +9,8 @@ export default function ExerciseDetails({ exercise }) {
       <TitleAndMuscleWrapper>
         <ExerciseTitle>{exercise.name}</ExerciseTitle>
         <ExerciseDetailsMuscle>
-          {exercise.muscleGroups.map((muscle, index) => (
-            <MuscleGroup key={index}>{muscle}</MuscleGroup>
+          {exercise.muscleGroups.map((muscle) => (
+            <MuscleGroup key={muscle}>{muscle}</MuscleGroup>
           ))}
         </ExerciseDetailsMuscle>
       </TitleAndMuscleWrapper>
@@ -58,7 +58,7 @@ const ExerciseTitle = styled.h1`
   margin: 0;
   font-size: 1.5rem;
   flex-shrink: 0;
-  color: #4D4020;
+  color: var(--dark-brown);
 `;
 
 const ExerciseDetailsMuscle = styled.figcaption`
@@ -72,9 +72,9 @@ const ExerciseDetailsMuscle = styled.figcaption`
 
 const MuscleGroup = styled.span`
   font-size: 0.75rem;
-  color: #4D4020;
+  color: var(--dark-brown);
   font-weight: bold;
-  background-color: #FDEDC8;
+  background-color: var(--orange);
   padding: 0.25rem 0.5rem;
   border-radius: 1rem;
 `;
@@ -92,12 +92,12 @@ const InstructionItem = styled.li`
   display: flex;
   align-items: center;
   font-size: 0.875rem;
-  color: #4D4020;
+  color: var(--dark-brown);
 `;
 
 const InstructionNumber = styled.span`
-  background-color: #FAC74E;
-  color: #ffffff;
+  background-color: var(--orange);
+  color: white;
   font-weight: bold;
   border-radius: 50%;
   width: 2rem;

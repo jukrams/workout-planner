@@ -21,11 +21,8 @@ const ExerciseCard = styled.li`
   margin: 0 2rem 2rem 2rem;
   list-style: none;
   position: relative;
-  width: 80vw;
-  height: 350px; /* Fixed height */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  max-width: 80vw;
+  height: 350px;
 `;
 
 const ExerciseCardName = styled.p`
