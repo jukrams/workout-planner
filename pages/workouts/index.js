@@ -6,10 +6,12 @@ import { FavouriteButton } from "@/components/Workout";
 import { useState } from "react";
 import Login from "@/components/Login";
 import useSWR from "swr";
+import { useSession } from "next-auth/react";
 
 export default function WorkoutsPage() {
   const { data: exercises = [] } = useSWR("/api/exercises");
   const { data: workouts = [], isLoading, mutate } = useSWR("/api/workouts");
+  const { data: session } = useSession();
 
   const [isFavouritesMode, setisFavouritesMode] = useState(false);
 
@@ -59,27 +61,29 @@ export default function WorkoutsPage() {
         </Headline>
         <Login />
       </HeadlineSection>
-      <ButtonsSection>
-        <CreateLink href={"/workouts/create"}>
-          <Image alt="Edit" width={30} height={30} src="/icons/plus.svg" />
-          Create Workout
-        </CreateLink>
-        <FavouriteButton
-          type="button"
-          onClick={() => setisFavouritesMode(!isFavouritesMode)}
-        >
-          <FavouriteIcon
-            alt="Favourite"
-            width={35}
-            height={35}
-            src={
-              isFavouritesMode
-                ? "/icons/star-filled-white.svg"
-                : "/icons/star-white.svg"
-            }
-          />
-        </FavouriteButton>
-      </ButtonsSection>
+      {session && (
+        <ButtonsSection>
+          <CreateLink href={"/workouts/create"}>
+            <Image alt="Edit" width={30} height={30} src="/icons/plus.svg" />
+            Create Workout
+          </CreateLink>
+          <FavouriteButton
+            type="button"
+            onClick={() => setisFavouritesMode(!isFavouritesMode)}
+          >
+            <FavouriteIcon
+              alt="Favourite"
+              width={35}
+              height={35}
+              src={
+                isFavouritesMode
+                  ? "/icons/star-filled-white.svg"
+                  : "/icons/star-white.svg"
+              }
+            />
+          </FavouriteButton>
+        </ButtonsSection>
+      )}
       <WorkoutsList
         workouts={isFavouritesMode ? favouriteWorkouts : workouts}
         exercises={exercises}
