@@ -4,42 +4,20 @@ import styled from "styled-components";
 import { uid } from "uid";
 import HeadlineSection from "@/components/HeadlineSection";
 import useSWR from "swr";
-import { useSession } from "next-auth/react";
 
 export default function EditPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: session } = useSession();
-  const url = session
-    ? `/api/workouts/user/${session.user.id}`
-    : `/api/workouts/${id}`;
-  const { data: workouts } = useSWR(url);
+  const { data: workouts } = useSWR("/api/workouts");
   const { data: exercises } = useSWR("/api/exercises");
 
   if (!id || !workouts || !exercises) {
     return <p>Loading...</p>;
   }
 
-  // async function handleEditWorkout(editedWorkout) {
-  //   const response = await fetch(`/api/workouts/${id}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(editedWorkout),
-  //   });
-  //   if (response.ok) {
-  //     router.push("/workouts");
-  //   }
-  // }
-
   async function handleEditWorkout(editedWorkout) {
-    if (!session) {
-      console.error("No active session found. Please log in.");
-      return;
-    }
-    const response = await fetch(`/api/workouts/user/${session.user.id}`, {
+    const response = await fetch(`/api/workouts/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

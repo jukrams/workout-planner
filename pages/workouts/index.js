@@ -6,13 +6,10 @@ import { FavouriteButton } from "@/components/Workout";
 import { useState } from "react";
 import Login from "@/components/Login";
 import useSWR from "swr";
-import { useSession } from "next-auth/react";
 
 export default function WorkoutsPage() {
   const { data: exercises = [] } = useSWR("/api/exercises");
-  const { data: session } = useSession();
-  const url = session ? `/api/workouts/user` : `/api/workouts`;
-  const { data: workouts = [], isLoading, mutate } = useSWR(url);
+  const { data: workouts = [], isLoading, mutate } = useSWR("/api/workouts");
 
   const [isFavouritesMode, setisFavouritesMode] = useState(false);
 
@@ -21,11 +18,7 @@ export default function WorkoutsPage() {
   }
 
   async function handleDeleteWorkout(id) {
-    if (!session) {
-      console.error("No active session found. Please log in.");
-      return;
-    }
-    const response = await fetch(`/api/workouts/user/${session.user.id}`, {
+    const response = await fetch(`/api/workouts/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -34,15 +27,10 @@ export default function WorkoutsPage() {
   }
 
   async function handleToggleFavourite(id) {
-    if (!session) {
-      console.error("No active session found. Please log in.");
-      return;
-    }
-
     const workout = workouts.find((workout) => workout._id === id);
     if (workout) {
       workout.isFavourite = !workout.isFavourite;
-      const response = await fetch(`/api/workouts/user/${session.user.id}`, {
+      const response = await fetch(`/api/workouts/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

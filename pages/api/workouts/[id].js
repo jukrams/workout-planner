@@ -1,5 +1,5 @@
-import dbConnect from "../../../db/connect";
-import Workout from "../../../db/models/Workout";
+import dbConnect from "@/db/connect";
+import Workout from "@/db/models/Workout";
 
 export default async function handler(request, response) {
   await dbConnect();
