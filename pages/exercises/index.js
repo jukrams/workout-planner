@@ -85,7 +85,7 @@ export default function HomePage({ muscleGroups }) {
     setSearchInput(input);
     const lowercasedInput = input.toLowerCase();
     const filtered = exercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(lowercasedInput)
+      exercise.name.toLowerCase().startsWith(lowercasedInput)
     );
     setFilteredExercises(filtered);
   }

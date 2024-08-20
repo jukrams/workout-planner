@@ -1,52 +1,25 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import styled from "styled-components";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Login({ isHomepage }) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
 
-  async function handleSignIn() {
-    try {
-      await signIn("github", { callbackUrl: "/exercises" });
-    } catch (error) {
-      console.error("Sign-in error:", error);
-    }
+  function handleSignIn() {
+    signIn("github", { callbackUrl: "/exercises" });
   }
 
-  useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      const { name, id: githubId } = session.user;
-
-      if (name && githubId) {
-        fetch("/api/users/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, githubId }),
-        }).then((response) => {
-          if (!response.ok) {
-            throw new Error(`Failed to create user`);
-          }
-          return response.json();
-        });
-      }
-    }
-  }, [status, session, router]);
-
-  if (status === "loading") {
-    return <p>Loading...</p>;
+  function handleSignOut() {
+    signOut({ callbackUrl: "/" });
   }
 
   const ButtonComponent = isHomepage ? HomepageButton : AnimatedButton;
 
   return (
     <ButtonComponent
-      onClick={session ? () => signOut() : handleSignIn}
+      onClick={session ? handleSignOut : handleSignIn}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(!isHovered)}
