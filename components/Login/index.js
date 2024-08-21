@@ -7,7 +7,7 @@ export default function Login({ isHomepage }) {
   const { data: session } = useSession();
   const [isHovered, setIsHovered] = useState(false);
 
-  function handleSignIn() {
+  async function handleSignIn() {
     signIn("github", { callbackUrl: "/exercises" });
   }
 

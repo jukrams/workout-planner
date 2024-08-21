@@ -1,11 +1,24 @@
 import Calendar from "@/components/Calendar";
 import HeadlineSection from "@/components/HeadlineSection";
 import styled from "styled-components";
+import useSWR from "swr";
 
 export default function ProgressPage() {
-  const weeklyProgress = 2;
-  const weeklyGoal = 7;
-  const totalWorkouts = 5;
+  const { data: progress, isLoading } = useSWR("/api/progress");
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  console.log(progress);
+
+  const weeklyWorkouts = 7;
+  const weeklyProgress = progress[0].completedWorkoutsThisWeek;
+
+  const totalWorkouts =
+    progress && Array.isArray(progress[0].completedWorkouts)
+      ? progress[0].completedWorkouts.length
+      : 0;
 
   return (
     <>
@@ -14,10 +27,10 @@ export default function ProgressPage() {
         <ProgressText>
           Weekly
           <br />
-          Goal
+          Workouts
         </ProgressText>
         <ProgressNumbers>
-          {weeklyProgress}/{weeklyGoal}
+          {weeklyProgress}/{weeklyWorkouts}
         </ProgressNumbers>
       </ProgressBox>
       <ProgressBox>
