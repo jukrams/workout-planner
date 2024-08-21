@@ -3,8 +3,10 @@ import styled from "styled-components";
 import ExerciseDetails from "@/components/ExerciseDetails";
 import { useRouter } from "next/router";
 import BackIcon from "public/icons/back-arrow-white.svg";
+import useSWR from "swr";
 
-export default function DetailsPage({ exercises }) {
+export default function DetailsPage() {
+  const { data: exercises } = useSWR("/api/exercises");
   const router = useRouter();
   const { id } = router.query;
 
@@ -12,7 +14,7 @@ export default function DetailsPage({ exercises }) {
     return <p>Loading...</p>;
   }
 
-  const exercise = exercises.find((exercise) => exercise.id === id);
+  const exercise = exercises.find((exercise) => exercise._id === id);
 
   return (
     <>

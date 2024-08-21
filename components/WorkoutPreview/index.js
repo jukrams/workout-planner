@@ -10,11 +10,11 @@ export default function WorkoutPreview({
   exercises,
   workoutExercises,
   even,
-  id,
+  _id,
 }) {
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
-      (exerciseItem) => exerciseItem.id === workoutExercise.exerciseId
+      (exerciseItem) => exerciseItem._id === workoutExercise.exerciseId
     );
     return {
       ...exercise,
@@ -31,7 +31,7 @@ export default function WorkoutPreview({
 
   const splittedName = name.split(" ");
 
-  const sessionStorageKey = `${id}`;
+  const sessionStorageKey = `${_id}`;
   const [completedExercises, setCompletedExercises] = useSessionStorageState(
     sessionStorageKey,
     { defaultValue: [] }
@@ -56,7 +56,7 @@ export default function WorkoutPreview({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasOpenedModal, setHasOpenedModal] = useSessionStorageState(
-    `${id}-hasOpenedModal`,
+    `${_id}-hasOpenedModal`,
     {
       defaultValue: false,
     }
@@ -83,8 +83,8 @@ export default function WorkoutPreview({
         ))}
       </HeadlineSection>
       <MusclesList>
-        {workoutMuscleGroups.map((workoutMuscleGroup) => (
-          <MuscleTags key={workoutMuscleGroup}>{workoutMuscleGroup}</MuscleTags>
+        {workoutMuscleGroups.map((workoutMuscleGroup, index) => (
+          <MuscleTags key={index}>{workoutMuscleGroup}</MuscleTags>
         ))}
       </MusclesList>
       {isDetailsMode && (
@@ -107,7 +107,7 @@ export default function WorkoutPreview({
           />
           <ExercisesList>
             {includedExercises.map((includedExercise) => (
-              <Exercises key={includedExercise.id} $even={even}>
+              <Exercises key={includedExercise._id} $even={even}>
                 <ExerciseName $even={even}>
                   {includedExercise.name}
                 </ExerciseName>
@@ -117,8 +117,10 @@ export default function WorkoutPreview({
                 <Checkbox
                   type="checkbox"
                   $even={even}
-                  checked={completedExercises.includes(includedExercise.id)}
-                  onChange={() => toggleExerciseCompletion(includedExercise.id)}
+                  checked={completedExercises.includes(includedExercise._id)}
+                  onChange={() =>
+                    toggleExerciseCompletion(includedExercise._id)
+                  }
                 />
               </Exercises>
             ))}
@@ -134,6 +136,9 @@ export default function WorkoutPreview({
 
 const HeadlineSection = styled.section`
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 `;
 
 const Headline = styled.h2`
@@ -141,7 +146,12 @@ const Headline = styled.h2`
   font-size: 3rem;
   font-weight: normal;
   line-height: 1;
+  word-break: break-word;
   color: ${(props) => (props.$even ? "white" : "var(--dark-orange)")};
+
+  &:first-of-type {
+    max-width: calc(100% - 120px);
+  }
 
   &:last-of-type {
     margin-bottom: 0.5rem;

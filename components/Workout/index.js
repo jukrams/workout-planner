@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import ModalDelete from "../ModalDelete";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export default function Workout({
   workouts,
@@ -15,6 +16,8 @@ export default function Workout({
 }) {
   const [showModal, setShowModal] = useState(false);
   const [workoutIdToDelete, setWorkoutIdToDelete] = useState(null);
+
+  const { data: session } = useSession();
 
   const handleDelete = (id) => {
     setWorkoutIdToDelete(id);
@@ -40,72 +43,76 @@ export default function Workout({
   return (
     <>
       {workouts.map((workout, index) => (
-        <WorkoutCard key={workout.id} $even={index % 2 === 0}>
-          <IconsSection>
-            <FavouriteButton
-              type="button"
-              onClick={() => onToggleFavourite(workout.id)}
-            >
-              <Icon
-                alt="Favourite"
-                width={35}
-                height={35}
-                src={
-                  index % 2 === 0
-                    ? favouriteWorkouts.find(
-                        (favouriteWorkout) =>
-                          favouriteWorkout.id === workout.id &&
-                          favouriteWorkout.isFavourite
-                      )
-                      ? "/icons/star-filled-white.svg"
-                      : "/icons/star-white.svg"
-                    : favouriteWorkouts.find(
-                        (favouriteWorkout) =>
-                          favouriteWorkout.id === workout.id &&
-                          favouriteWorkout.isFavourite
-                      )
-                    ? "/icons/star-filled-orange.svg"
-                    : "/icons/star-orange.svg"
-                }
-                $even={index % 2 === 0}
-                $favouriteIcon
-              />
-            </FavouriteButton>
-            <EditButton href={`workouts/${workout.id}/edit`}>
-              <Icon
-                alt="Edit"
-                width={35}
-                height={35}
-                src={
-                  index % 2 === 0 ? "/icons/edit.svg" : "/icons/edit-orange.svg"
-                }
-                $even={index % 2 === 0}
-              />
-            </EditButton>
-            <DeleteButton
-              type="button"
-              onClick={() => handleDelete(workout.id)}
-            >
-              <Icon
-                alt="Delete"
-                width={36}
-                height={36}
-                src={
-                  index % 2 === 0
-                    ? "/icons/delete.svg"
-                    : "/icons/delete-orange.svg"
-                }
-                $even={index % 2 === 0}
-              />
-            </DeleteButton>
-          </IconsSection>
+        <WorkoutCard key={workout._id} $even={index % 2 === 0}>
+          {session && (
+            <IconsSection>
+              <FavouriteButton
+                type="button"
+                onClick={() => onToggleFavourite(workout._id)}
+              >
+                <Icon
+                  alt="Favourite"
+                  width={35}
+                  height={35}
+                  src={
+                    index % 2 === 0
+                      ? favouriteWorkouts.find(
+                          (favouriteWorkout) =>
+                            favouriteWorkout._id === workout._id &&
+                            favouriteWorkout.isFavourite
+                        )
+                        ? "/icons/star-filled-white.svg"
+                        : "/icons/star-white.svg"
+                      : favouriteWorkouts.find(
+                          (favouriteWorkout) =>
+                            favouriteWorkout._id === workout._id &&
+                            favouriteWorkout.isFavourite
+                        )
+                      ? "/icons/star-filled-orange.svg"
+                      : "/icons/star-orange.svg"
+                  }
+                  $even={index % 2 === 0}
+                  $favouriteIcon
+                />
+              </FavouriteButton>
+              <EditButton href={`workouts/${workout._id}/edit`}>
+                <Icon
+                  alt="Edit"
+                  width={35}
+                  height={35}
+                  src={
+                    index % 2 === 0
+                      ? "/icons/edit.svg"
+                      : "/icons/edit-orange.svg"
+                  }
+                  $even={index % 2 === 0}
+                />
+              </EditButton>
+              <DeleteButton
+                type="button"
+                onClick={() => handleDelete(workout._id)}
+              >
+                <Icon
+                  alt="Delete"
+                  width={36}
+                  height={36}
+                  src={
+                    index % 2 === 0
+                      ? "/icons/delete.svg"
+                      : "/icons/delete-orange.svg"
+                  }
+                  $even={index % 2 === 0}
+                />
+              </DeleteButton>
+            </IconsSection>
+          )}
           <WorkoutPreview
             name={workout.name}
             workoutExercises={workout.exercises}
             exercises={exercises}
             workouts={workouts}
             even={index % 2 === 0}
-            id={workout.id}
+            _id={workout._id}
           />
         </WorkoutCard>
       ))}

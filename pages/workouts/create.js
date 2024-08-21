@@ -1,12 +1,32 @@
 import WorkoutForm from "@/components/WorkoutForm";
 import styled from "styled-components";
 import HeadlineSection from "@/components/HeadlineSection";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
-export default function CreateWorkout({ exercises, onAddWorkout }) {
+export default function CreateWorkout() {
+  const router = useRouter();
+
+  const { data: exercises = [] } = useSWR("/api/exercises");
+
+  async function handleAddWorkout(newWorkout) {
+    const response = await fetch("/api/workouts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newWorkout),
+    });
+
+    if (response.ok) {
+      router.push("/workouts");
+    }
+  }
+
   return (
     <Background>
       <HeadlineSection />
-      <WorkoutForm exercises={exercises} onAddWorkout={onAddWorkout} />
+      <WorkoutForm exercises={exercises} onAddWorkout={handleAddWorkout} />
     </Background>
   );
 }

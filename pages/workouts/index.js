@@ -4,22 +4,49 @@ import styled from "styled-components";
 import Image from "next/image";
 import { FavouriteButton } from "@/components/Workout";
 import { useState } from "react";
+import Login from "@/components/Login";
+import useSWR from "swr";
+import { useSession } from "next-auth/react";
 
-export default function WorkoutsPage({
-  workouts,
-  exercises,
-  onEditWorkout,
-  onDeleteWorkout,
-  favouriteWorkouts,
-  onToggleFavourite,
-}) {
+export default function WorkoutsPage() {
+  const { data: exercises = [] } = useSWR("/api/exercises");
+  const { data: workouts = [], isLoading, mutate } = useSWR("/api/workouts");
+  const { data: session } = useSession();
+
   const [isFavouritesMode, setisFavouritesMode] = useState(false);
 
-  const filteredWorkouts = workouts.filter((workout) =>
-    favouriteWorkouts.find(
-      (favouriteWorkout) =>
-        favouriteWorkout.id === workout.id && favouriteWorkout.isFavourite
-    )
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  async function handleDeleteWorkout(id) {
+    const response = await fetch(`/api/workouts/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      mutate();
+    }
+  }
+
+  async function handleToggleFavourite(id) {
+    const workout = workouts.find((workout) => workout._id === id);
+    if (workout) {
+      workout.isFavourite = !workout.isFavourite;
+      const response = await fetch(`/api/workouts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(workout),
+      });
+      if (response.ok) {
+        mutate();
+      }
+    }
+  }
+
+  const favouriteWorkouts = workouts.filter(
+    (workout) => workout.isFavourite === true
   );
 
   return (
@@ -32,6 +59,9 @@ export default function WorkoutsPage({
           <br />
           workouts
         </Headline>
+        <Login />
+      </HeadlineSection>
+      {session && (
         <ButtonsSection>
           <CreateLink href={"/workouts/create"}>
             <Image alt="Edit" width={30} height={30} src="/icons/plus.svg" />
@@ -53,15 +83,15 @@ export default function WorkoutsPage({
             />
           </FavouriteButton>
         </ButtonsSection>
-      </HeadlineSection>
+      )}
       <WorkoutsList
-        workouts={isFavouritesMode ? filteredWorkouts : workouts}
+        workouts={isFavouritesMode ? favouriteWorkouts : workouts}
         exercises={exercises}
-        onEditWorkout={onEditWorkout}
-        onDeleteWorkout={onDeleteWorkout}
-        favouriteWorkouts={favouriteWorkouts}
-        onToggleFavourite={onToggleFavourite}
         isFavouritesMode={isFavouritesMode}
+        onDeleteWorkout={handleDeleteWorkout}
+        favouriteWorkouts={favouriteWorkouts}
+        onToggleFavourite={handleToggleFavourite}
+        isLoading={isLoading}
       />
     </>
   );
@@ -70,7 +100,12 @@ export default function WorkoutsPage({
 const HeadlineSection = styled.section`
   width: 85vw;
   max-width: 1000px;
-  margin: auto;
+  margin: 2rem auto auto auto;
+  width: 85vw;
+  max-width: 1000px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
 
 const Headline = styled.h1`
@@ -78,12 +113,15 @@ const Headline = styled.h1`
   font-size: xx-large;
   font-weight: normal;
   line-height: 1;
+  margin-top: 0;
 `;
 
 const ButtonsSection = styled.section`
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
+  margin: auto auto 2rem auto;
+  width: 85vw;
+  max-width: 1000px;
 `;
 
 const CreateLink = styled(Link)`

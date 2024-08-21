@@ -32,7 +32,7 @@ export default function WorkoutForm({
           exercise: exerciseName.value,
           sets: sets.value,
           reps: reps.value,
-          id: uid(),
+          _id: uid(),
         },
       ]);
       exerciseName.value = "";
@@ -45,29 +45,29 @@ export default function WorkoutForm({
 
   function handleDeleteExercise(id) {
     setAddedExercises(
-      addedExercises.filter((addedExercise) => addedExercise.id !== id)
+      addedExercises.filter((addedExercise) => addedExercise._id !== id)
     );
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (!isEditMode) {
       const newWorkout = {
         name: event.target.name.value,
+        isFavourite: false,
         exercises: addedExercises.map((addedExercise) => {
           const selectedExercise = exercises.find(
             (exercise) => exercise.name === addedExercise.exercise
           );
           return {
-            exerciseId: selectedExercise.id,
+            exerciseId: selectedExercise._id,
             sets: addedExercise.sets,
             reps: addedExercise.reps,
           };
         }),
       };
       onAddWorkout(newWorkout);
-      router.push("/workouts");
     } else {
       const editedWorkout = {
         id: defaultData.id,
@@ -77,14 +77,13 @@ export default function WorkoutForm({
             (exercise) => exercise.name === addedExercise.exercise
           );
           return {
-            exerciseId: selectedExercise.id,
+            exerciseId: selectedExercise._id,
             sets: addedExercise.sets,
             reps: addedExercise.reps,
           };
         }),
       };
       onEditWorkout(editedWorkout);
-      router.push("/workouts");
     }
 
     event.target.reset();
@@ -111,13 +110,13 @@ export default function WorkoutForm({
         <StyledFieldset $edit={isEditMode}>
           <StyledLegend $edit={isEditMode}>Second step</StyledLegend>
           <ExercisesListHeadline>Added to list:</ExercisesListHeadline>
-          {addedExercises.map((addedExercise) => (
-            <AddedExercise key={addedExercise.id}>
+          {addedExercises.map((addedExercise, index) => (
+            <AddedExercise key={index}>
               {addedExercise.exercise} {addedExercise.sets} sets /{" "}
               {addedExercise.reps} reps
               <DeleteButton
                 type="button"
-                onClick={() => handleDeleteExercise(addedExercise.id)}
+                onClick={() => handleDeleteExercise(addedExercise._id)}
                 $edit={isEditMode}
               >
                 X
@@ -136,7 +135,7 @@ export default function WorkoutForm({
               Please select an option
             </option>
             {exercises.map((exercise) => (
-              <option value={exercise.name} key={exercise.id}>
+              <option value={exercise.name} key={exercise._id}>
                 {exercise.name}
               </option>
             ))}
@@ -340,6 +339,7 @@ const CancelButton = styled.button`
 
   &:hover {
     background-color: var(--dark-orange);
+    color: white;
     cursor: pointer;
   }
 `;

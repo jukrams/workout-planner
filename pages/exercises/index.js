@@ -1,17 +1,38 @@
 import ExercisesList from "@/components/ExercisesList";
 import FilterList from "@/components/FilterList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import useSWR from "swr";
+import Login from "@/components/Login";
+import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
 
-export default function HomePage({ exercises, muscleGroups }) {
+export default function HomePage({ muscleGroups }) {
+  const { data: session } = useSession();
+  const { data: exercises = [], isLoading: exerciseIsLoading } =
+    useSWR("/api/exercises");
+
   const [filterMode, setFilterMode] = useState(false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
-  const [filteredExercises, setFilteredExercises] = useState(exercises);
+  const [filteredExercises, setFilteredExercises] = useState([exercises]);
   const [muscles, setMuscles] = useState(muscleGroups);
+  const [filterApplied, setFilterApplied] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
+  useEffect(() => {
+    if (!exerciseIsLoading && exercises.length > 0) {
+      setFilteredExercises(exercises);
+    }
+  }, [exercises, exerciseIsLoading]);
+
+  if (exerciseIsLoading) {
+    return <p>Loading...</p>;
+  }
+
   function handleShowFilter() {
+    if (!filterApplied) {
+      setFilterApplied(true);
+    }
     setFilterMode(!filterMode);
   }
 
@@ -58,10 +79,13 @@ export default function HomePage({ exercises, muscleGroups }) {
   }
 
   function handleSearch(input) {
+    if (!filterApplied) {
+      setFilterApplied(true);
+    }
     setSearchInput(input);
     const lowercasedInput = input.toLowerCase();
     const filtered = exercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(lowercasedInput)
+      exercise.name.toLowerCase().startsWith(lowercasedInput)
     );
     setFilteredExercises(filtered);
   }
@@ -69,19 +93,26 @@ export default function HomePage({ exercises, muscleGroups }) {
   return (
     <StyledSection>
       <HeadlineSection>
-        <H1>
-          WELCOME TO YOUR <br />
-          EXERCISE LIST
-        </H1>
+        {session ? (
+          <H1>
+            WELCOME TO YOUR <br />
+            EXERCISE LIST, <Username>{session.user.name}</Username>!
+          </H1>
+        ) : (
+          <H1>
+            {" "}
+            WELCOME TO YOUR <br />
+            EXERCISE LIST
+          </H1>
+        )}
+        <Login />
       </HeadlineSection>
-
       <ControlsContainer>
         <SearchBar searchInput={searchInput} onSearch={handleSearch} />
         <FilterButton type="button" onClick={handleShowFilter}>
           Filter ☰
         </FilterButton>
       </ControlsContainer>
-
       {filterMode ? (
         <FilterList
           muscleGroups={muscles}
@@ -91,8 +122,10 @@ export default function HomePage({ exercises, muscleGroups }) {
           onClear={handleClear}
         />
       ) : null}
-      <ExercisesList exercises={filteredExercises} />
-
+      <ExercisesList
+        exercises={filterApplied ? filteredExercises : exercises}
+        exerciseIsLoading={exerciseIsLoading}
+      />
     </StyledSection>
   );
 }
@@ -130,10 +163,19 @@ const H1 = styled.h1`
   font-size: xx-large;
   font-weight: normal;
   line-height: 1;
+  margin-top: 0;
+  max-width: 65%;
+`;
+
+const Username = styled.span`
+  color: var(--dark-orange);
 `;
 
 const HeadlineSection = styled.section`
   width: 85vw;
   max-width: 1000px;
-  margin: auto;
+  margin: 2rem auto auto auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
