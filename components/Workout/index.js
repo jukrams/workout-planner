@@ -132,7 +132,7 @@ const WorkoutCard = styled.li`
   margin-bottom: 3rem;
   border-radius: 1.5rem;
   padding: 1rem 2rem;
-  width: 80vw;
+  width: 85vw;
   max-width: 1000px;
   display: flex;
   flex-direction: column;
