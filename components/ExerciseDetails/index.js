@@ -4,21 +4,21 @@ export default function ExerciseDetails({ exercise }) {
   return (
     <Container>
       <ImageWrapper>
-        <ExerciseImage src={exercise.imageUrl} />
+        <ExerciseImage src={exercise.imageUrl} alt={exercise.name} />
       </ImageWrapper>
       <TitleAndMuscleWrapper>
         <ExerciseTitle>{exercise.name}</ExerciseTitle>
-        <ExerciseDetailsMuscle>
+        <MuscleGroupWrapper>
           {exercise.muscleGroups.map((muscle) => (
             <MuscleGroup key={muscle}>{muscle}</MuscleGroup>
           ))}
-        </ExerciseDetailsMuscle>
+        </MuscleGroupWrapper>
       </TitleAndMuscleWrapper>
       <ExerciseDetailsInstruction>
         {exercise.instructions.map((instruction, index) => (
           <InstructionItem key={index}>
             <InstructionNumber>{index + 1}</InstructionNumber>
-            {instruction}
+            <li key={index}>{instruction}</li>
           </InstructionItem>
         ))}
       </ExerciseDetailsInstruction>
@@ -27,11 +27,10 @@ export default function ExerciseDetails({ exercise }) {
 }
 
 const Container = styled.div`
-  font-family: Arial, sans-serif;
   width: 100%;
 `;
 
-const ImageWrapper = styled.figure`
+const ImageWrapper = styled.div`
   width: 100%;
   height: 350px;
   overflow: hidden;
@@ -61,7 +60,7 @@ const ExerciseTitle = styled.h1`
   color: var(--dark-brown);
 `;
 
-const ExerciseDetailsMuscle = styled.figcaption`
+const MuscleGroupWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
