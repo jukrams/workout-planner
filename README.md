@@ -47,4 +47,4 @@ You can find the first version of that project in the [workout-planner](https://
 - `npm run build` to build the project
 - `npm run start` to start a production server
 - `npm run test` to run the tests
-- `npm run lint` to run the lin
+- `npm run lint` to run the linter
