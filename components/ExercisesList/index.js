@@ -24,10 +24,9 @@ const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem auto 4rem auto;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1rem auto 5.5rem auto;
   width: 85vw;
   max-width: 1000px;
-  border: black 1px solid;
 `;

@@ -18,18 +18,17 @@ export default function ExercisePreview({ exercise }) {
 }
 
 const ExerciseCard = styled.li`
-  margin: 0 2rem 2rem 2rem;
   list-style: none;
   position: relative;
-  width: 85vw;
-  height: 45vh;
-  max-width: 1000px;
+  width: 300px;
+  height: 400px;
   border-radius: 1rem;
   overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  @media (min-width: 768px) {
-    max-width: 25vw;
-    height: 50vh;
+  &:hover {
+    transform: scale(1.02); /* Leichte Vergrößerung beim Hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Schatten hinzufügen */
   }
 `;
 
@@ -73,11 +72,8 @@ const StyledLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1rem;
 `;
 
 const ExerciseImage = styled.img`
   width: 100%;
-  height: auto;
-  object-fit: cover;
 `;
