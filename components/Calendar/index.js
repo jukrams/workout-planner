@@ -5,35 +5,14 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton, PickersDay } from "@mui/x-date-pickers";
 import { Badge } from "@mui/material";
 import dayjs from "dayjs";
-
-// TEST EMOJIS FOR COMPLETED WORKOUT
-function getRandomNumber(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
-}
-
-function fetchWorkoutDays(date, { signal }) {
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      const daysInMonth = date.daysInMonth();
-      const workoutDays = [1, 2, 15].map(() => getRandomNumber(1, daysInMonth)); // Beispielhafte Tage
-
-      resolve({ workoutDays });
-    }, 500);
-
-    signal.onabort = () => {
-      clearTimeout(timeout);
-      reject(new DOMException("aborted", "AbortError"));
-    };
-  });
-}
-
-const initialValue = dayjs("2024-08-01");
+import useSWR from "swr";
 
 function WorkoutDay(props) {
   const { workoutDays = [], day, outsideCurrentMonth, ...other } = props;
 
   const isWorkoutDay =
-    !outsideCurrentMonth && workoutDays.indexOf(day.date()) >= 0;
+    !outsideCurrentMonth &&
+    workoutDays.some((workoutDay) => dayjs(workoutDay).isSame(day, "day"));
 
   return (
     <Badge
@@ -51,47 +30,27 @@ function WorkoutDay(props) {
 }
 
 export default function Calendar() {
-  const requestAbortController = React.useRef(null);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { data: progress } = useSWR("/api/progress");
+
   const [workoutDays, setWorkoutDays] = React.useState([]);
 
-  const fetchWorkoutDaysForMonth = (date) => {
-    const controller = new AbortController();
-    fetchWorkoutDays(date, { signal: controller.signal })
-      .then(({ workoutDays }) => {
-        setWorkoutDays(workoutDays);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          throw error;
-        }
-      });
-
-    requestAbortController.current = controller;
-  };
+  const today = new Date().toISOString().split("T")[0];
+  const initialValue = dayjs(today);
 
   React.useEffect(() => {
-    fetchWorkoutDaysForMonth(initialValue);
-    return () => requestAbortController.current?.abort();
-  }, []);
+    if (progress && Array.isArray(progress)) {
+      const fetchedWorkoutDays = progress.flatMap((item) =>
+        item.completedWorkouts.map((workout) => workout.date)
+      );
 
-  const handleMonthChange = (date) => {
-    if (requestAbortController.current) {
-      requestAbortController.current.abort();
+      setWorkoutDays(fetchedWorkoutDays);
     }
-
-    setIsLoading(true);
-    setWorkoutDays([]);
-    fetchWorkoutDaysForMonth(date);
-  };
+  }, [progress]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
         defaultValue={initialValue}
-        loading={isLoading}
-        onMonthChange={handleMonthChange}
         renderLoading={() => <DayCalendarSkeleton />}
         slots={{
           day: WorkoutDay,
@@ -122,7 +81,7 @@ export default function Calendar() {
               "&:hover": {
                 backgroundColor: "var(--dark-brown)",
               },
-              "&:clicked": {
+              "&:focus": {
                 backgroundColor: "var(--dark-brown)",
               },
             },

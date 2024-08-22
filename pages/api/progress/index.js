@@ -27,7 +27,6 @@ export default async function handler(request, response) {
     try {
       const { completedWorkouts, completedWorkoutsThisWeek } = request.body;
 
-      // Aktualisieren der Statistik
       const result = await Statistic.findOneAndUpdate(
         { owner: userId },
         {
