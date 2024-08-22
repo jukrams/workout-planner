@@ -24,7 +24,7 @@ export default function FilterList({
                 key={selectedMuscleGroup}
                 onClick={() => onDeselect(selectedMuscleGroup)}
               >
-                {selectedMuscleGroup} X
+                {selectedMuscleGroup} ✘
               </SelectedMuscleTags>
             ))}
             <ClearButton type="button" onClick={onClear}>
