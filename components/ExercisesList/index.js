@@ -24,5 +24,7 @@ const List = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 4rem;
+  margin: 1rem auto 4rem auto;
+  width: 85vw;
+  max-width: 1000px;
 `;

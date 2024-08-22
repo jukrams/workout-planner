@@ -21,8 +21,10 @@ const ExerciseCard = styled.li`
   margin: 0 2rem 2rem 2rem;
   list-style: none;
   position: relative;
-  max-width: 80vw;
-  height: 350px;
+  width: 85vw;
+  height: 45vh;
+  border-radius: 1rem;
+  overflow: hidden;
 `;
 
 const ExerciseCardName = styled.p`
@@ -65,12 +67,11 @@ const StyledLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 1rem;
 `;
 
 const ExerciseImage = styled.img`
-  width: 80vw;
-  height: 100%;
+  width: 100%;
+  height: auto;
   object-fit: cover;
-  object-position: center;
-  border-radius: 1rem;
 `;
