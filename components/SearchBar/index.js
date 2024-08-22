@@ -26,7 +26,7 @@ export default function SearchBar({ searchInput, onSearch }) {
 
 const SearchInputWrapper = styled.div`
   position: relative;
-  width: 60vw;
+  width: 70%;
 `;
 
 const SearchIcon = styled(FaSearch)`
