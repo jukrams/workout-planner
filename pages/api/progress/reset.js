@@ -13,7 +13,7 @@ export default async function handler(request, response) {
   const token = await getToken({ req: request });
   const userId = token?.sub;
 
-  if (request.method === "PUT") {
+  if (request.method === "POST") {
     try {
       // Mongoose-Modell verwenden, um Statistiken zu aktualisieren
       const result = await Statistic.updateMany({
