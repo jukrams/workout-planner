@@ -27,8 +27,8 @@ const ExerciseCard = styled.li`
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: scale(1.02); /* Leichte Vergrößerung beim Hover */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Schatten hinzufügen */
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 `;
 

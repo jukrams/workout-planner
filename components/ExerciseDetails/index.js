@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 export default function ExerciseDetails({ exercise }) {
@@ -14,17 +15,63 @@ export default function ExerciseDetails({ exercise }) {
           ))}
         </MuscleGroupWrapper>
       </TitleAndMuscleWrapper>
-      <ExerciseDetailsInstruction>
+      <ExerciseInstruction>
         {exercise.instructions.map((instruction, index) => (
-          <InstructionItem key={index}>
-            <InstructionNumber>{index + 1}</InstructionNumber>
-            <li key={index}>{instruction}</li>
-          </InstructionItem>
+          <ExerciseInstructionSteps key={index}>
+            <NumberWrapper>
+              <Circle
+                height={35}
+                width={35}
+                alt="Circle"
+                src={"/icons/circle-filled-orange.svg"}
+              />
+              <Number>{index + 1}</Number>
+            </NumberWrapper>
+            {instruction}
+          </ExerciseInstructionSteps>
         ))}
-      </ExerciseDetailsInstruction>
+      </ExerciseInstruction>
     </Container>
   );
 }
+
+const ExerciseInstruction = styled.ul`
+  list-style: none;
+  width: 85vw;
+  max-width: 1000px;
+  margin: 2.5rem auto 0 auto;
+  padding: 0;
+`;
+
+const ExerciseInstructionSteps = styled.li`
+  display: flex;
+  align-items: center;
+  color: var(--dark-brown);
+  line-height: 1.25;
+  margin-bottom: 1rem;
+`;
+
+const NumberWrapper = styled.section`
+  position: relative;
+  height: 35px;
+  width: 35px;
+  margin-right: 2rem;
+`;
+
+const Circle = styled(Image)`
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: relative;
+`;
+
+const Number = styled.p`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -32,18 +79,17 @@ const Container = styled.div`
 
 const ImageWrapper = styled.div`
   width: 100%;
-  height: 350px;
+  max-height: 40vh;
+  max-width: 500px;
   overflow: hidden;
-  margin: 0;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  margin: 0 auto;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
 `;
 
 const ExerciseImage = styled.img`
   width: 100%;
-  height: 100%;
   object-fit: cover;
-  object-position: center;
 `;
 
 const TitleAndMuscleWrapper = styled.div`
@@ -73,36 +119,7 @@ const MuscleGroup = styled.span`
   font-size: 0.75rem;
   color: var(--dark-brown);
   font-weight: bold;
-  background-color: var(--orange);
+  background-color: var(--light-orange);
   padding: 0.25rem 0.5rem;
   border-radius: 1rem;
-`;
-
-const ExerciseDetailsInstruction = styled.ol`
-  border-radius: 1rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  list-style: none;
-`;
-
-const InstructionItem = styled.li`
-  margin-bottom: 1rem;
-  margin: 1rem;
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
-  color: var(--dark-brown);
-`;
-
-const InstructionNumber = styled.span`
-  background-color: var(--orange);
-  color: white;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
 `;
