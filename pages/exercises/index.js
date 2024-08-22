@@ -3,7 +3,6 @@ import FilterList from "@/components/FilterList";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
-import Login from "@/components/Login";
 import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
 import MenuButton from "@/components/MenuButton";

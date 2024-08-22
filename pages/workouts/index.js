@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Image from "next/image";
 import { FavouriteButton } from "@/components/Workout";
 import { useState } from "react";
-import Login from "@/components/Login";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
 import MenuButton from "@/components/MenuButton";
