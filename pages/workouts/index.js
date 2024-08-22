@@ -7,6 +7,7 @@ import { useState } from "react";
 import Login from "@/components/Login";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
+import MenuButton from "@/components/MenuButton";
 
 export default function WorkoutsPage() {
   const { data: exercises = [] } = useSWR("/api/exercises");
@@ -59,7 +60,7 @@ export default function WorkoutsPage() {
           <br />
           workouts
         </Headline>
-        <Login />
+        <MenuButton />
       </HeadlineSection>
       {session && (
         <ButtonsSection>

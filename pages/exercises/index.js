@@ -6,6 +6,7 @@ import useSWR from "swr";
 import Login from "@/components/Login";
 import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
+import MenuButton from "@/components/MenuButton";
 
 export default function HomePage({ muscleGroups }) {
   const { data: session } = useSession();
@@ -105,7 +106,7 @@ export default function HomePage({ muscleGroups }) {
             EXERCISE LIST
           </H1>
         )}
-        <Login />
+        <MenuButton isExercisesPage />
       </HeadlineSection>
       <ControlsContainer>
         <SearchBar searchInput={searchInput} onSearch={handleSearch} />
