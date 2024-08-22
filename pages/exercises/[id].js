@@ -19,7 +19,7 @@ export default function DetailsPage() {
   return (
     <>
       <StyledBackLink href="/exercises">
-        <BackIcon /> {}
+        <BackIcon />
       </StyledBackLink>
       <ExerciseDetails exercise={exercise} />
     </>

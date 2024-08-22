@@ -38,7 +38,8 @@ export default function ExerciseDetails({ exercise }) {
 const ExerciseInstruction = styled.ul`
   list-style: none;
   width: 85vw;
-  max-width: 1000px;
+  max-height: 40vh;
+  max-width: 500px;
   margin: 2.5rem auto 0 auto;
   padding: 0;
 `;
@@ -48,7 +49,8 @@ const ExerciseInstructionSteps = styled.li`
   align-items: center;
   color: var(--dark-brown);
   line-height: 1.25;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: large;
 `;
 
 const NumberWrapper = styled.section`
@@ -96,12 +98,15 @@ const TitleAndMuscleWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 1rem;
+  margin: 1rem auto;
+  width: 85vw;
+  max-height: 40vh;
+  max-width: 500px;
 `;
 
 const ExerciseTitle = styled.h1`
   margin: 0;
-  font-size: 1.5rem;
+  font-size: xxx-large;
   flex-shrink: 0;
   color: var(--dark-brown);
 `;
@@ -116,10 +121,9 @@ const MuscleGroupWrapper = styled.div`
 `;
 
 const MuscleGroup = styled.span`
-  font-size: 0.75rem;
+  font-size: large;
   color: var(--dark-brown);
-  font-weight: bold;
   background-color: var(--light-orange);
-  padding: 0.25rem 0.5rem;
+  padding: 0 0.5rem;
   border-radius: 1rem;
 `;
