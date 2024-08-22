@@ -10,15 +10,9 @@ export default function ProgressPage() {
     return <p>Loading...</p>;
   }
 
-  console.log(progress);
-
   const weeklyWorkouts = 7;
-  const weeklyProgress = progress[0].completedWorkoutsThisWeek;
-
-  const totalWorkouts =
-    progress && Array.isArray(progress[0].completedWorkouts)
-      ? progress[0].completedWorkouts.length
-      : 0;
+  const weeklyProgress = progress?.[0]?.completedWorkoutsThisWeek ?? 0;
+  const totalWorkouts = progress?.[0]?.completedWorkouts?.length ?? 0;
 
   return (
     <>
