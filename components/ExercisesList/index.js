@@ -22,9 +22,12 @@ export default function ExercisesList({ exercises, exerciseIsLoading }) {
 const List = styled.ul`
   padding: 0;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   margin: 1rem auto 4rem auto;
   width: 85vw;
   max-width: 1000px;
+  border: black 1px solid;
 `;
