@@ -4,6 +4,7 @@ import ProgressBar from "../ProgressBar";
 import useSessionStorageState from "use-session-storage-state";
 import Image from "next/image";
 import ModalFinishedWorkout from "../ModalFinishedWorkout";
+import useSWR, { mutate } from "swr";
 
 export default function WorkoutPreview({
   name,
@@ -12,6 +13,8 @@ export default function WorkoutPreview({
   even,
   _id,
 }) {
+  const { data: statistic, isLoading } = useSWR("/api/progress");
+
   const includedExercises = workoutExercises.map((workoutExercise) => {
     const exercise = exercises.find(
       (exerciseItem) => exerciseItem._id === workoutExercise.exerciseId
@@ -69,8 +72,28 @@ export default function WorkoutPreview({
     }
   }, [progress, hasOpenedModal, setHasOpenedModal]);
 
-  function handleCloseModal() {
+  async function handleCloseModal() {
     setIsModalOpen(false);
+
+    const today = new Date().toISOString().split("T")[0];
+    const newCompletedWorkout = { date: today };
+
+    const updatedStatistic = {
+      completedWorkouts: statistic?.completedWorkouts
+        ? [...statistic.completedWorkouts, newCompletedWorkout]
+        : [newCompletedWorkout],
+      completedWorkoutsThisWeek: statistic?.completedWorkoutsThisWeek
+        ? statistic.completedWorkoutsThisWeek
+        : 1,
+    };
+
+    const response = await fetch("/api/progress", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedStatistic),
+    });
   }
 
   return (

@@ -29,7 +29,7 @@ export default function Workout({
     setWorkoutIdToDelete(null);
   }
 
-  function successMessage() {
+  async function successMessage() {
     toast.success("Workout deleted successfully!");
   }
 

@@ -2,13 +2,17 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HeadlineSection({ isEditMode }) {
+export default function HeadlineSection({ isEditMode, isProgressMode }) {
   return (
     <StyledSection>
-      <BackLink href={"/workouts"} $edit={isEditMode}>
+      <BackLink
+        href={"/workouts"}
+        $edit={isEditMode}
+        $progress={isProgressMode}
+      >
         <Image
           src={
-            isEditMode
+            isEditMode || isProgressMode
               ? "/icons/back-arrow-white.svg"
               : "/icons/back-arrow-orange.svg"
           }
@@ -24,6 +28,14 @@ export default function HeadlineSection({ isEditMode }) {
           your
           <br />
           workout
+        </Headline>
+      ) : isProgressMode ? (
+        <Headline $progress={isProgressMode}>
+          Check
+          <br />
+          your
+          <br />
+          progress
         </Headline>
       ) : (
         <Headline>
@@ -60,11 +72,16 @@ const Headline = styled.h1`
 const BackLink = styled(Link)`
   text-decoration: none;
   background-color: ${(props) =>
-    props.$edit ? "var(--dark-orange)" : "#fef3d8"};
+    props.$edit
+      ? "var(--dark-orange)"
+      : props.$progress
+      ? "var(--orange)"
+      : "#fef3d8"};
   height: 45px;
   width: 45px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 `;
