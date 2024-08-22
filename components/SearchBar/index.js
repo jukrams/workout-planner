@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { FaSearch, FaTimes } from 'react-icons/fa';
+import styled from "styled-components";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 export default function SearchBar({ searchInput, onSearch }) {
   function handleChange(event) {
@@ -7,7 +7,7 @@ export default function SearchBar({ searchInput, onSearch }) {
   }
 
   function handleClear() {
-    onSearch(''); 
+    onSearch("");
   }
 
   return (
@@ -26,7 +26,7 @@ export default function SearchBar({ searchInput, onSearch }) {
 
 const SearchInputWrapper = styled.div`
   position: relative;
-  width: 65vw;
+  width: 60vw;
 `;
 
 const SearchIcon = styled(FaSearch)`
@@ -34,7 +34,7 @@ const SearchIcon = styled(FaSearch)`
   top: 50%;
   left: 10px;
   transform: translateY(-50%);
-  color: var(--dark-gray);
+  color: var(--dark-brown);
   font-size: 1.5rem;
 `;
 
@@ -49,11 +49,17 @@ const ClearIcon = styled(FaTimes)`
 `;
 
 const SearchInput = styled.input`
-  padding: 0.5rem 2.5rem 0.5rem 2.5rem; 
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
   font-size: 1rem;
   width: 100%;
-  background-color: var(--light-orange);
+  background-color: white;
   border: none;
   border-radius: 0.5rem;
   height: 2.5rem;
+  color: var(--dark-brown);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  &::placeholder {
+    color: var(--gray-brown);
+  }
 `;
