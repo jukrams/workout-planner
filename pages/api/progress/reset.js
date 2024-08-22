@@ -5,34 +5,35 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(request, response) {
+  // Authentifizierung und Session-Prüfung
   const session = await getServerSession(request, response, authOptions);
-  await dbConnect();
+  await dbConnect(); // Verbindet zur MongoDB
 
+  // Token erhalten und User-ID extrahieren
   const token = await getToken({ req: request });
-  const userId = token.sub;
+  const userId = token?.sub;
 
   if (request.method === "PUT") {
     try {
-      const { completedWorkoutsThisWeek } = request.body;
+      // Mongoose-Modell verwenden, um Statistiken zu aktualisieren
+      const result = await Statistic.updateMany({
+        $set: { completedWorkoutsThisWeek: 0 },
+      });
 
-      // Aktualisieren der Statistik
-      const collection = database.collection("statistics");
-
-      // Setze den gewünschten Wert auf 0
-      await collection.updateMany(
-        {},
-        { $set: { completedWorkoutsThisWeek: 0 } }
-      );
-      if (!result) {
-        return response.status(404).json({ error: "Statistic not found" });
+      if (result.modifiedCount === 0) {
+        return response
+          .status(404)
+          .json({ error: "Statistic not found or already updated" });
       }
 
+      // Erfolgreiche Antwort senden
       response.status(200).json({ status: "Statistic successfully updated." });
     } catch (error) {
       console.error("Error during update:", error);
       response.status(400).json({ error: error.message });
     }
   } else {
+    // Methode nicht erlaubt
     return response.status(405).json({ message: "Method not allowed" });
   }
 }
