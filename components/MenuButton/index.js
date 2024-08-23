@@ -68,17 +68,16 @@ const Button = styled.button`
   border: none;
   padding: 0.5rem;
   border-radius: 2rem;
+  background-color: var(--gray-brown);
   transition: width 0.3s ease, background-color 0.2s ease;
-  background-color: var(--orange);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   overflow: hidden;
-  background-color: "var(--orange)";
   width: fit-content;
   height: fit-content;
 
   &:hover {
-    background-color: var(--dark-orange);
+    background-color: var(--dark-brown);
     cursor: pointer;
   }
 `;
