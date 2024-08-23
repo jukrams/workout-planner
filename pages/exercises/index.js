@@ -137,7 +137,7 @@ const StyledSection = styled.section`
 
 const ControlsContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin: 1rem auto;
   width: 85vw;
@@ -145,17 +145,13 @@ const ControlsContainer = styled.div`
 `;
 
 const FilterButton = styled.button`
+  font-size: x-large;
   border: none;
-  background-color: orange;
+  background-color: white;
+  color: var(--dark-brown);
   border-radius: 0.25rem;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  margin-left: 1rem;
+  padding: 0.5rem 0;
   cursor: pointer;
-
-  &:hover {
-    background-color: darkorange;
-  }
 `;
 
 const H1 = styled.h1`

@@ -18,16 +18,25 @@ export default function ExercisePreview({ exercise }) {
 }
 
 const ExerciseCard = styled.li`
-  margin: 0 2rem 2rem 2rem;
   list-style: none;
   position: relative;
+  width: 300px;
+  height: 400px;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const ExerciseCardName = styled.p`
   font-size: medium;
   position: absolute;
   top: 0;
-  left: 4vw;
+  left: 1rem;
   font-weight: bold;
   color: white;
   background-color: #edb01e;
@@ -37,8 +46,8 @@ const ExerciseCardName = styled.p`
 
 const ExerciseCardMuscleContainer = styled.div`
   position: absolute;
-  bottom: 3vw;
-  left: 2vw;
+  bottom: 1rem;
+  left: 1rem;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -66,7 +75,5 @@ const StyledLink = styled(Link)`
 `;
 
 const ExerciseImage = styled.img`
-  width: 80vw;
-  height: auto;
-  border-radius: 1rem;
+  width: 100%;
 `;

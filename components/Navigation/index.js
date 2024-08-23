@@ -8,10 +8,17 @@ export default function Navigation() {
   return (
     <Navbar>
       <NavbarItem $active={router.pathname === "/exercises"}>
-        <StyledLink href="/exercises">Exercises</StyledLink>
+        <StyledLink
+          $active={router.pathname === "/exercises"}
+          href="/exercises"
+        >
+          Exercises
+        </StyledLink>
       </NavbarItem>
       <NavbarItem $active={router.pathname === "/workouts"}>
-        <StyledLink href="/workouts">Workouts</StyledLink>
+        <StyledLink $active={router.pathname === "/workouts"} href="/workouts">
+          Workouts
+        </StyledLink>
       </NavbarItem>
     </Navbar>
   );
@@ -20,7 +27,7 @@ export default function Navigation() {
 const Navbar = styled.ul`
   width: 100%;
   height: 4.25rem;
-  background-color: #fbda8b;
+  background-color: var(--light-brown);
   position: fixed;
   bottom: 0;
   margin: 0;
@@ -32,11 +39,13 @@ const Navbar = styled.ul`
 `;
 
 const NavbarItem = styled.li`
-  background-color: ${(props) => (props.$active ? "var(--orange)" : "#FBDA8B")};
+  background-color: ${(props) =>
+    props.$active ? "var(--gray-brown)" : "var(--light-brown)"};
   height: 100%;
   display: flex;
   align-items: center;
   line-height: 1;
+  height: 100%;
 
   &:first-of-type {
     border-top-right-radius: ${(props) => (props.$active ? "1.25rem" : "0")};
@@ -57,4 +66,5 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: var(--dark-brown);
   font-size: 1.4rem;
+  color: ${(props) => (props.$active ? "white" : "var(--dark-brown)")};
 `;
